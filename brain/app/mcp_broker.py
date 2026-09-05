@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from brain.app.models import ActionIntent, CallResult
+from brain.app.schemas import MOTION_VERBS, PERFORM_VERBS, validate_perform_arguments
 
-PERFORM_VERBS = {"walk", "turn", "stop", "snore", "eyes"}
-ALL_VERBS = PERFORM_VERBS | {"say", "sleep", "get_state"}
+ALL_VERBS = set(PERFORM_VERBS) | {"say", "sleep", "get_state"}
 
 
 class McpBroker:
@@ -21,23 +21,15 @@ class McpBroker:
         self._queue = [item for item in self._queue if item.verb not in {"walk", "turn"}]
 
     def call_perform(self, arguments: dict) -> CallResult:
-        verb = arguments.get("verb")
-        ttl_ms = arguments.get("ttl_ms")
-        if verb not in PERFORM_VERBS:
-            return CallResult(ok=False, error="unknown-verb")
-        if ttl_ms is None:
-            return CallResult(ok=False, error="missing-ttl")
-        try:
-            ttl = int(ttl_ms)
-        except (TypeError, ValueError):
-            return CallResult(ok=False, error="bad-ttl")
-        if ttl < 0:
-            return CallResult(ok=False, error="bad-ttl")
-        intent = ActionIntent(
-            verb=str(verb),
-            args={k: v for k, v in arguments.items() if k not in {"verb", "ttl_ms"}},
-            ttl_ms=ttl,
-        )
+        error = validate_perform_arguments(arguments)
+        if error:
+            return CallResult(ok=False, error=error)
+        verb = str(arguments["verb"])
+        ttl = int(arguments["ttl_ms"])
+        args: dict = {}
+        if verb in MOTION_VERBS and "dir" in arguments:
+            args["dir"] = arguments["dir"]
+        intent = ActionIntent(verb=verb, args=args, ttl_ms=ttl)
         self.device_calls.append(
             {
                 "name": "niu.perform",

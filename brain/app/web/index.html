@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>牛来排练台</title>
+    <link rel="stylesheet" href="/web/rehearsal.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主内容</a>
+    <header class="top">
+      <h1>牛来 · 排练台</h1>
+      <p class="status-row">
+        <span id="connection-label">模拟输入</span>
+        <span id="mode-badge" class="badge sim">模拟输入</span>
+        <span id="stale-label" class="muted" hidden>陈旧</span>
+      </p>
+      <button id="btn-stop" type="button">暂停表演</button>
+    </header>
+
+    <main id="main">
+      <section aria-labelledby="now-heading">
+        <h2 id="now-heading">现在</h2>
+        <p>
+          人格：
+          <strong id="persona-label">机械</strong>
+          <span class="legend">机械 / 偷偷活动 / 已暂停</span>
+        </p>
+        <p>人员：<span id="presence-label">未知</span></p>
+        <p>安全：<span id="safety-label">READY</span></p>
+        <p>当前场景：<span id="scene-label">无</span></p>
+        <p>最近反馈：<span id="feedback-label">尚未发送控制请求</span></p>
+      </section>
+
+      <section aria-labelledby="events-heading">
+        <h2 id="events-heading">事件时间轴</h2>
+        <ol id="event-list"></ol>
+        <p id="event-empty" class="muted">暂无事件</p>
+      </section>
+
+      <section aria-labelledby="memory-heading">
+        <h2 id="memory-heading">角色记忆</h2>
+        <p>generation：<span id="memory-generation">1</span></p>
+        <ul id="memory-list"></ul>
+        <button id="btn-clear-memory" type="button">清空记忆</button>
+      </section>
+
+      <section aria-labelledby="rehearsal-heading">
+        <h2 id="rehearsal-heading">高级排练</h2>
+        <p class="badge sim">模拟事件不计验收</p>
+        <div class="actions">
+          <button id="btn-present" type="button">模拟有人</button>
+          <button id="btn-absent" type="button">模拟无人</button>
+          <button id="btn-unknown" type="button">模拟未知人员</button>
+        </div>
+      </section>
+    </main>
+
+    <noscript>需要 JavaScript 每 500ms 轮询 /api/v1/state。</noscript>
+    <script src="/web/rehearsal.js" defer></script>
+  </body>
+</html>

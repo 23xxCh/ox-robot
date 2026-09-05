@@ -1,0 +1,19 @@
+{
+    "type": "niulai-s3-expand-v17",
+    "target": "esp32s3",
+    "builds": [
+        {
+            "name": "niulai-s3-expand-v17",
+            "sdkconfig_append": [
+                "CONFIG_LCD_ST7789_240X320=y",
+                "CONFIG_USE_CUSTOM_WAKE_WORD=y",
+                "CONFIG_CUSTOM_WAKE_WORD=\"niu lai niu lai\"",
+                "CONFIG_CUSTOM_WAKE_WORD_DISPLAY=\"牛来牛来\"",
+                "CONFIG_CUSTOM_WAKE_WORD_THRESHOLD=20",
+                "CONFIG_SR_MN_CN_NONE=n",
+                "CONFIG_SR_MN_CN_MULTINET5_RECOGNITION_QUANT8=y",
+                "CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y"
+            ]
+        }
+    ]
+}

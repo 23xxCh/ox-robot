@@ -5,8 +5,10 @@ from enum import Enum
 
 class PersonaState(str, Enum):
     FREEZE = "FREEZE"
+    MECHANICAL = "FREEZE"
     PUBLIC_ALIVE = "PUBLIC_ALIVE"
     SECRET_ALIVE = "SECRET_ALIVE"
+    SECRET = "SECRET_ALIVE"
 
 
 class PersonaFSM:
