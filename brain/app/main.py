@@ -17,6 +17,8 @@ from brain.app.brain import NiulaiBrain
 from brain.app.im import router as im_router
 from brain.app.lifecycle import ABSENT_HOLD_MS, Presence
 from brain.app.media import send_opus_pcm, try_qwen_asr, tts_pcm
+from pathlib import Path
+
 from brain.app.llm import speak
 from brain.app.models import ActionIntent
 from brain.app.origin import DEFAULT_ORIGIN, normalize_origin
@@ -26,7 +28,29 @@ from brain.app.providers import looks_like_utf8
 
 MAX_AUDIO_BYTES = 512 * 1024
 MUTTER_INTERVAL_S = 11.0
+DEFAULT_MEMORY = Path(__file__).resolve().parents[1] / "data" / "niulai-memory.sqlite"
 logger = logging.getLogger(__name__)
+
+
+def _device_id(ws: WebSocket) -> str:
+    return (ws.headers.get("device-id") or "niu-1").strip() or "niu-1"
+
+
+def _compose_line(
+    brain: NiulaiBrain,
+    device_id: str,
+    presence: str,
+    origin: dict[str, str],
+    user_text: str,
+) -> tuple[str, list[ActionIntent]]:
+    mem = brain.memory
+    notes = mem.prompt_memory(device_id, presence) if mem else ""
+    line, _source = speak(origin, presence, user_text, memory=notes)
+    line, intents = motion_intents(user_text, line)
+    if mem:
+        line = mem.dedupe_line(device_id, line, presence=presence)
+        mem.remember_line(device_id, line)
+    return line, intents
 
 
 def _client_wants_opus(frame: dict[str, Any], ws: WebSocket) -> bool:
@@ -104,7 +128,7 @@ async def _send_motion(ws: WebSocket, intents: list[ActionIntent]) -> None:
 
 def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
     app = FastAPI(title="niulai-brain", version="0.1.0")
-    app.state.brain = brain or NiulaiBrain()
+    app.state.brain = brain or NiulaiBrain(memory_path=DEFAULT_MEMORY)
     app.state.ffmpeg_path = shutil.which("ffmpeg")
     app.state.origin = dict(DEFAULT_ORIGIN)
     app.include_router(im_router)
@@ -126,12 +150,16 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
         current: NiulaiBrain = ws.app.state.brain
         ffmpeg_path: str | None = ws.app.state.ffmpeg_path
         mutter_task: asyncio.Task[None] | None = None
+        device_id = _device_id(ws)
+        last_spoken = ""
 
         async def mutter_loop() -> None:
+            nonlocal last_spoken
             while True:
                 await asyncio.sleep(MUTTER_INTERVAL_S)
                 origin = normalize_origin(getattr(ws.app.state, "origin", None))
-                line, _source = speak(origin, "ABSENT", "")
+                line, _intents = _compose_line(current, device_id, "ABSENT", origin, "")
+                last_spoken = line
                 await ws.send_json(
                     {
                         "type": "llm",
@@ -160,8 +188,10 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                 mutter_task = None
 
         async def speak_absent() -> None:
+            nonlocal last_spoken
             origin = normalize_origin(getattr(ws.app.state, "origin", None))
-            line, _source = speak(origin, "ABSENT", "")
+            line, _intents = _compose_line(current, device_id, "ABSENT", origin, "")
+            last_spoken = line
             await ws.send_json(
                 {
                     "type": "llm",
@@ -224,12 +254,16 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         await speak_absent()
                     continue
                 if kind == "abort":
+                    if last_spoken and current.memory:
+                        current.memory.note_interrupt(device_id, last_spoken)
                     stop_mutter()
                     continue
                 if kind == "niulai":
                     presence = str(frame.get("presence") or "")
                     now_ms = int(time.time() * 1000)
                     if presence == "PRESENT":
+                        if session_presence == "ABSENT" and last_spoken and current.memory:
+                            current.memory.note_interrupt(device_id, last_spoken)
                         session_presence = "PRESENT"
                         current.lifecycle.set_presence(
                             Presence.PRESENT, source="device", now_ms=now_ms
@@ -263,9 +297,13 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         session_presence = "PRESENT"
                         heard = str(frame.get("text") or "牛来")
                         current.handle_utterance(heard, now_ms=int(time.time() * 1000))
+                        if current.memory and "牛来" in heard:
+                            current.memory.bump_mama(device_id)
                         origin = normalize_origin(getattr(ws.app.state, "origin", None))
-                        line, _source = speak(origin, "PRESENT", heard)
-                        line, intents = motion_intents(heard, line)
+                        line, _intents = _compose_line(
+                            current, device_id, "PRESENT", origin, heard
+                        )
+                        last_spoken = line
                         await ws.send_json({"type": "stt", "text": heard})
                         await ws.send_json({"type": "llm", "text": line, "emotion": "happy"})
                         await _speak(
@@ -291,15 +329,19 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         origin = normalize_origin(getattr(ws.app.state, "origin", None))
                         intents: list[ActionIntent] = []
                         if presence == "ABSENT":
-                            reply, _source = speak(origin, "ABSENT", transcript or "")
-                            reply, intents = motion_intents(transcript or "", reply)
+                            reply, intents = _compose_line(
+                                current, device_id, "ABSENT", origin, transcript or ""
+                            )
                         elif transcript:
-                            reply, _source = speak(origin, "PRESENT", transcript)
-                            reply, intents = motion_intents(transcript, reply)
+                            reply, intents = _compose_line(
+                                current, device_id, "PRESENT", origin, transcript
+                            )
                         elif payload:
                             reply = "我在，你再说一次。"
                         else:
                             reply = ""
+                        if reply:
+                            last_spoken = reply
                         emotion = (
                             random.choice(["sleepy", "winking", "thinking", "angry", "surprised"])
                             if presence == "ABSENT"

@@ -37,6 +37,47 @@ def test_hello_listen_roundtrip_emits_stt_llm_tts() -> None:
         assert tts_stopped
 
 
+def test_wake_counts_mama_and_absent_uses_interrupt() -> None:
+    brain = NiulaiBrain()
+    client = TestClient(create_app(brain))
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json({"type": "hello", "version": 1})
+        ws.receive_json()
+        ws.send_json({"type": "listen", "state": "detect", "text": "牛来"})
+        for _ in range(12):
+            msg = ws.receive_json()
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                break
+        assert brain.memory is not None
+        assert brain.memory.character("niu-1") is not None
+        assert brain.memory.character("niu-1").mama_count == 1
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        first = ""
+        for _ in range(12):
+            msg = ws.receive_json()
+            if msg.get("type") == "llm" and msg.get("text"):
+                first = str(msg["text"])
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                break
+        assert first
+        ws.send_json({"type": "abort"})
+        ws.send_json({"type": "niulai", "presence": "PRESENT"})
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        second = ""
+        for _ in range(12):
+            msg = ws.receive_json()
+            if msg.get("type") == "llm" and msg.get("text"):
+                second = str(msg["text"])
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                break
+        assert second
+        assert "妈妈" not in second
+        complaint = brain.memory.character("niu-1").pending_complaint
+        assert complaint
+        notes = brain.memory.prompt_memory("niu-1", "ABSENT")
+        assert "打断" in notes or complaint[:8] in notes
+
+
 def test_present_wake_is_polite_not_roast() -> None:
     client = TestClient(create_app(NiulaiBrain()))
     with client.websocket_connect("/xiaozhi/v1/") as ws:

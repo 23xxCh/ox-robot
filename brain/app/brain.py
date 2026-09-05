@@ -27,7 +27,7 @@ class NiulaiBrain:
         self.mcp = McpBroker()
         self.providers = MockProviders()
         self.im_outbox: list[ImOutbound] = []
-        self.memory = MemoryStore(memory_path) if memory_path else None
+        self.memory = MemoryStore(memory_path if memory_path is not None else ":memory:")
 
     def ingest_distance(self, cm: float) -> list[ActionIntent]:
         self.lifecycle.ingest_proximity(cm, now_ms=0, timeout=cm < 0)

@@ -68,6 +68,23 @@ def test_oversize_payload_rejected(tmp_path: Path) -> None:
         store.commit_event(_event("big", "note", 1, payload={"x": "a" * 5000}))
 
 
+def test_wss_helpers_track_mama_interrupt_and_dedupe(tmp_path: Path) -> None:
+    store = _store(tmp_path)
+    assert store.bump_mama("niu-1") == 1
+    assert store.bump_mama("niu-1") == 2
+    store.note_interrupt("niu-1", "正要吐槽")
+    store.remember_line("niu-1", "哼，又没人理我")
+    notes = store.prompt_memory("niu-1", "ABSENT")
+    assert "妈妈" in notes
+    assert "2" in notes
+    assert "正要吐槽" in notes
+    assert "哼，又没人理我" in notes
+    again = store.dedupe_line("niu-1", "哼，又没人理我", presence="ABSENT")
+    assert again != "哼，又没人理我"
+    polite = store.dedupe_line("niu-1", "我在，你说。我是牛来。", presence="PRESENT")
+    assert polite == "我在，你说。我是牛来。"
+
+
 def test_prune_keeps_newest(tmp_path: Path) -> None:
     store = _store(tmp_path)
     for i in range(5):

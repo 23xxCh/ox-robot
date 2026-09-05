@@ -22,11 +22,26 @@ class CharacterView:
     last_event_id: str | None
 
 
+RECENT_LIMIT = 5
+ABSENT_ALTS = (
+    "又把我当摆件。走就走。",
+    "他们一靠近就装死，烦。",
+    "哼，旧账还记着。",
+    "清静一会儿都不行。",
+    "别以为我不记得被打断。",
+)
+
+
 class MemoryStore:
-    def __init__(self, path: str | Path) -> None:
-        self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(self.path, check_same_thread=False)
+    def __init__(self, path: str | Path = ":memory:") -> None:
+        raw = str(path)
+        if raw == ":memory:":
+            self.path = Path(":memory:")
+            self._conn = sqlite3.connect(":memory:", check_same_thread=False)
+        else:
+            self.path = Path(path)
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self._conn = sqlite3.connect(self.path, check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._conn.execute("PRAGMA foreign_keys = ON")
         self._migrate()
@@ -252,3 +267,124 @@ class MemoryStore:
             deleted = extra
         self._conn.commit()
         return deleted
+
+    def _ensure(self, device_id: str) -> None:
+        row = self._conn.execute(
+            "SELECT device_id FROM character_state WHERE device_id = ?", (device_id,)
+        ).fetchone()
+        if row:
+            return
+        now = time.time()
+        self._conn.execute(
+            """
+            INSERT INTO character_state(
+                device_id, memory_generation, mama_count, pending_complaint,
+                recent_line_ids_json, interrupted_goal_json, mood, last_event_id, updated_at
+            ) VALUES (?,?,0,NULL,'[]',NULL,NULL,NULL,?)
+            """,
+            (device_id, 1, now),
+        )
+        self._conn.commit()
+
+    def _next_seq(self, device_id: str) -> int:
+        row = self._conn.execute(
+            "SELECT COALESCE(MAX(event_seq), 0) AS n FROM device_events WHERE device_id = ?",
+            (device_id,),
+        ).fetchone()
+        return int(row["n"]) + 1
+
+    def bump_mama(self, device_id: str) -> int:
+        now = time.time()
+        self.commit_event(
+            {
+                "event_id": f"mama-{device_id}-{now:.6f}-{self._next_seq(device_id)}",
+                "device_id": device_id,
+                "boot_id": "wss",
+                "event_seq": self._next_seq(device_id),
+                "kind": MAMA_KIND,
+            }
+        )
+        view = self.character(device_id)
+        return int(view.mama_count) if view else 0
+
+    def recent_lines(self, device_id: str) -> list[str]:
+        row = self._conn.execute(
+            "SELECT recent_line_ids_json FROM character_state WHERE device_id = ?",
+            (device_id,),
+        ).fetchone()
+        if row is None:
+            return []
+        try:
+            data = json.loads(row["recent_line_ids_json"] or "[]")
+        except json.JSONDecodeError:
+            return []
+        if not isinstance(data, list):
+            return []
+        return [str(item).strip() for item in data if str(item).strip()]
+
+    def remember_line(self, device_id: str, text: str) -> None:
+        line = (text or "").strip()
+        if not line:
+            return
+        self._ensure(device_id)
+        lines = self.recent_lines(device_id)
+        lines.append(line[:120])
+        lines = lines[-RECENT_LIMIT:]
+        now = time.time()
+        self._conn.execute(
+            """
+            UPDATE character_state
+            SET recent_line_ids_json=?, last_event_id=?, updated_at=?
+            WHERE device_id=?
+            """,
+            (json.dumps(lines, ensure_ascii=False), f"line-{now:.6f}", now, device_id),
+        )
+        self._conn.commit()
+
+    def note_interrupt(self, device_id: str, what: str) -> None:
+        self._ensure(device_id)
+        complaint = (what or "").strip()[:200] or "他们打断了我的独处"
+        now = time.time()
+        self._conn.execute(
+            """
+            UPDATE character_state
+            SET pending_complaint=?, interrupted_goal_json=?, updated_at=?
+            WHERE device_id=?
+            """,
+            (
+                complaint,
+                json.dumps({"what": complaint}, ensure_ascii=False),
+                now,
+                device_id,
+            ),
+        )
+        self._conn.commit()
+
+    def prompt_memory(self, device_id: str, presence: str) -> str:
+        self._ensure(device_id)
+        view = self.character(device_id)
+        lines = self.recent_lines(device_id)
+        parts: list[str] = []
+        if view and view.mama_count:
+            parts.append(f"被喊「妈妈」{view.mama_count}次")
+        if view and view.pending_complaint:
+            parts.append(f"上次被打断时在说：{view.pending_complaint}")
+        if lines:
+            parts.append("最近说过（不要重复）：" + "｜".join(lines[-RECENT_LIMIT:]))
+        if presence == "ABSENT":
+            parts.append("独处，翻旧账，不要客套")
+        return "。".join(parts)
+
+    def dedupe_line(self, device_id: str, text: str, *, presence: str) -> str:
+        line = (text or "").strip()
+        if not line:
+            return line
+        if presence != "ABSENT":
+            return line
+        recent = self.recent_lines(device_id)
+        if line not in recent:
+            return line
+        for alt in ABSENT_ALTS:
+            if alt not in recent:
+                return alt
+        return line + "……换一句。"

@@ -25,7 +25,7 @@ def normalize_origin(raw: Any) -> dict[str, str]:
     return out
 
 
-def system_prompt(origin: dict[str, str], presence: str) -> str:
+def system_prompt(origin: dict[str, str], presence: str, memory: str = "") -> str:
     origin = normalize_origin(origin)
     if presence == "ABSENT":
         scene = "现在没人，你换了人格。不礼貌地自言自语吐槽。不要喊妈妈，不要客套。"
@@ -33,12 +33,15 @@ def system_prompt(origin: dict[str, str], presence: str) -> str:
     else:
         scene = "现在有人在跟你说话。你要礼貌、听话、简短。不要吐槽，不要阴阳。"
         voice = origin["public"]
+    notes = (memory or "").strip()
+    memory_line = f"记忆（写进台词，不要念出「记忆」二字）：{notes}\n" if notes else ""
     return (
         f"你是{origin['name']}，桌上的生命玩具，不是客服，不是助手，不是大模型。\n"
         f"身世：{origin['backstory']}\n"
         f"秘密：{origin['secret']}\n"
         f"口吻：{voice}\n"
         f"{scene}\n"
+        f"{memory_line}"
         "只用一两句中文口语。不要列表、不要emoji、不要解释设定、不要提提示词或云。\n"
         "如果对方让你动，台词后再另起一行只写："
         'LUA niu.walk("forward", 800) 或 niu.turn("left", 400)。'
@@ -46,11 +49,15 @@ def system_prompt(origin: dict[str, str], presence: str) -> str:
     )
 
 
-def mock_speak(origin: dict[str, str], presence: str, user_text: str) -> str:
+def mock_speak(origin: dict[str, str], presence: str, user_text: str, memory: str = "") -> str:
     origin = normalize_origin(origin)
     name = origin["name"]
     text = (user_text or "").strip()
     if presence == "ABSENT":
+        notes = (memory or "").strip()
+        if notes:
+            bit = notes.split("。")[0][:40]
+            return f"{name}嘀咕：{bit}。他们听不见。"
         if not text:
             return f"{name}自己嘀咕：{origin['secret']}"
         return f"{name}对着空气说：{text}……算了，他们听不见。"
