@@ -4,24 +4,33 @@ StreamingPcmToOpus / OpusPacketPacer follow
 E:\\AI TOY\\xiaozhi-claw\\backend\\realtime\\media.py (ffmpeg libopus 24 kHz 60 ms).
 
 ASR of raw Opus is not implemented here: listen.stop with non-UTF-8 binary
-falls back in the websocket handler. TTS PCM is Windows SAPI when it works,
-otherwise a short beep so the speaker still plays something without API keys.
+falls back in the websocket handler. TTS prefers DashScope qwen3-tts-flash
+(Dylan), then Windows SAPI, then a short beep.
 """
 
 from __future__ import annotations
 
 import asyncio
 import contextlib
+import logging
 import math
+import os
 import struct
 import sys
 import tempfile
 import time
 from collections.abc import Awaitable, Callable
 from pathlib import Path
+from typing import Any
+
+import httpx
 
 OPUS_SAMPLE_RATE = 24000
 OPUS_FRAME_MS = 60
+QWEN_TTS_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
+QWEN_TTS_MODEL = "qwen3-tts-flash"
+QWEN_TTS_VOICE = "Dylan"
+logger = logging.getLogger(__name__)
 
 
 class OpusPacketPacer:
@@ -267,7 +276,71 @@ async def try_sapi_pcm(text: str, ffmpeg_path: str) -> bytes | None:
             return None
 
 
+def qwen_audio_url(data: dict[str, Any]) -> str | None:
+    output = data.get("output") if isinstance(data, dict) else None
+    if not isinstance(output, dict):
+        return None
+    audio = output.get("audio")
+    if isinstance(audio, dict):
+        url = str(audio.get("url") or "").strip()
+        if url.startswith("http"):
+            return url
+    url = str(output.get("audio_url") or "").strip()
+    if url.startswith("http"):
+        return url
+    return None
+
+
+async def try_qwen_tts_pcm(text: str, ffmpeg_path: str) -> bytes | None:
+    spoken = text.strip()
+    if not spoken:
+        return None
+    from brain.app.llm import _load_env_files
+
+    _load_env_files()
+    key = (os.environ.get("DASHSCOPE_API_KEY") or os.environ.get("QWEN_API_KEY") or "").strip()
+    if not key:
+        return None
+    payload = {
+        "model": os.environ.get("DASHSCOPE_TTS_MODEL") or QWEN_TTS_MODEL,
+        "input": {
+            "text": spoken[:200],
+            "voice": os.environ.get("DASHSCOPE_TTS_VOICE") or QWEN_TTS_VOICE,
+            "language_type": "Chinese",
+        },
+    }
+    url = os.environ.get("DASHSCOPE_TTS_URL") or QWEN_TTS_URL
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            response = await client.post(
+                url,
+                json=payload,
+                headers={
+                    "Authorization": f"Bearer {key}",
+                    "Content-Type": "application/json",
+                },
+            )
+            if response.status_code != 200:
+                logger.warning("qwen tts http %s", response.status_code)
+                return None
+            audio_url = qwen_audio_url(response.json())
+            if not audio_url:
+                logger.warning("qwen tts missing audio url")
+                return None
+            audio = await client.get(audio_url)
+            audio.raise_for_status()
+            if not audio.content:
+                return None
+            return await wav_to_pcm(audio.content, ffmpeg_path)
+    except Exception:
+        logger.exception("qwen tts failed")
+        return None
+
+
 async def tts_pcm(text: str, ffmpeg_path: str) -> bytes:
+    spoken = await try_qwen_tts_pcm(text, ffmpeg_path)
+    if spoken:
+        return spoken
     spoken = await try_sapi_pcm(text, ffmpeg_path)
     if spoken:
         return spoken

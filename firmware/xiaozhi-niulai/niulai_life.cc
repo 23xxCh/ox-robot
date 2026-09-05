@@ -1,8 +1,6 @@
 #include "niulai_life.h"
 
 #include "application.h"
-#include "assets/lang_config.h"
-#include "audio_codec.h"
 #include "board.h"
 #include "config.h"
 
@@ -20,7 +18,7 @@ namespace {
 constexpr float kPresentCm = 55.0f;
 constexpr int kPresentStreak = 1;
 constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
-constexpr int64_t kSecretTalkUs = 10LL * 1000 * 1000;
+constexpr int64_t kBrainRetryUs = 8LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
 constexpr uint32_t kMaxDuty = (1u << 14) - 1;
@@ -77,8 +75,9 @@ void NiulaiLife::Loop() {
             HoldCenter();
         } else if (presence_ == kAbsent) {
             SecretWalk();
-            if (now - last_speak_us_ >= kSecretTalkUs) {
-                SpeakSecret();
+            if (now - last_brain_us_ >= kBrainRetryUs) {
+                last_brain_us_ = now;
+                AskBrainSecret();
             }
         }
 
@@ -186,24 +185,24 @@ void NiulaiLife::OnPresence(Presence next) {
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
     if (next == kPresent) {
         ParkLegs();
-        Speak(Lang::Sounds::OGG_HI, "happy", "你回来啦");
+        PostFace("happy", "妈妈");
+        Application::GetInstance().Schedule([]() {
+            Application::GetInstance().NiulaiEnterPresent();
+        });
         return;
     }
     if (next == kAbsent) {
         wiggle_phase_ = 0;
-        SpeakSecret();
+        last_brain_us_ = esp_timer_get_time();
+        PostFace("winking", "");
+        AskBrainSecret();
     }
 }
 
-void NiulaiLife::SpeakSecret() {
-    secret_line_ = (secret_line_ + 1) % 3;
-    if (secret_line_ == 0) {
-        Speak(Lang::Sounds::OGG_SECRET1, "sleepy", "终于清静了");
-    } else if (secret_line_ == 1) {
-        Speak(Lang::Sounds::OGG_SECRET2, "winking", "哼，又没人理我");
-    } else {
-        Speak(Lang::Sounds::OGG_SECRET3, "thinking", "他们以为我只会叫妈妈");
-    }
+void NiulaiLife::AskBrainSecret() {
+    Application::GetInstance().Schedule([]() {
+        Application::GetInstance().NiulaiEnterSecret();
+    });
 }
 
 void NiulaiLife::PostFace(const char* emotion, const char* chat) {
@@ -216,19 +215,5 @@ void NiulaiLife::PostFace(const char* emotion, const char* chat) {
     Application::GetInstance().Schedule([display, emo, msg]() {
         display->SetEmotion(emo.c_str());
         display->SetChatMessage(msg.empty() ? "system" : "assistant", msg.c_str());
-    });
-}
-
-void NiulaiLife::Speak(const std::string_view& ogg, const char* emotion, const char* chat) {
-    last_speak_us_ = esp_timer_get_time();
-    PostFace(emotion, chat);
-    Application::GetInstance().Schedule([ogg]() {
-        auto& audio = Application::GetInstance().GetAudioService();
-        auto* codec = Board::GetInstance().GetAudioCodec();
-        if (codec != nullptr) {
-            codec->SetOutputVolume(90);
-        }
-        audio.ResetDecoder();
-        audio.PlaySound(ogg);
     });
 }

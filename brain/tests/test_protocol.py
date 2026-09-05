@@ -145,6 +145,28 @@ def test_binary_non_utf8_still_yields_tts_stop() -> None:
         assert tts_stopped
 
 
+def test_device_absent_presence_speaks_without_listen() -> None:
+    client = TestClient(create_app(NiulaiBrain()))
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json({"type": "hello", "version": 1})
+        assert ws.receive_json()["type"] == "hello"
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        types: list[str] = []
+        texts: list[str] = []
+        for _ in range(12):
+            msg = ws.receive_json()
+            types.append(msg["type"])
+            if msg.get("text"):
+                texts.append(str(msg["text"]))
+            if msg["type"] == "tts" and msg.get("state") == "stop":
+                break
+        assert "tts" in types
+        assert any(text.strip() for text in texts)
+        assert all("你回来啦" not in text for text in texts)
+        ws.send_json({"type": "abort"})
+        ws.send_json({"type": "niulai", "presence": "PRESENT"})
+
+
 def test_opus_hello_binary_non_utf8_yields_tts_stop_without_ffmpeg() -> None:
     app = create_app(NiulaiBrain())
     app.state.ffmpeg_path = None

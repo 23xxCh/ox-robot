@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
 import shutil
@@ -13,6 +14,7 @@ from brain.app.api import attach_rehearsal_state
 from brain.app.api import router as rehearsal_router
 from brain.app.brain import NiulaiBrain
 from brain.app.im import router as im_router
+from brain.app.lifecycle import ABSENT_HOLD_MS, Presence
 from brain.app.media import send_opus_pcm, tts_pcm
 from brain.app.llm import speak
 from brain.app.origin import DEFAULT_ORIGIN, normalize_origin
@@ -20,6 +22,7 @@ from brain.app.persona import PersonaState
 from brain.app.providers import looks_like_utf8
 
 MAX_AUDIO_BYTES = 512 * 1024
+MUTTER_INTERVAL_S = 11.0
 logger = logging.getLogger(__name__)
 
 
@@ -97,6 +100,42 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
         audio_format = "mock-utf8"
         current: NiulaiBrain = ws.app.state.brain
         ffmpeg_path: str | None = ws.app.state.ffmpeg_path
+        mutter_task: asyncio.Task[None] | None = None
+
+        async def mutter_loop() -> None:
+            while True:
+                await asyncio.sleep(MUTTER_INTERVAL_S)
+                origin = normalize_origin(getattr(ws.app.state, "origin", None))
+                line, _source = speak(origin, "ABSENT", "")
+                await _speak(
+                    ws,
+                    line,
+                    audio_format=audio_format,
+                    ffmpeg_path=ffmpeg_path,
+                )
+
+        def ensure_mutter() -> None:
+            nonlocal mutter_task
+            if mutter_task is None or mutter_task.done():
+                mutter_task = asyncio.create_task(mutter_loop())
+
+        def stop_mutter() -> None:
+            nonlocal mutter_task
+            if mutter_task is not None:
+                mutter_task.cancel()
+                mutter_task = None
+
+        async def speak_absent() -> None:
+            origin = normalize_origin(getattr(ws.app.state, "origin", None))
+            line, _source = speak(origin, "ABSENT", "")
+            await _speak(
+                ws,
+                line,
+                audio_format=audio_format,
+                ffmpeg_path=ffmpeg_path,
+            )
+            ensure_mutter()
+
         try:
             while True:
                 message = await ws.receive()
@@ -135,16 +174,31 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         }
                     )
                     now_ms = int(time.time() * 1000)
-                    ticked = current.lifecycle.tick(now_ms)
+                    current.lifecycle.tick(now_ms)
                     if current.persona.state == PersonaState.SECRET_ALIVE:
-                        origin = normalize_origin(getattr(ws.app.state, "origin", None))
-                        line, _source = speak(origin, "ABSENT", "")
-                        await _speak(
-                            ws,
-                            line,
-                            audio_format=audio_format,
-                            ffmpeg_path=ffmpeg_path,
+                        await speak_absent()
+                    continue
+                if kind == "abort":
+                    stop_mutter()
+                    continue
+                if kind == "niulai":
+                    presence = str(frame.get("presence") or "")
+                    now_ms = int(time.time() * 1000)
+                    if presence == "PRESENT":
+                        current.lifecycle.set_presence(
+                            Presence.PRESENT, source="device", now_ms=now_ms
                         )
+                        stop_mutter()
+                        continue
+                    if presence == "ABSENT":
+                        current.lifecycle.set_presence(
+                            Presence.ABSENT,
+                            source="device",
+                            now_ms=now_ms - ABSENT_HOLD_MS,
+                        )
+                        current.lifecycle.tick(now_ms)
+                        await speak_absent()
+                        continue
                     continue
                 if kind == "listen":
                     state = frame.get("state")
@@ -178,6 +232,12 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         continue
         except WebSocketDisconnect:
             return
+        finally:
+            pending = mutter_task
+            stop_mutter()
+            if pending is not None:
+                with contextlib.suppress(asyncio.CancelledError):
+                    await pending
 
     return app
 
