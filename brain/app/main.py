@@ -372,4 +372,20 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
     return app
 
 
-app = create_app()
+class _LazyApp:
+    def __init__(self) -> None:
+        self._app: FastAPI | None = None
+
+    def _unwrap(self) -> FastAPI:
+        if self._app is None:
+            self._app = create_app()
+        return self._app
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._unwrap(), name)
+
+    async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
+        await self._unwrap()(scope, receive, send)
+
+
+app = _LazyApp()
