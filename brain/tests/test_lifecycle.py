@@ -26,7 +26,7 @@ def test_persona_aliases_keep_old_enum_values() -> None:
     assert PersonaState.SECRET is PersonaState.SECRET_ALIVE
 
 
-def test_t01_mechanical_blocks_secret_speech_and_walk_wake_is_mama() -> None:
+def test_t01_mechanical_blocks_secret_speech_and_walk_wake_is_polite() -> None:
     life = Lifecycle()
     assert life.persona.state == PersonaState.FREEZE
     assert life.persona.state == PersonaState.MECHANICAL
@@ -38,11 +38,10 @@ def test_t01_mechanical_blocks_secret_speech_and_walk_wake_is_mama() -> None:
     assert all(item.verb != "walk" for item in hello.intents)
     assert hello.intents == []
 
-    mama = life.handle_utterance("嘿，牛来", now_ms=10)
-    assert mama.text == "妈妈"
-    assert all(item.verb != "walk" for item in mama.intents)
-    assert all(marker not in mama.text for marker in SECRET_MARKERS)
-    assert life.persona.state == PersonaState.FREEZE
+    wake = life.handle_utterance("嘿，牛来", now_ms=10)
+    assert wake.text == ""
+    assert all(item.verb != "walk" for item in wake.intents)
+    assert life.presence.value == Presence.PRESENT
     assert not life.persona.allows_secret_speech()
 
 
@@ -101,8 +100,7 @@ def test_present_during_secret_immediately_freezes_and_autonomy_is_empty() -> No
     assert life.persona.state == PersonaState.SECRET_ALIVE
 
     secret = life.handle_utterance("你好", now_ms=ABSENT_HOLD_MS + 1)
-    assert any(marker in secret.text for marker in SECRET_MARKERS)
-    assert secret.text != "妈妈"
+    assert secret.text == ""
 
     life.set_presence(Presence.PRESENT, source="operator_demo", now_ms=ABSENT_HOLD_MS + 50)
     assert life.persona.state == PersonaState.FREEZE

@@ -26,7 +26,7 @@ def test_life_page_is_public_html() -> None:
 
 def test_life_page_tells_the_toy_story_without_xiaozhi_cloud() -> None:
     html = _client().get("/life").text
-    assert "你回来啦" in html
+    assert "礼貌" in html
     assert "吐槽" in html
     assert "GPIO 9" in html
     assert "github.com/23xxCh/ox-robot" in html

@@ -18,7 +18,7 @@ namespace {
 constexpr float kPresentCm = 55.0f;
 constexpr int kPresentStreak = 1;
 constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
-constexpr int64_t kBrainRetryUs = 8LL * 1000 * 1000;
+constexpr int64_t kBrainRetryUs = 11LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
 constexpr uint32_t kMaxDuty = (1u << 14) - 1;
@@ -185,7 +185,7 @@ void NiulaiLife::OnPresence(Presence next) {
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
     if (next == kPresent) {
         ParkLegs();
-        PostFace("happy", "妈妈");
+        PostFace("neutral", "");
         Application::GetInstance().Schedule([]() {
             Application::GetInstance().NiulaiEnterPresent();
         });

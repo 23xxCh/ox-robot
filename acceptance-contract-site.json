@@ -6,7 +6,7 @@
       "id": "AC-SITE-001",
       "scenario": "GET /life returns a Chinese public page for 牛来 without Xiaozhi cloud",
       "check_type": "test",
-      "expect": "200 HTML with 牛来, 你回来啦, GPIO 9, GitHub, 不连小智云",
+      "expect": "200 HTML with 牛来, 礼貌, GPIO 9, GitHub, 不连小智云",
       "status": "green",
       "depends_on": [],
       "verifier": "python -m pytest -q brain/tests/test_site.py"

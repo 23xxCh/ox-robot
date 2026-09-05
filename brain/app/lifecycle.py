@@ -169,11 +169,7 @@ class Lifecycle:
         spoken = text or ""
         if WAKE_WORD in spoken:
             self.set_presence(Presence.PRESENT, source="wake", now_ms=now_ms)
-            if self._safety != SafetyState.READY:
-                return UtteranceResult(text="", intents=[])
-            return UtteranceResult(text=MAMA_TEXT, intents=[])
-        if self.persona.allows_secret_speech():
-            return UtteranceResult(text=PRIVATE_LINE, intents=[])
+            return UtteranceResult(text="", intents=[])
         return UtteranceResult(text="", intents=[])
 
     def _enter_mechanical(self) -> None:

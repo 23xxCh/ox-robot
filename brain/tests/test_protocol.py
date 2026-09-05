@@ -37,14 +37,12 @@ def test_hello_listen_roundtrip_emits_stt_llm_tts() -> None:
         assert tts_stopped
 
 
-def test_mechanical_wake_speaks_mama_not_chat() -> None:
+def test_present_wake_is_polite_not_roast() -> None:
     client = TestClient(create_app(NiulaiBrain()))
     with client.websocket_connect("/xiaozhi/v1/") as ws:
         ws.send_json({"type": "hello", "version": 1})
         ws.receive_json()
-        ws.send_json({"type": "listen", "state": "start"})
-        ws.send_bytes("牛来牛来".encode("utf-8"))
-        ws.send_json({"type": "listen", "state": "stop"})
+        ws.send_json({"type": "listen", "state": "detect", "text": "牛来"})
         texts: list[str] = []
         for _ in range(12):
             msg = ws.receive_json()
@@ -52,8 +50,9 @@ def test_mechanical_wake_speaks_mama_not_chat() -> None:
                 texts.append(msg["text"])
             if msg.get("type") == "tts" and msg.get("state") == "stop":
                 break
-        assert "牛来牛来" in texts
-        assert "妈妈" in texts
+        assert "牛来" in texts
+        assert any("我在" in item for item in texts)
+        assert all("妈妈" not in item for item in texts)
         assert all("吐槽" not in item for item in texts)
 
 
@@ -140,9 +139,31 @@ def test_binary_non_utf8_still_yields_tts_stop() -> None:
         assert "llm" in types
         assert "tts" in types
         assert stt_text == ""
-        assert llm_text == "嗯，我在。"
-        assert any("嗯，我在" in item for item in tts_texts)
+        assert llm_text == "我在，你再说一次。"
+        assert any("我在" in item for item in tts_texts)
         assert tts_stopped
+
+
+def test_walk_utterance_sends_niulai_motion() -> None:
+    client = TestClient(create_app(NiulaiBrain()))
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json({"type": "hello", "version": 1})
+        ws.receive_json()
+        ws.send_json({"type": "niulai", "presence": "PRESENT"})
+        ws.send_json({"type": "listen", "state": "start"})
+        ws.send_bytes("往前走".encode("utf-8"))
+        ws.send_json({"type": "listen", "state": "stop"})
+        kinds: list[str] = []
+        motion = None
+        for _ in range(20):
+            msg = ws.receive_json()
+            kinds.append(msg["type"])
+            if msg["type"] == "niulai" and msg.get("motion"):
+                motion = msg
+                break
+        assert motion is not None
+        assert motion["motion"] in {"walk", "turn"}
+        assert int(motion["ms"]) <= 2000
 
 
 def test_device_absent_presence_speaks_without_listen() -> None:
@@ -163,6 +184,11 @@ def test_device_absent_presence_speaks_without_listen() -> None:
         assert "tts" in types
         assert any(text.strip() for text in texts)
         assert all("你回来啦" not in text for text in texts)
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        ws.send_json({"type": "listen", "state": "detect", "text": "牛来"})
+        follow = ws.receive_json()
+        assert follow.get("type") == "stt"
+        assert follow.get("text") == "牛来"
         ws.send_json({"type": "abort"})
         ws.send_json({"type": "niulai", "presence": "PRESENT"})
 
@@ -195,5 +221,5 @@ def test_opus_hello_binary_non_utf8_yields_tts_stop_without_ffmpeg() -> None:
             if msg["type"] == "tts" and msg.get("state") == "stop":
                 tts_stopped = True
                 break
-        assert llm_text == "嗯，我在。"
+        assert llm_text == "我在，你再说一次。"
         assert tts_stopped

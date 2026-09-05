@@ -15,9 +15,11 @@ from brain.app.api import router as rehearsal_router
 from brain.app.brain import NiulaiBrain
 from brain.app.im import router as im_router
 from brain.app.lifecycle import ABSENT_HOLD_MS, Presence
-from brain.app.media import send_opus_pcm, tts_pcm
+from brain.app.media import send_opus_pcm, try_qwen_asr, tts_pcm
 from brain.app.llm import speak
+from brain.app.models import ActionIntent
 from brain.app.origin import DEFAULT_ORIGIN, normalize_origin
+from brain.app.scripting import motion_intents
 from brain.app.persona import PersonaState
 from brain.app.providers import looks_like_utf8
 
@@ -79,6 +81,23 @@ async def _speak(
     await ws.send_json({"type": "tts", "state": "stop"})
 
 
+async def _send_motion(ws: WebSocket, intents: list[ActionIntent]) -> None:
+    for intent in intents:
+        if intent.verb not in {"walk", "turn"}:
+            continue
+        ttl = int(intent.ttl_ms or 800)
+        if ttl <= 0 and intent.args.get("dir") != "stop":
+            ttl = 800
+        await ws.send_json(
+            {
+                "type": "niulai",
+                "motion": intent.verb,
+                "dir": str(intent.args.get("dir") or "forward"),
+                "ms": ttl,
+            }
+        )
+
+
 def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
     app = FastAPI(title="niulai-brain", version="0.1.0")
     app.state.brain = brain or NiulaiBrain()
@@ -96,8 +115,10 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
     async def device_ws(ws: WebSocket) -> None:
         await ws.accept()
         audio = bytearray()
+        packets: list[bytes] = []
         listening = False
         audio_format = "mock-utf8"
+        session_presence = "UNKNOWN"
         current: NiulaiBrain = ws.app.state.brain
         ffmpeg_path: str | None = ws.app.state.ffmpeg_path
         mutter_task: asyncio.Task[None] | None = None
@@ -146,7 +167,9 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                     if listening:
                         room = MAX_AUDIO_BYTES - len(audio)
                         if room > 0:
-                            audio.extend(data[:room])
+                            chunk = bytes(data[:room])
+                            audio.extend(chunk)
+                            packets.append(chunk)
                     continue
                 text = message.get("text")
                 if not text:
@@ -185,18 +208,24 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                     presence = str(frame.get("presence") or "")
                     now_ms = int(time.time() * 1000)
                     if presence == "PRESENT":
+                        session_presence = "PRESENT"
                         current.lifecycle.set_presence(
                             Presence.PRESENT, source="device", now_ms=now_ms
                         )
                         stop_mutter()
                         continue
                     if presence == "ABSENT":
+                        already_absent = session_presence == "ABSENT"
+                        mutter_alive = mutter_task is not None and not mutter_task.done()
+                        session_presence = "ABSENT"
                         current.lifecycle.set_presence(
                             Presence.ABSENT,
                             source="device",
                             now_ms=now_ms - ABSENT_HOLD_MS,
                         )
                         current.lifecycle.tick(now_ms)
+                        if already_absent and mutter_alive:
+                            continue
                         await speak_absent()
                         continue
                     continue
@@ -205,19 +234,51 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                     if state == "start":
                         listening = True
                         audio.clear()
+                        packets.clear()
+                        continue
+                    if state == "detect":
+                        stop_mutter()
+                        session_presence = "PRESENT"
+                        heard = str(frame.get("text") or "牛来")
+                        current.handle_utterance(heard, now_ms=int(time.time() * 1000))
+                        origin = normalize_origin(getattr(ws.app.state, "origin", None))
+                        line, _source = speak(origin, "PRESENT", heard)
+                        line, intents = motion_intents(heard, line)
+                        await ws.send_json({"type": "stt", "text": heard})
+                        await ws.send_json({"type": "llm", "text": line})
+                        await _speak(
+                            ws,
+                            line,
+                            audio_format=audio_format,
+                            ffmpeg_path=ffmpeg_path,
+                        )
+                        await _send_motion(ws, intents)
                         continue
                     if state == "stop":
                         listening = False
                         payload = bytes(audio)
+                        frame_packets = list(packets)
                         audio.clear()
+                        packets.clear()
                         transcript = current.providers.transcribe(payload)
+                        if not transcript and payload and not looks_like_utf8(payload):
+                            if ffmpeg_path:
+                                transcript = (await try_qwen_asr(frame_packets, ffmpeg_path)) or ""
                         await ws.send_json({"type": "stt", "text": transcript})
-                        result = current.handle_utterance(transcript)
-                        reply = result.text
-                        if not reply and payload and not looks_like_utf8(payload):
-                            # Raw Opus cannot be decoded to text here; still talk
-                            # so the toy plays something after listen.stop.
-                            reply = current.providers.heard_fallback
+                        current.handle_utterance(transcript, now_ms=int(time.time() * 1000))
+                        presence = session_presence if session_presence in {"PRESENT", "ABSENT"} else "PRESENT"
+                        origin = normalize_origin(getattr(ws.app.state, "origin", None))
+                        intents: list[ActionIntent] = []
+                        if presence == "ABSENT":
+                            reply, _source = speak(origin, "ABSENT", transcript or "")
+                            reply, intents = motion_intents(transcript or "", reply)
+                        elif transcript:
+                            reply, _source = speak(origin, "PRESENT", transcript)
+                            reply, intents = motion_intents(transcript, reply)
+                        elif payload:
+                            reply = "我在，你再说一次。"
+                        else:
+                            reply = ""
                         await ws.send_json({"type": "llm", "text": reply})
                         if reply:
                             await _speak(
@@ -229,6 +290,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         else:
                             await ws.send_json({"type": "tts", "state": "start"})
                             await ws.send_json({"type": "tts", "state": "stop"})
+                        await _send_motion(ws, intents)
                         continue
         except WebSocketDisconnect:
             return

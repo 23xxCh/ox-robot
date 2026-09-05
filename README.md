@@ -1,6 +1,6 @@
 # 牛来 / ox-robot
 
-人前它是一只只会说「妈妈」的机械玩具；人离开后，它才过自己的生活。
+有人靠近时它先停着等人喊；喊「牛来」才礼貌听、想、说。人离开后，它才过自己的生活。
 
 一块小智 S3 扩展板 V1.7 负责听、说、屏、灯、键、超声和四路舵机信号。笔记本上的 `brain/` 负责人格、记忆和动作编排。不把完整 ESP-Claw 固件并进小智。
 
@@ -12,11 +12,11 @@
 ## 架构
 
 ```
-喊「牛来牛来」 / 按 KY-004 / 超声
+喊「牛来」 / 按 KY-004 / 超声
         │
         ▼
   小智板 niulai-s3-expand-v17
-  本地 mama / 你回来啦 / SECRET 吐槽（Opus）
+  有人喊它 → 礼貌听、想、说；没人 → 走私有大脑 LLM + 千问男声吐槽
   冻结走板端 C · 舵机 5V 外供 · 不打开小智云
         │  （本轮演示不依赖这条线）
         ▼
@@ -49,8 +49,8 @@
 | 超声 HC-SR04 | 8 / 17 | TRIG / ECHO |
 | 舵机 SG90 ×4 | 10 / 11 / **9** / 13 | **5V 外供**；左后不要接 GPIO 12（充电指示） |
 | KY-016 灯 S | **14** | 三针模块本轮只会红 |
-| KY-004 键 S | **18** | 按下为低，播本地「妈妈」 |
-| BOOT | 0 | 短按切换聆听 |
+| KY-004 键 S | **18** | 按下为低，开始礼貌听、想、说 |
+| BOOT | 0 | 短按同样开始礼貌对话 |
 
 KY-016：`-`=GND，中间=5V，`S`=14。  
 KY-004：`-`=GND，中间 VCC 可空，`S`=18。  
@@ -60,13 +60,13 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=18。
 
 板型 `niulai-s3-expand-v17`，源码 overlay 在 `firmware/xiaozhi-niulai/`，构建在小智 `xiaozhi-esp32` 树里。
 
-- 唤醒词：`niu lai niu lai`（牛来牛来）
-- 唤醒 / BOOT / KY-004 只播本地 `mama.ogg`（Opus），并立刻把四腿写回 1500 µs；不打开云端对话
-- 超声近距视为有人：腿立刻中位，播本地「妈妈」，可立刻打断 SECRET
-- SECRET：优先连笔记本私有 `ws://192.168.18.242:8000/xiaozhi/v1/`；失败则本地 `secret1.ogg`。拒绝 xiaozhi.me
+- 唤醒词：`niu lai`（单次「牛来」）
+- 唤醒 / BOOT / KY-004 礼貌听、想、说，走私有大脑；立刻把四腿写回 1500 µs；不打开小智云
+- 超声近距视为有人：腿立刻中位，打断 SECRET 吐槽，等人喊
+- SECRET：连笔记本私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（当前 WLAN）。LLM + `qwen3-tts-flash` Dylan，约 11 秒一句。拒绝 xiaozhi.me。笔记本没开或 IP 变了，独处没声音。
 - SECRET 步态：约 800 ms 随机步态，随后约 2 s 停在 1500 µs。360° 舵机不会一直转。喇叭音量 90
 
-构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。2026-09-05 19:57 已烧进 COM6（GPIO 10/11/9/13，hash verified）。靠近/妈妈会 `ResetDecoder()`，SECRET 吐槽立刻被打断。
+构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。不要闪 COM6，除非 brain 挂了或 WLAN 不再是 `192.168.10.95`。靠近会 `ResetDecoder()`，SECRET 吐槽立刻被打断。
 
 ```powershell
 # ESP-IDF 6.0.2
@@ -75,7 +75,7 @@ python scripts/build.py niulai-s3-expand-v17
 idf.py -p COM6 flash
 ```
 
-COM 口按设备管理器改。烧完先看黄牛脸，再按键或喊「牛来牛来」。
+COM 口按设备管理器改。烧完先看黄牛脸，再按键或喊「牛来」。
 
 ## 本地大脑
 
