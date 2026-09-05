@@ -4,6 +4,7 @@ import asyncio
 import contextlib
 import json
 import logging
+import random
 import shutil
 import time
 from typing import Any
@@ -131,6 +132,15 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                 await asyncio.sleep(MUTTER_INTERVAL_S)
                 origin = normalize_origin(getattr(ws.app.state, "origin", None))
                 line, _source = speak(origin, "ABSENT", "")
+                await ws.send_json(
+                    {
+                        "type": "llm",
+                        "text": line,
+                        "emotion": random.choice(
+                            ["sleepy", "winking", "thinking", "angry", "surprised"]
+                        ),
+                    }
+                )
                 await _speak(
                     ws,
                     line,
@@ -152,6 +162,15 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
         async def speak_absent() -> None:
             origin = normalize_origin(getattr(ws.app.state, "origin", None))
             line, _source = speak(origin, "ABSENT", "")
+            await ws.send_json(
+                {
+                    "type": "llm",
+                    "text": line,
+                    "emotion": random.choice(
+                        ["sleepy", "winking", "thinking", "angry", "surprised"]
+                    ),
+                }
+            )
             await _speak(
                 ws,
                 line,
@@ -248,7 +267,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         line, _source = speak(origin, "PRESENT", heard)
                         line, intents = motion_intents(heard, line)
                         await ws.send_json({"type": "stt", "text": heard})
-                        await ws.send_json({"type": "llm", "text": line})
+                        await ws.send_json({"type": "llm", "text": line, "emotion": "happy"})
                         await _speak(
                             ws,
                             line,
@@ -281,7 +300,12 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                             reply = "我在，你再说一次。"
                         else:
                             reply = ""
-                        await ws.send_json({"type": "llm", "text": reply})
+                        emotion = (
+                            random.choice(["sleepy", "winking", "thinking", "angry", "surprised"])
+                            if presence == "ABSENT"
+                            else "happy"
+                        )
+                        await ws.send_json({"type": "llm", "text": reply, "emotion": emotion})
                         if reply:
                             await _speak(
                                 ws,
