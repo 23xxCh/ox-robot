@@ -16,6 +16,8 @@ def _load_env_files() -> None:
     if _ENV_LOADED:
         return
     _ENV_LOADED = True
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        return
     here = Path(__file__).resolve()
     for path in (here.parents[1] / ".env", here.parents[2] / ".env"):
         if not path.is_file():
@@ -45,6 +47,18 @@ def _providers() -> list[tuple[str, str, str]]:
                 os.environ["NIULAI_LLM_API_KEY"].strip(),
                 (os.environ.get("NIULAI_LLM_BASE_URL") or "https://api.deepseek.com").rstrip("/"),
                 os.environ.get("NIULAI_LLM_MODEL") or "deepseek-chat",
+            )
+        )
+    dashscope = (os.environ.get("DASHSCOPE_API_KEY") or os.environ.get("QWEN_API_KEY") or "").strip()
+    if dashscope:
+        specs.append(
+            (
+                dashscope,
+                (
+                    os.environ.get("DASHSCOPE_BASE_URL")
+                    or "https://dashscope.aliyuncs.com/compatible-mode/v1"
+                ).rstrip("/"),
+                os.environ.get("DASHSCOPE_MODEL") or "qwen-plus",
             )
         )
     zhipu = (os.environ.get("ZHIPU_API_KEY") or "").strip()
