@@ -29,7 +29,7 @@
 
 
 // KY-016 S (3-pin module = one PWM channel, typically red).
-// GPIO 21 is LCD SCL; GPIO 12 is servo RL. Do not steal either.
+// GPIO 21 is LCD SCL; GPIO 12 is TP4054 CHRG. Rear-left servo is GPIO 9.
 #define BUILTIN_LED_GPIO        GPIO_NUM_14
 #define BOOT_BUTTON_GPIO        GPIO_NUM_0
 // KY-004: idle HIGH, pressed LOW. GPIO 47 is LCD MOSI — do not use it.
