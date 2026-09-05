@@ -76,7 +76,7 @@
 - [ ] P0-5 独处冷却 / 不重复 / 断链本地 secret ogg
 - [ ] P0-6 PRESENT Lua 走路源码已有，测例+文档对齐；默认不烧板
 - [ ] P0-3/P0-7 礼貌对话回归测例；brain `/health` 保持 ok
-- [ ] P0-8 pytest 全绿并 push
+- [x] P0-8 pytest 全绿并 push（63 passed，`d79fe06`）
 - [ ] P0-9 交卷稿与锁定行为一致
 - [ ] 人：录像
 - [ ] 人：飞书粘贴
