@@ -1,10 +1,14 @@
 #include "niulai_life.h"
 
 #include "application.h"
+#include "assets/lang_config.h"
+#include "audio_codec.h"
+#include "board.h"
 #include "config.h"
 
 #include <driver/gpio.h>
 #include <esp_log.h>
+#include <esp_random.h>
 #include <esp_rom_sys.h>
 #include <esp_timer.h>
 
@@ -16,9 +20,9 @@ namespace {
 constexpr float kPresentCm = 55.0f;
 constexpr int kPresentStreak = 1;
 constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
+constexpr int64_t kSecretTalkUs = 10LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
-constexpr int kWalkAmpUs = 250;
 constexpr uint32_t kMaxDuty = (1u << 14) - 1;
 }  // namespace
 
@@ -36,7 +40,6 @@ void NiulaiLife::Start(Display* display) {
     echo.pull_down_en = GPIO_PULLDOWN_ENABLE;
     gpio_config(&echo);
 
-    // Core 0: audio / SR typically sit on core 1.
     xTaskCreatePinnedToCore(TaskTrampoline, "niulai_life", 4096, this, 5, nullptr, 0);
     ESP_LOGI(TAG, "life loop started TRIG=%d ECHO=%d", (int)ULTRASONIC_TRIG_GPIO,
              (int)ULTRASONIC_ECHO_GPIO);
@@ -74,6 +77,9 @@ void NiulaiLife::Loop() {
             HoldCenter();
         } else if (presence_ == kAbsent) {
             SecretWalk();
+            if (now - last_speak_us_ >= kSecretTalkUs) {
+                SpeakSecret();
+            }
         }
 
         if (++log_tick_ % 10 == 0) {
@@ -135,23 +141,42 @@ void NiulaiLife::SnapFreeze() {
 }
 
 void NiulaiLife::SecretWalk() {
-    // 400 ms diagonal, then ~2 s parked at 1500 us.
-    // Holding 1250/1750 forever makes 360° SG90s spin; 1500 stops them.
-    // PRESENT / close pre-empts before this runs.
-    wiggle_phase_ = (wiggle_phase_ + 1) % 12;
-    if (wiggle_phase_ >= 2) {
+    // Random gait, short burst then park so 360° servos stop.
+    if (wiggle_phase_ == 0) {
+        gait_ = static_cast<int>(esp_random() % 4);
+    }
+    wiggle_phase_ = (wiggle_phase_ + 1) % 14;
+    if (wiggle_phase_ >= 4) {
         HoldCenter();
         return;
     }
-    int sign = (wiggle_phase_ == 0) ? 1 : -1;
-    WritePulseUs(0, kCenterUs + sign * kWalkAmpUs);
-    WritePulseUs(1, kCenterUs - sign * kWalkAmpUs);
-    WritePulseUs(2, kCenterUs - sign * kWalkAmpUs);
-    WritePulseUs(3, kCenterUs + sign * kWalkAmpUs);
-    if (wiggle_phase_ == 0) {
-        PostFace("sleepy", "……");
-    } else if (wiggle_phase_ == 1) {
-        PostFace("winking", "……");
+    int sign = (wiggle_phase_ < 2) ? 1 : -1;
+    int amp = 160 + static_cast<int>(esp_random() % 120);
+    switch (gait_) {
+        case 1:  // front pair
+            WritePulseUs(0, kCenterUs + sign * amp);
+            WritePulseUs(1, kCenterUs - sign * amp);
+            WritePulseUs(2, kCenterUs);
+            WritePulseUs(3, kCenterUs);
+            break;
+        case 2:  // rear pair
+            WritePulseUs(0, kCenterUs);
+            WritePulseUs(1, kCenterUs);
+            WritePulseUs(2, kCenterUs - sign * amp);
+            WritePulseUs(3, kCenterUs + sign * amp);
+            break;
+        case 3:  // turn in place
+            WritePulseUs(0, kCenterUs + sign * amp);
+            WritePulseUs(1, kCenterUs + sign * amp);
+            WritePulseUs(2, kCenterUs + sign * amp);
+            WritePulseUs(3, kCenterUs + sign * amp);
+            break;
+        default:  // diagonal
+            WritePulseUs(0, kCenterUs + sign * amp);
+            WritePulseUs(1, kCenterUs - sign * amp);
+            WritePulseUs(2, kCenterUs - sign * amp);
+            WritePulseUs(3, kCenterUs + sign * amp);
+            break;
     }
 }
 
@@ -160,12 +185,24 @@ void NiulaiLife::OnPresence(Presence next) {
     presence_ = next;
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
     if (next == kPresent) {
-        SnapFreeze();
+        ParkLegs();
+        Speak(Lang::Sounds::OGG_HI, "happy", "你回来啦");
         return;
     }
     if (next == kAbsent) {
         wiggle_phase_ = 0;
-        PostFace("sleepy", "……");
+        SpeakSecret();
+    }
+}
+
+void NiulaiLife::SpeakSecret() {
+    secret_line_ = (secret_line_ + 1) % 3;
+    if (secret_line_ == 0) {
+        Speak(Lang::Sounds::OGG_SECRET1, "sleepy", "终于清静了");
+    } else if (secret_line_ == 1) {
+        Speak(Lang::Sounds::OGG_SECRET2, "winking", "哼，又没人理我");
+    } else {
+        Speak(Lang::Sounds::OGG_SECRET3, "thinking", "他们以为我只会叫妈妈");
     }
 }
 
@@ -179,5 +216,17 @@ void NiulaiLife::PostFace(const char* emotion, const char* chat) {
     Application::GetInstance().Schedule([display, emo, msg]() {
         display->SetEmotion(emo.c_str());
         display->SetChatMessage(msg.empty() ? "system" : "assistant", msg.c_str());
+    });
+}
+
+void NiulaiLife::Speak(const std::string_view& ogg, const char* emotion, const char* chat) {
+    last_speak_us_ = esp_timer_get_time();
+    PostFace(emotion, chat);
+    Application::GetInstance().Schedule([ogg]() {
+        auto* codec = Board::GetInstance().GetAudioCodec();
+        if (codec != nullptr) {
+            codec->SetOutputVolume(90);
+        }
+        Application::GetInstance().PlaySound(ogg);
     });
 }

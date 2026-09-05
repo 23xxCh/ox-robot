@@ -140,6 +140,10 @@ private:
         // KY-004 active-low poke: local "妈妈" only, no cloud chat.
         key_button_.OnClick([this]() {
             life_.ParkLegs();
+            auto* codec = GetAudioCodec();
+            if (codec != nullptr) {
+                codec->SetOutputVolume(90);
+            }
             Application::GetInstance().PlaySound(Lang::Sounds::OGG_MAMA);
             if (display_ != nullptr) {
                 display_->SetEmotion("happy");
