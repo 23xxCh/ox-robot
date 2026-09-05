@@ -1,18 +1,43 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import Any
 
 import httpx
 
 from brain.app.origin import mock_speak, normalize_origin, system_prompt
 
+_ENV_LOADED = False
+
+
+def _load_env_files() -> None:
+    global _ENV_LOADED
+    if _ENV_LOADED:
+        return
+    _ENV_LOADED = True
+    here = Path(__file__).resolve()
+    for path in (here.parents[1] / ".env", here.parents[2] / ".env"):
+        if not path.is_file():
+            continue
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            name, value = line.split("=", 1)
+            name = name.strip()
+            value = value.strip().strip('"').strip("'")
+            if name and name not in os.environ:
+                os.environ[name] = value
+
 
 def llm_enabled() -> bool:
+    _load_env_files()
     return bool(_providers())
 
 
 def _providers() -> list[tuple[str, str, str]]:
+    _load_env_files()
     specs: list[tuple[str, str, str]] = []
     if os.environ.get("NIULAI_LLM_API_KEY"):
         specs.append(
