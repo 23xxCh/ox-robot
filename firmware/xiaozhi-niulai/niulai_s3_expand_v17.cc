@@ -179,7 +179,7 @@ private:
             ch.hpoint = 0;
             ESP_ERROR_CHECK(ledc_channel_config(&ch));
         }
-        ESP_LOGI(TAG, "Servos held at 1500us on GPIO 10/11/12/13");
+        ESP_LOGI(TAG, "Servos held at 1500us on GPIO 10/11/9/13 (not 12=CHRG)");
     }
 
 public:

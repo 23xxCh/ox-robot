@@ -8,6 +8,11 @@
 
 namespace {
 
+constexpr uint32_t kAnimPeriodMs = 80;
+constexpr int kBlinkEveryTicks = 31;   // ~2.5s
+constexpr int kBlinkClosedTicks = 2;   // ~160ms
+constexpr int kClosedLidH = 26;
+
 lv_obj_t* Oval(lv_obj_t* parent, int w, int h, lv_color_t color) {
     lv_obj_t* o = lv_obj_create(parent);
     lv_obj_set_size(o, w, h);
@@ -30,6 +35,15 @@ NiulaiLcdDisplay::NiulaiLcdDisplay(esp_lcd_panel_io_handle_t panel_io, esp_lcd_p
     DisplayLockGuard lock(this);
     BuildFace();
     ApplyFace("neutral");
+    StartAnim();
+}
+
+NiulaiLcdDisplay::~NiulaiLcdDisplay() {
+    if (anim_timer_ != nullptr) {
+        DisplayLockGuard lock(this);
+        lv_timer_delete(anim_timer_);
+        anim_timer_ = nullptr;
+    }
 }
 
 void NiulaiLcdDisplay::ClearChatMessages() {
@@ -48,7 +62,55 @@ void NiulaiLcdDisplay::ClearChatMessages() {
 
 void NiulaiLcdDisplay::SetEmotion(const char* emotion) {
     DisplayLockGuard lock(this);
+    blinking_ = false;
+    blink_ticks_ = 0;
     ApplyFace(emotion != nullptr ? emotion : "neutral");
+}
+
+void NiulaiLcdDisplay::StartAnim() {
+    if (anim_timer_ == nullptr) {
+        anim_timer_ = lv_timer_create(AnimTimerCb, kAnimPeriodMs, this);
+    }
+}
+
+void NiulaiLcdDisplay::AnimTimerCb(lv_timer_t* timer) {
+    auto* self = static_cast<NiulaiLcdDisplay*>(lv_timer_get_user_data(timer));
+    // Recursive LVGL mutex: safe both from the LVGL task and if already locked.
+    DisplayLockGuard lock(self);
+    self->TickAnim();
+}
+
+void NiulaiLcdDisplay::TickAnim() {
+    if (face_ == nullptr || lid_l_ == nullptr || lid_r_ == nullptr || mouth_ == nullptr) {
+        return;
+    }
+
+    if (blinking_) {
+        ++blink_ticks_;
+        if (blink_ticks_ >= kBlinkClosedTicks) {
+            blinking_ = false;
+            blink_ticks_ = 0;
+            ApplyFace(emotion_);
+        }
+    } else {
+        ++blink_ticks_;
+        if (blink_ticks_ >= kBlinkEveryTicks) {
+            blinking_ = true;
+            blink_ticks_ = 0;
+            lv_obj_set_height(lid_l_, kClosedLidH);
+            lv_obj_set_height(lid_r_, kClosedLidH);
+        }
+    }
+
+    if (talking_) {
+        static const int kPulse[] = {2, 4, 2, 0, -2, 0};
+        int h = mouth_rest_h_ + kPulse[mouth_phase_ % 6];
+        if (h < 6) {
+            h = 6;
+        }
+        lv_obj_set_height(mouth_, h);
+        ++mouth_phase_;
+    }
 }
 
 void NiulaiLcdDisplay::BuildFace() {
@@ -128,16 +190,22 @@ void NiulaiLcdDisplay::ApplyFace(const char* emotion) {
         return;
     }
 
-    const bool happy = strcmp(emotion, "happy") == 0 || strcmp(emotion, "laughing") == 0 ||
-                       strcmp(emotion, "loving") == 0 || strcmp(emotion, "funny") == 0 ||
-                       strcmp(emotion, "kissy") == 0 || strcmp(emotion, "confident") == 0;
-    const bool sleepy = strcmp(emotion, "sleepy") == 0 || strcmp(emotion, "relaxed") == 0;
-    const bool sad = strcmp(emotion, "sad") == 0 || strcmp(emotion, "crying") == 0;
-    const bool angry = strcmp(emotion, "angry") == 0;
-    const bool surprise = strcmp(emotion, "surprised") == 0 || strcmp(emotion, "shocked") == 0;
-    const bool think = strcmp(emotion, "thinking") == 0 || strcmp(emotion, "confused") == 0;
-    const bool shy = strcmp(emotion, "embarrassed") == 0 || strcmp(emotion, "silly") == 0;
-    const bool wink = strcmp(emotion, "winking") == 0;
+    if (emotion != emotion_) {
+        strncpy(emotion_, emotion, sizeof(emotion_) - 1);
+        emotion_[sizeof(emotion_) - 1] = '\0';
+    }
+
+    const bool happy = strcmp(emotion_, "happy") == 0 || strcmp(emotion_, "laughing") == 0 ||
+                       strcmp(emotion_, "loving") == 0 || strcmp(emotion_, "funny") == 0 ||
+                       strcmp(emotion_, "kissy") == 0 || strcmp(emotion_, "confident") == 0;
+    const bool sleepy = strcmp(emotion_, "sleepy") == 0 || strcmp(emotion_, "relaxed") == 0;
+    const bool sad = strcmp(emotion_, "sad") == 0 || strcmp(emotion_, "crying") == 0;
+    const bool angry = strcmp(emotion_, "angry") == 0;
+    const bool surprise = strcmp(emotion_, "surprised") == 0 || strcmp(emotion_, "shocked") == 0;
+    const bool think = strcmp(emotion_, "thinking") == 0 || strcmp(emotion_, "confused") == 0;
+    const bool shy = strcmp(emotion_, "embarrassed") == 0 || strcmp(emotion_, "silly") == 0;
+    const bool wink = strcmp(emotion_, "winking") == 0;
+    talking_ = strcmp(emotion_, "happy") == 0 || strcmp(emotion_, "laughing") == 0;
 
     int lid_h = 16;
     int mouth_w = 36;
@@ -174,6 +242,9 @@ void NiulaiLcdDisplay::ApplyFace(const char* emotion) {
         mouth_w = 32;
         mouth_h = 12;
     }
+
+    mouth_rest_h_ = mouth_h;
+    mouth_phase_ = 0;
 
     lv_obj_set_height(lid_l_, lid_h);
     lv_obj_set_height(lid_r_, lid_h);

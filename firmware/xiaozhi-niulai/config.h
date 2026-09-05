@@ -42,7 +42,8 @@
 #define ULTRASONIC_ECHO_GPIO    GPIO_NUM_17
 #define SERVO_FL_GPIO           GPIO_NUM_10
 #define SERVO_FR_GPIO           GPIO_NUM_11
-#define SERVO_RL_GPIO           GPIO_NUM_12
+// GPIO 12 is TP4054 CHRG + charge LED on 小智 S3 扩展板 V1.7. PWM fights that net.
+#define SERVO_RL_GPIO           GPIO_NUM_9
 #define SERVO_RR_GPIO           GPIO_NUM_13
 
 

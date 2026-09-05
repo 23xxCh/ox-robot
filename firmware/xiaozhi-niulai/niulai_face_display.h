@@ -10,6 +10,7 @@ public:
     NiulaiLcdDisplay(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_handle_t panel, int width,
                      int height, int offset_x, int offset_y, bool mirror_x, bool mirror_y,
                      bool swap_xy);
+    ~NiulaiLcdDisplay() override;
 
     void SetEmotion(const char* emotion) override;
     void ClearChatMessages() override;
@@ -34,8 +35,19 @@ private:
     lv_obj_t* blush_l_ = nullptr;
     lv_obj_t* blush_r_ = nullptr;
 
+    lv_timer_t* anim_timer_ = nullptr;
+    char emotion_[24] = "neutral";
+    int mouth_rest_h_ = 10;
+    int blink_ticks_ = 0;
+    int mouth_phase_ = 0;
+    bool talking_ = false;
+    bool blinking_ = false;
+
     void BuildFace();
     void ApplyFace(const char* emotion);
+    void StartAnim();
+    void TickAnim();
+    static void AnimTimerCb(lv_timer_t* timer);
 };
 
 #endif
