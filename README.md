@@ -12,19 +12,19 @@
 ## 架构
 
 ```
-喊「牛来牛来」 / 按 KY-004
+喊「牛来牛来」 / 按 KY-004 / 超声
         │
         ▼
   小智板 niulai-s3-expand-v17
-  本地播 mama.ogg（不打开云端对话）
-  冻结走板端 C · 舵机 5V 外供
-        │  小智 WSS
+  本地 mama / 你回来啦 / SECRET 吐槽（Opus）
+  冻结走板端 C · 舵机 5V 外供 · 不打开小智云
+        │  （本轮演示不依赖这条线）
         ▼
   笔记本 FastAPI  brain/
-  人格 · Lua(niu.*) · MCP ttl 帽 · SQLite · 飞书/微信
+  /life 人设页 · Lua(niu.*) · MCP ttl 帽 · SQLite
 ```
 
-约束：不合完整 ESP-Claw；ESP 的 5V 不给舵机供电；继电器不用；freeze 不走 LLM。
+约束：不合完整 ESP-Claw；ESP 的 5V 不给舵机供电；继电器不用；freeze 不走 LLM；不打开 xiaozhi.me。
 
 ## 仓库
 
@@ -84,9 +84,10 @@ python -m pytest
 python -m brain.app
 ```
 
-排练页：http://127.0.0.1:8000/
+排练页：http://127.0.0.1:8000/  
+人设页：http://127.0.0.1:8000/life （笔记本浏览器，不驱动真机冻结，也不连小智云）
 
-无云端 API key 时测例仍应通过。
+无 `NIULAI_LLM_*` key 时测例仍应通过。90 秒路演只演板端，不演 /life 闲聊。
 
 ## 文档
 

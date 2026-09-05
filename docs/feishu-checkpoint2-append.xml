@@ -10,6 +10,7 @@
 <tr><td>PRESENT 冻结</td><td>TRIG 8 / ECHO 17，约 55 cm 内立刻 1500 µs 中位，播本地「你回来啦」</td></tr>
 <tr><td>SECRET 小晃</td><td>随机步态约 800 ms，再 1500 µs 停约 2 s；硬帽 1100–1900 µs；有人立刻停</td></tr>
 <tr><td>本地吐槽</td><td>板上 hi.ogg / secret1-3.ogg（Opus），不是小智云，也不是 brain TTS</td></tr>
+<tr><td>/life 人设页</td><td>笔记本 http://127.0.0.1:8000/life ；DashScope Qwen 可选。不驱动真机冻结，90 秒不演</td></tr>
 </tbody>
 </table>
 <h2>还剩到 12:00</h2>
@@ -22,6 +23,6 @@
 <li seq="auto">喊「牛来牛来」或按键 → 「妈妈」。本地录音，不经小智云。</li>
 <li seq="auto">手靠近超声 → 腿立刻停，喇叭说「你回来啦」。</li>
 <li seq="auto">手拿开约 8 秒 → 腿随机小晃，说一句本地吐槽。再靠近立刻停。</li>
-<li seq="auto">打开仓库。不演云端闲聊，不演跑步。</li>
+<li seq="auto">打开仓库。不演 /life 闲聊，不演跑步，不连小智云。</li>
 </ol>
 <p>分工：陈熙贤硬件与录像，潘炜德固件与文档，微微叙事与路演词。</p>
