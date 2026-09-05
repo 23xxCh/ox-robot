@@ -1,5 +1,5 @@
 <h1>Checkpoint 2 进展（2026-09-06）</h1>
-<p>相对 Checkpoint 1，板端生命循环已烧进 COM6（最近一次 2026-09-05 19:06，GPIO 10/11/9/13，hash verified）。超声近距立刻冻腿并说「你回来啦」；约 8 秒无近距才随机小晃约 800 ms，随后停在 1500 µs 约 2 s，并播本地吐槽。靠近立刻打断。唤醒、按键、BOOT 只播本地「妈妈」并停腿，不连小智云。屏上是黄牛来脸。左后舵机改接 GPIO 9：板上 GPIO 12 是充电指示。仓库 https://github.com/23xxCh/ox-robot</p>
+<p>相对 Checkpoint 1，板端生命循环已烧进 COM6（最近一次 2026-09-05 19:57，GPIO 10/11/9/13，hash verified）。超声近距立刻冻腿并说「你回来啦」；约 8 秒无近距才随机小晃约 800 ms，随后停在 1500 µs 约 2 s，并播本地吐槽。靠近会清播放队列，SECRET 吐槽立刻停。唤醒、按键、BOOT 只播本地「妈妈」并停腿，不连小智云。屏上是黄牛来脸。左后舵机改接 GPIO 9：板上 GPIO 12 是充电指示。仓库 https://github.com/23xxCh/ox-robot</p>
 <h2>新完成</h2>
 <table>
 <colgroup><col width="160"/><col width="400"/></colgroup>

@@ -223,10 +223,12 @@ void NiulaiLife::Speak(const std::string_view& ogg, const char* emotion, const c
     last_speak_us_ = esp_timer_get_time();
     PostFace(emotion, chat);
     Application::GetInstance().Schedule([ogg]() {
+        auto& audio = Application::GetInstance().GetAudioService();
         auto* codec = Board::GetInstance().GetAudioCodec();
         if (codec != nullptr) {
             codec->SetOutputVolume(90);
         }
-        Application::GetInstance().PlaySound(ogg);
+        audio.ResetDecoder();
+        audio.PlaySound(ogg);
     });
 }

@@ -68,7 +68,7 @@ python scripts/build.py niulai-s3-expand-v17
 idf.py -p COM6 flash monitor
 ```
 
-COM 口按设备管理器改。2026-09-05 19:06 已烧进 COM6（GPIO 10/11/9/13，Wrote 2792160 bytes，hash verified，RTS 复位）。烧完先看黄牛脸，再按 KY-004 或喊「牛来牛来」。左后黄线必须在 GPIO 9，不要接 12。
+COM 口按设备管理器改。2026-09-05 19:57 已烧进 COM6（GPIO 10/11/9/13，Wrote 2807072 bytes，hash verified，RTS 复位）。靠近或播妈妈会 `ResetDecoder()`，SECRET 吐槽立刻停。烧完先看黄牛脸，再按 KY-004 或喊「牛来牛来」。左后黄线必须在 GPIO 9，不要接 12。
 
 ## 小智主干挂钩（不在本 overlay 目录里）
 

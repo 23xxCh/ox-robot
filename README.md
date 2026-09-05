@@ -65,7 +65,7 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=18。
 - 超声近距视为有人：腿立刻中位，播「你回来啦」；约 8 秒无近距才随机小晃（可立刻打断）并播本地吐槽
 - SECRET 步态：约 800 ms 随机步态，随后约 2 s 停在 1500 µs。360° 舵机不会一直转。喇叭音量 90
 
-构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。2026-09-05 19:06 已烧进 COM6（GPIO 10/11/9/13，hash verified）。
+构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。2026-09-05 19:57 已烧进 COM6（GPIO 10/11/9/13，hash verified）。靠近/妈妈会 `ResetDecoder()`，SECRET 吐槽立刻被打断。
 
 ```powershell
 # ESP-IDF 6.0.2
