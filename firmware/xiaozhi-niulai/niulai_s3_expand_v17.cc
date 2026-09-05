@@ -139,6 +139,39 @@ private:
         });
     }
 
+    // 50 Hz / 1500 us on FL/FR/RL/RR. Parks 180° SG90s and stops 360° continuous servos.
+    // Timer 2 / channels 2-5: backlight owns timer 0 ch 0, LED owns timer 1 ch 1.
+    void InitializeServosHold() {
+        ledc_timer_config_t timer = {};
+        timer.speed_mode = LEDC_LOW_SPEED_MODE;
+        timer.timer_num = LEDC_TIMER_2;
+        timer.duty_resolution = LEDC_TIMER_14_BIT;
+        timer.freq_hz = 50;
+        timer.clk_cfg = LEDC_AUTO_CLK;
+        ESP_ERROR_CHECK(ledc_timer_config(&timer));
+
+        const gpio_num_t pins[] = {
+            SERVO_FL_GPIO, SERVO_FR_GPIO, SERVO_RL_GPIO, SERVO_RR_GPIO
+        };
+        const ledc_channel_t channels[] = {
+            LEDC_CHANNEL_2, LEDC_CHANNEL_3, LEDC_CHANNEL_4, LEDC_CHANNEL_5
+        };
+        const uint32_t duty_center = (1500u * ((1u << 14) - 1)) / 20000u;
+
+        for (int i = 0; i < 4; ++i) {
+            ledc_channel_config_t ch = {};
+            ch.speed_mode = LEDC_LOW_SPEED_MODE;
+            ch.channel = channels[i];
+            ch.timer_sel = LEDC_TIMER_2;
+            ch.intr_type = LEDC_INTR_DISABLE;
+            ch.gpio_num = pins[i];
+            ch.duty = duty_center;
+            ch.hpoint = 0;
+            ESP_ERROR_CHECK(ledc_channel_config(&ch));
+        }
+        ESP_LOGI(TAG, "Servos held at 1500us on GPIO 10/11/12/13");
+    }
+
 public:
     NiulaiS3ExpandV17() :
         boot_button_(BOOT_BUTTON_GPIO),
@@ -146,6 +179,7 @@ public:
         InitializeSpi();
         InitializeLcdDisplay();
         InitializeButtons();
+        InitializeServosHold();
         if (DISPLAY_BACKLIGHT_PIN != GPIO_NUM_NC) {
             GetBacklight()->RestoreBrightness();
         }
