@@ -5,6 +5,9 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from brain.app.llm import llm_enabled, speak
+from brain.app.origin import DEFAULT_ORIGIN, normalize_origin
+
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 
@@ -37,6 +40,8 @@ def new_rehearsal_state() -> dict[str, Any]:
         "pending_complaint": None,
         "mood": None,
         "stop_request_ids": [],
+        "origin": dict(DEFAULT_ORIGIN),
+        "chat": [],
     }
 
 
@@ -139,6 +144,11 @@ async def rehearsal_page() -> FileResponse:
 @router.get("/life")
 async def life_page() -> FileResponse:
     return FileResponse(WEB_DIR / "life.html", media_type="text/html; charset=utf-8")
+
+
+@router.get("/web/life.js")
+async def life_js() -> FileResponse:
+    return FileResponse(WEB_DIR / "life.js", media_type="application/javascript")
 
 
 @router.get("/web/rehearsal.css")
@@ -254,3 +264,59 @@ async def post_rehearsal_event(request: Request) -> JSONResponse:
 
     event = _append_event(state, **event_fields)
     return JSONResponse({"ok": True, "simulated": True, "event": event})
+
+
+def _origin_payload(state: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "origin": normalize_origin(state.get("origin")),
+        "llm": llm_enabled(),
+    }
+
+
+@router.get("/api/v1/origin")
+async def get_origin(request: Request) -> dict[str, Any]:
+    return _origin_payload(_rehearsal(request))
+
+
+@router.put("/api/v1/origin")
+async def put_origin(request: Request) -> JSONResponse:
+    state = _rehearsal(request)
+    try:
+        payload = await request.json()
+    except Exception:
+        return JSONResponse({"error": "invalid_json"}, status_code=400)
+    if not isinstance(payload, dict):
+        return JSONResponse({"error": "invalid_body"}, status_code=400)
+    origin = normalize_origin(payload.get("origin") if "origin" in payload else payload)
+    state["origin"] = origin
+    request.app.state.origin = origin
+    _append_event(state, type="origin", text=origin["name"], simulated=True)
+    return JSONResponse(_origin_payload(state))
+
+
+@router.post("/api/v1/chat")
+async def post_chat(request: Request) -> JSONResponse:
+    state = _rehearsal(request)
+    try:
+        payload = await request.json()
+    except Exception:
+        return JSONResponse({"error": "invalid_json"}, status_code=400)
+    if not isinstance(payload, dict):
+        return JSONResponse({"error": "invalid_body"}, status_code=400)
+    presence = str(payload.get("presence") or state.get("presence") or "PRESENT").upper()
+    if presence not in PRESENCE_VALUES:
+        return JSONResponse({"error": "invalid_presence"}, status_code=400)
+    text = _clip_text(payload.get("text"))
+    origin = normalize_origin(state.get("origin"))
+    reply, source = speak(origin, presence, text)
+    if presence in {"PRESENT", "ABSENT"}:
+        _apply_presence(state, presence)
+    turn = {"user": text, "reply": reply, "presence": presence, "source": source}
+    chat = state.setdefault("chat", [])
+    chat.append(turn)
+    overflow = len(chat) - 40
+    if overflow > 0:
+        del chat[:overflow]
+    _append_event(state, type="chat", text=reply, presence=presence, simulated=True)
+    return JSONResponse({"reply": reply, "presence": presence, "source": source, "origin": origin})
+

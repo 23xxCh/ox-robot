@@ -30,6 +30,33 @@
       a { color: #6b3a8c; }
       .note { color: var(--mute); font-size: 0.95rem; }
       .horn { display: inline-block; width: 0.7em; height: 1.1em; background: var(--mute); border-radius: 50%; vertical-align: middle; }
+      label { display: block; margin: 0.8rem 0 0.25rem; font-weight: 600; }
+      input, textarea {
+        width: 100%;
+        font: inherit;
+        padding: 0.45rem 0.55rem;
+        border: 1px solid #d8c8b0;
+        border-radius: 6px;
+        background: #fff;
+      }
+      textarea { min-height: 4.5rem; }
+      button {
+        margin-top: 0.75rem;
+        padding: 0.45rem 0.9rem;
+        font: inherit;
+        border: 0;
+        border-radius: 6px;
+        background: var(--ink);
+        color: var(--paper);
+        cursor: pointer;
+      }
+      #chat-log {
+        list-style: none;
+        padding: 0;
+        min-height: 6rem;
+      }
+      #chat-log li { margin: 0.4rem 0; }
+      #llm-badge { font-size: 0.9rem; color: var(--mute); }
     </style>
   </head>
   <body>
@@ -52,7 +79,40 @@
         <a href="https://github.com/23xxCh/ox-robot">github.com/23xxCh/ox-robot</a>
       </p>
       <p><a href="/">打开排练台</a></p>
+
+      <h2>身世</h2>
+      <p class="note">写完保存，再跟它说话。有人/没人两套口吻。对话走本地大脑，不连小智云。</p>
+      <p id="llm-badge">大脑：检测中</p>
+      <form id="origin-form">
+        <label for="origin-name">名字</label>
+        <input id="origin-name" name="name" maxlength="80" />
+        <label for="origin-backstory">身世</label>
+        <textarea id="origin-backstory" name="backstory"></textarea>
+        <label for="origin-alone">没人时怎么说话</label>
+        <textarea id="origin-alone" name="alone"></textarea>
+        <label for="origin-public">有人时怎么说话</label>
+        <textarea id="origin-public" name="public"></textarea>
+        <label for="origin-secret">秘密</label>
+        <textarea id="origin-secret" name="secret"></textarea>
+        <button type="submit" id="origin-save">保存身世</button>
+      </form>
+
+      <h2>跟它说话</h2>
+      <p>
+        <label for="chat-presence">现在</label>
+        <select id="chat-presence">
+          <option value="PRESENT">有人在面前</option>
+          <option value="ABSENT">没人，它自己过</option>
+        </select>
+      </p>
+      <ol id="chat-log"></ol>
+      <form id="chat-form">
+        <label for="chat-text">你说</label>
+        <input id="chat-text" maxlength="500" autocomplete="off" />
+        <button type="submit">让它回一句</button>
+      </form>
     </main>
     <footer class="note">本地大脑 rehearsal。产品对话不连小智云。</footer>
+    <script src="/web/life.js" defer></script>
   </body>
 </html>

@@ -14,6 +14,8 @@ from brain.app.api import router as rehearsal_router
 from brain.app.brain import NiulaiBrain
 from brain.app.im import router as im_router
 from brain.app.media import send_opus_pcm, tts_pcm
+from brain.app.llm import speak
+from brain.app.origin import DEFAULT_ORIGIN, normalize_origin
 from brain.app.persona import PersonaState
 from brain.app.providers import looks_like_utf8
 
@@ -78,6 +80,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
     app = FastAPI(title="niulai-brain", version="0.1.0")
     app.state.brain = brain or NiulaiBrain()
     app.state.ffmpeg_path = shutil.which("ffmpeg")
+    app.state.origin = dict(DEFAULT_ORIGIN)
     app.include_router(im_router)
     app.include_router(rehearsal_router)
     attach_rehearsal_state(app)
@@ -134,14 +137,11 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                     now_ms = int(time.time() * 1000)
                     ticked = current.lifecycle.tick(now_ms)
                     if current.persona.state == PersonaState.SECRET_ALIVE:
-                        spoken = [
-                            str(item.args.get("text") or "")
-                            for item in (ticked or current.autonomy_intents())
-                            if item.verb == "say" and item.args.get("text")
-                        ]
+                        origin = normalize_origin(getattr(ws.app.state, "origin", None))
+                        line, _source = speak(origin, "ABSENT", "")
                         await _speak(
                             ws,
-                            spoken[0] if spoken else "哼，又没人理我",
+                            line,
                             audio_format=audio_format,
                             ffmpeg_path=ffmpeg_path,
                         )
