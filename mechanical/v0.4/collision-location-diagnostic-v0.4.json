@@ -1,0 +1,62 @@
+[
+  {
+    "shell": "05_BodyFrontShell",
+    "frame": "05_electronics_deck.stl",
+    "triangle_pair_count": 0,
+    "shell_overlap_region": null,
+    "frame_overlap_region": null
+  },
+  {
+    "shell": "05_BodyFrontShell",
+    "frame": "06_standoff_set.stl",
+    "triangle_pair_count": 0,
+    "shell_overlap_region": null,
+    "frame_overlap_region": null
+  },
+  {
+    "shell": "07_HeadFrontShell",
+    "frame": "13_mouth_bracket.stl",
+    "triangle_pair_count": 0,
+    "shell_overlap_region": null,
+    "frame_overlap_region": null
+  },
+  {
+    "shell": "07_HeadFrontShell",
+    "frame": "35_HCSR04Placeholder.stl",
+    "triangle_pair_count": 372,
+    "shell_overlap_region": {
+      "min_mm": [
+        -23.857,
+        -68.669,
+        257.539
+      ],
+      "max_mm": [
+        23.878,
+        -64.182,
+        281.354
+      ],
+      "average_mm": [
+        -0.041,
+        -66.129,
+        267.023
+      ]
+    },
+    "frame_overlap_region": {
+      "min_mm": [
+        -24.0,
+        -68.0,
+        258.0
+      ],
+      "max_mm": [
+        24.0,
+        -65.0,
+        281.0
+      ],
+      "average_mm": [
+        -1.806,
+        -66.237,
+        269.273
+      ]
+    }
+  }
+]

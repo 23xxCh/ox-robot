@@ -1,0 +1,31 @@
+{
+  "source": "E:\\AI WORK\\硬件黑客松\\30917144b3a6572e5c69c4590d885680.glb",
+  "removed_tail_components": 165,
+  "weld_distance_source": 1e-06,
+  "voxel_size_source": 0.004,
+  "welded_before_voxel": {
+    "vertices": 736346,
+    "faces": 1472537,
+    "boundary_edges": 20,
+    "non_manifold_edges": 20,
+    "dimensions": [
+      0.6208629608154297,
+      0.4516991376876831,
+      0.9803411364555359
+    ],
+    "signed_volume": 0.07836566668190315,
+    "filled_faces": 1
+  },
+  "outer_after_voxel": {
+    "vertices": 34381,
+    "faces": 40970,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "dimensions": [
+      220.0,
+      200.0,
+      329.9999694824219
+    ],
+    "signed_volume": 4137351.727819122
+  }
+}

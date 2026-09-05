@@ -1,0 +1,52 @@
+{
+  "source": {
+    "vertices": 21200,
+    "polygons": 22255,
+    "boundary_edges": 0,
+    "non_manifold_edges": 7,
+    "volume_mm3": 18105.772,
+    "dimensions_mm": [
+      96.563,
+      61.161,
+      48.958
+    ]
+  },
+  "tests": {
+    "0.4": {
+      "vertices": 217378,
+      "polygons": 217580,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "volume_mm3": 18813.245,
+      "dimensions_mm": [
+        96.537,
+        61.016,
+        48.899
+      ]
+    },
+    "0.6": {
+      "vertices": 91778,
+      "polygons": 91902,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "volume_mm3": 19025.87,
+      "dimensions_mm": [
+        96.231,
+        61.075,
+        48.33
+      ]
+    },
+    "0.8": {
+      "vertices": 49766,
+      "polygons": 49838,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "volume_mm3": 19253.297,
+      "dimensions_mm": [
+        96.272,
+        60.945,
+        48.235
+      ]
+    }
+  }
+}

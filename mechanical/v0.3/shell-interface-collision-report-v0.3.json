@@ -1,0 +1,58 @@
+{
+  "shell_blend": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\niulai-hollow-shell-v0.3.blend",
+  "frame_version": "v0.3-shell-interface",
+  "part_dimensions_mm": {
+    "body_front": [
+      220.0,
+      80.369,
+      136.001
+    ],
+    "body_rear": [
+      219.678,
+      105.579,
+      136.401
+    ],
+    "head_front": [
+      169.305,
+      106.524,
+      140.585
+    ],
+    "head_rear": [
+      175.085,
+      63.668,
+      128.134
+    ],
+    "mouth": [
+      94.32,
+      60.51,
+      54.075
+    ]
+  },
+  "printer_volume_mm": [
+    330.0,
+    320.0,
+    325.0
+  ],
+  "all_parts_fit_printer_when_oriented": true,
+  "blocking_collision_pair_count": 0,
+  "blocking_collisions": [],
+  "planned_aperture_intersection_count": 3,
+  "planned_aperture_intersections": [
+    {
+      "shell": "head_front",
+      "frame": "OLEDPlaceholder",
+      "triangle_pair_count": 124
+    },
+    {
+      "shell": "head_front",
+      "frame": "HCSR04Placeholder",
+      "triangle_pair_count": 112
+    },
+    {
+      "shell": "body_front",
+      "frame": "RadarPlaceholder",
+      "triangle_pair_count": 49
+    }
+  ],
+  "status": "STRUCTURE_CLEAR_APERTURES_PENDING"
+}

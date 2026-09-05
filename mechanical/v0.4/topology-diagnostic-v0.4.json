@@ -1,0 +1,93 @@
+{
+  "00_CleanOuterReference": {
+    "vertices": 34381,
+    "edges": 75349,
+    "faces": 40970,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      40970
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 4137351.727819122
+  },
+  "02_OpenBottomShell": {
+    "vertices": 1229188,
+    "edges": 2458376,
+    "faces": 1229188,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      1229188
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 268889.5359962251
+  },
+  "05_BodyFrontShell": {
+    "vertices": 588484,
+    "edges": 1176980,
+    "faces": 588490,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      588490
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 127365.61574422114
+  },
+  "06_BodyRearShell": {
+    "vertices": 95316,
+    "edges": 190628,
+    "faces": 95314,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      95314
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 20755.15732838256
+  },
+  "07_HeadFrontShell": {
+    "vertices": 245864,
+    "edges": 491728,
+    "faces": 245864,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      245864
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 51566.08341814914
+  },
+  "08_HeadRearShell": {
+    "vertices": 268552,
+    "edges": 537100,
+    "faces": 268550,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      268550
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 56749.985171466615
+  },
+  "09_MouthShell": {
+    "vertices": 54942,
+    "edges": 109880,
+    "faces": 54940,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "connected_components": 1,
+    "largest_component_faces": [
+      54940
+    ],
+    "components_under_100_faces": 0,
+    "signed_volume": 11559.33143389898
+  }
+}

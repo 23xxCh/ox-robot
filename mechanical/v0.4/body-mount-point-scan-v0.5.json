@@ -1,0 +1,3793 @@
+{
+  "method": "symmetric 14 mm diameter post scan, z=46..80 mm",
+  "preferred_raw_gap_mm": [
+    3.0,
+    8.0
+  ],
+  "candidate_count": 91,
+  "viable_count": 14,
+  "recommended_candidates": [
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 4.913,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 4.913,
+          "nearest_post_point_mm": [
+            -44.638,
+            -35.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -41.63,
+            -33.263,
+            83.176
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 4.914,
+          "nearest_post_point_mm": [
+            44.638,
+            -35.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            41.633,
+            -33.262,
+            83.179
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 4.799,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 4.799,
+          "nearest_post_point_mm": [
+            -30.985,
+            -49.266,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -28.769,
+            -46.126,
+            82.875
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 4.806,
+          "nearest_post_point_mm": [
+            30.985,
+            -49.266,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            28.765,
+            -46.124,
+            82.879
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 5.314,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 5.839,
+          "nearest_post_point_mm": [
+            -51.062,
+            43.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -56.334,
+            45.951,
+            70.549
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 5.314,
+          "nearest_post_point_mm": [
+            51.344,
+            42.958,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            55.868,
+            45.606,
+            70.874
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 4.497,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 4.497,
+          "nearest_post_point_mm": [
+            -31.812,
+            61.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.935,
+            66.068,
+            71.355
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 4.55,
+          "nearest_post_point_mm": [
+            31.812,
+            61.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.0,
+            66.11,
+            71.385
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 5.545,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 5.563,
+          "nearest_post_point_mm": [
+            -49.638,
+            -30.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -46.039,
+            -27.451,
+            82.948
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 5.545,
+          "nearest_post_point_mm": [
+            49.638,
+            -30.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            46.049,
+            -27.462,
+            82.939
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 4.367,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 4.367,
+          "nearest_post_point_mm": [
+            -39.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -37.146,
+            -38.363,
+            82.88
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 4.402,
+          "nearest_post_point_mm": [
+            39.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            37.123,
+            -38.343,
+            82.898
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 4.288,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 4.304,
+          "nearest_post_point_mm": [
+            -35.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.985,
+            -42.574,
+            82.851
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 4.288,
+          "nearest_post_point_mm": [
+            35.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            32.988,
+            -42.588,
+            82.841
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 6.111,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 6.111,
+          "nearest_post_point_mm": [
+            -27.394,
+            61.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -29.403,
+            67.316,
+            71.387
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 6.129,
+          "nearest_post_point_mm": [
+            27.394,
+            61.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            29.425,
+            67.329,
+            71.402
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 3.585,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 4.15,
+          "nearest_post_point_mm": [
+            -44.95,
+            54.95,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -48.003,
+            57.607,
+            70.916
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 3.585,
+          "nearest_post_point_mm": [
+            44.015,
+            55.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.875,
+            58.645,
+            71.042
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 6.535,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 6.819,
+          "nearest_post_point_mm": [
+            -39.015,
+            55.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -42.787,
+            61.343,
+            71.1
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 6.535,
+          "nearest_post_point_mm": [
+            39.015,
+            55.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            42.902,
+            60.91,
+            71.1
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 6.967,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 7.478,
+          "nearest_post_point_mm": [
+            -45.734,
+            49.015,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.49,
+            53.735,
+            70.723
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 6.967,
+          "nearest_post_point_mm": [
+            46.062,
+            48.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            52.248,
+            51.575,
+            70.905
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 6.991,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 6.991,
+          "nearest_post_point_mm": [
+            -40.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -36.274,
+            -41.079,
+            84.341
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 7.056,
+          "nearest_post_point_mm": [
+            40.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            35.831,
+            -41.233,
+            84.173
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 7.222,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 7.225,
+          "nearest_post_point_mm": [
+            -35.5,
+            -49.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -31.971,
+            -45.161,
+            84.438
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 7.222,
+          "nearest_post_point_mm": [
+            35.5,
+            -49.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            31.975,
+            -45.161,
+            84.437
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 7.297,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 7.297,
+          "nearest_post_point_mm": [
+            -44.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -40.271,
+            -36.813,
+            84.538
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 7.329,
+          "nearest_post_point_mm": [
+            44.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.254,
+            -36.812,
+            84.57
+          ]
+        }
+      ]
+    }
+  ],
+  "all_candidates": [
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 20.265,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 20.265,
+          "nearest_post_point_mm": [
+            -26.812,
+            46.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.935,
+            66.068,
+            71.355
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 20.323,
+          "nearest_post_point_mm": [
+            26.812,
+            46.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.0,
+            66.11,
+            71.385
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 17.481,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 17.858,
+          "nearest_post_point_mm": [
+            -34.015,
+            45.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -44.074,
+            60.461,
+            71.086
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 17.481,
+          "nearest_post_point_mm": [
+            34.5,
+            45.362,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.358,
+            59.029,
+            71.043
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 15.753,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 15.753,
+          "nearest_post_point_mm": [
+            -50.05,
+            -50.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -40.405,
+            -41.016,
+            88.573
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 15.797,
+          "nearest_post_point_mm": [
+            49.638,
+            -50.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            39.6,
+            -41.428,
+            88.155
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 15.527,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 15.527,
+          "nearest_post_point_mm": [
+            -27.394,
+            51.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.935,
+            66.068,
+            71.355
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 15.588,
+          "nearest_post_point_mm": [
+            27.394,
+            51.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.0,
+            66.11,
+            71.385
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 13.761,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 14.479,
+          "nearest_post_point_mm": [
+            -40.362,
+            44.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.49,
+            53.735,
+            70.723
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 13.761,
+          "nearest_post_point_mm": [
+            41.062,
+            43.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            52.908,
+            50.45,
+            70.849
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 13.499,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 13.732,
+          "nearest_post_point_mm": [
+            -34.015,
+            50.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -41.709,
+            62.072,
+            71.1
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 13.499,
+          "nearest_post_point_mm": [
+            34.015,
+            50.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            41.854,
+            61.687,
+            71.1
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 12.983,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 12.983,
+          "nearest_post_point_mm": [
+            -49.638,
+            -45.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -41.186,
+            -38.785,
+            87.213
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 13.065,
+          "nearest_post_point_mm": [
+            49.638,
+            -45.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            41.515,
+            -38.52,
+            87.482
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 12.703,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 12.717,
+          "nearest_post_point_mm": [
+            -45.05,
+            -50.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -37.691,
+            -42.492,
+            87.102
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 12.703,
+          "nearest_post_point_mm": [
+            45.05,
+            -50.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            37.85,
+            -42.647,
+            87.397
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 10.815,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 10.815,
+          "nearest_post_point_mm": [
+            -27.394,
+            56.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -31.167,
+            66.694,
+            71.367
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 10.843,
+          "nearest_post_point_mm": [
+            27.394,
+            56.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            31.202,
+            66.711,
+            71.385
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 10.486,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 10.965,
+          "nearest_post_point_mm": [
+            -38.5,
+            51.062,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -44.074,
+            60.461,
+            71.086
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 10.486,
+          "nearest_post_point_mm": [
+            39.015,
+            50.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.358,
+            59.029,
+            71.043
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 10.456,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 10.456,
+          "nearest_post_point_mm": [
+            -49.266,
+            -40.985,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -42.417,
+            -35.823,
+            85.98
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 10.527,
+          "nearest_post_point_mm": [
+            49.266,
+            -40.985,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            42.38,
+            -35.775,
+            86.021
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 9.89,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 9.89,
+          "nearest_post_point_mm": [
+            -44.638,
+            -45.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -38.471,
+            -40.3,
+            85.722
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 9.973,
+          "nearest_post_point_mm": [
+            44.638,
+            -45.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            38.635,
+            -40.459,
+            86.165
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 9.885,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 9.886,
+          "nearest_post_point_mm": [
+            -40.5,
+            -49.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -34.887,
+            -43.862,
+            85.731
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 9.885,
+          "nearest_post_point_mm": [
+            40.5,
+            -49.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            35.089,
+            -43.476,
+            85.52
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 9.519,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 10.389,
+          "nearest_post_point_mm": [
+            -46.578,
+            42.394,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -56.103,
+            46.512,
+            70.508
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 9.519,
+          "nearest_post_point_mm": [
+            46.062,
+            43.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            54.057,
+            48.59,
+            70.888
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 9.199,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 9.199,
+          "nearest_post_point_mm": [
+            -31.812,
+            56.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -34.719,
+            65.465,
+            71.345
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 9.265,
+          "nearest_post_point_mm": [
+            31.812,
+            56.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            34.802,
+            65.509,
+            71.384
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 8.066,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 8.066,
+          "nearest_post_point_mm": [
+            -49.266,
+            -35.985,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -44.17,
+            -32.014,
+            84.83
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 8.106,
+          "nearest_post_point_mm": [
+            49.266,
+            -35.985,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            44.14,
+            -32.013,
+            84.864
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 7.297,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 7.297,
+          "nearest_post_point_mm": [
+            -44.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -40.271,
+            -36.813,
+            84.538
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 7.329,
+          "nearest_post_point_mm": [
+            44.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.254,
+            -36.812,
+            84.57
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 7.222,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 7.225,
+          "nearest_post_point_mm": [
+            -35.5,
+            -49.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -31.971,
+            -45.161,
+            84.438
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 7.222,
+          "nearest_post_point_mm": [
+            35.5,
+            -49.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            31.975,
+            -45.161,
+            84.437
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 6.991,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 6.991,
+          "nearest_post_point_mm": [
+            -40.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -36.274,
+            -41.079,
+            84.341
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 7.056,
+          "nearest_post_point_mm": [
+            40.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            35.831,
+            -41.233,
+            84.173
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 6.967,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 7.478,
+          "nearest_post_point_mm": [
+            -45.734,
+            49.015,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.49,
+            53.735,
+            70.723
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 6.967,
+          "nearest_post_point_mm": [
+            46.062,
+            48.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            52.248,
+            51.575,
+            70.905
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 6.535,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 6.819,
+          "nearest_post_point_mm": [
+            -39.015,
+            55.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -42.787,
+            61.343,
+            71.1
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 6.535,
+          "nearest_post_point_mm": [
+            39.015,
+            55.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            42.902,
+            60.91,
+            71.1
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 6.111,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 6.111,
+          "nearest_post_point_mm": [
+            -27.394,
+            61.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -29.403,
+            67.316,
+            71.387
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 6.129,
+          "nearest_post_point_mm": [
+            27.394,
+            61.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            29.425,
+            67.329,
+            71.402
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 5.545,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 5.563,
+          "nearest_post_point_mm": [
+            -49.638,
+            -30.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -46.039,
+            -27.451,
+            82.948
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 5.545,
+          "nearest_post_point_mm": [
+            49.638,
+            -30.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            46.049,
+            -27.462,
+            82.939
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 5.314,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 5.839,
+          "nearest_post_point_mm": [
+            -51.062,
+            43.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -56.334,
+            45.951,
+            70.549
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 5.314,
+          "nearest_post_point_mm": [
+            51.344,
+            42.958,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            55.868,
+            45.606,
+            70.874
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 4.913,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 4.913,
+          "nearest_post_point_mm": [
+            -44.638,
+            -35.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -41.63,
+            -33.263,
+            83.176
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 4.914,
+          "nearest_post_point_mm": [
+            44.638,
+            -35.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            41.633,
+            -33.262,
+            83.179
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 4.799,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 4.799,
+          "nearest_post_point_mm": [
+            -30.985,
+            -49.266,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -28.769,
+            -46.126,
+            82.875
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 4.806,
+          "nearest_post_point_mm": [
+            30.985,
+            -49.266,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            28.765,
+            -46.124,
+            82.879
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 4.497,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 4.497,
+          "nearest_post_point_mm": [
+            -31.812,
+            61.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.935,
+            66.068,
+            71.355
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 4.55,
+          "nearest_post_point_mm": [
+            31.812,
+            61.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.0,
+            66.11,
+            71.385
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 4.367,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 4.367,
+          "nearest_post_point_mm": [
+            -39.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -37.146,
+            -38.363,
+            82.88
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 4.402,
+          "nearest_post_point_mm": [
+            39.638,
+            -40.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            37.123,
+            -38.343,
+            82.898
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 4.288,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 4.304,
+          "nearest_post_point_mm": [
+            -35.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.985,
+            -42.574,
+            82.851
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 4.288,
+          "nearest_post_point_mm": [
+            35.05,
+            -45.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            32.988,
+            -42.588,
+            82.841
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 3.585,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 4.15,
+          "nearest_post_point_mm": [
+            -44.95,
+            54.95,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -48.003,
+            57.607,
+            70.916
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 3.585,
+          "nearest_post_point_mm": [
+            44.015,
+            55.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.875,
+            58.645,
+            71.042
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 2.74,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 3.492,
+          "nearest_post_point_mm": [
+            -50.734,
+            49.015,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -53.273,
+            51.314,
+            70.679
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 2.74,
+          "nearest_post_point_mm": [
+            50.734,
+            49.015,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            52.908,
+            50.45,
+            70.849
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 2.659,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 2.696,
+          "nearest_post_point_mm": [
+            -49.638,
+            -25.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -47.84,
+            -23.847,
+            81.141
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 2.659,
+          "nearest_post_point_mm": [
+            50.05,
+            -25.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            48.448,
+            -23.255,
+            81.13
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 2.616,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 2.77,
+          "nearest_post_point_mm": [
+            -39.015,
+            60.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -40.569,
+            62.843,
+            71.1
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 2.616,
+          "nearest_post_point_mm": [
+            39.015,
+            60.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.484,
+            62.702,
+            71.098
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 2.605,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 2.605,
+          "nearest_post_point_mm": [
+            -25.985,
+            -49.266,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -24.766,
+            -47.568,
+            81.555
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 2.644,
+          "nearest_post_point_mm": [
+            26.5,
+            -48.938,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            25.608,
+            -47.21,
+            81.791
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 2.321,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 2.408,
+          "nearest_post_point_mm": [
+            -44.638,
+            -30.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -43.001,
+            -29.203,
+            81.198
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 2.321,
+          "nearest_post_point_mm": [
+            44.638,
+            -30.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            43.052,
+            -29.256,
+            81.151
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 1.996,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 1.996,
+          "nearest_post_point_mm": [
+            -39.638,
+            -35.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -38.643,
+            -34.467,
+            81.388
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 1.998,
+          "nearest_post_point_mm": [
+            39.638,
+            -35.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            38.644,
+            -34.462,
+            81.388
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 1.798,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 1.798,
+          "nearest_post_point_mm": [
+            -30.5,
+            -44.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -29.755,
+            -43.563,
+            81.234
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 1.829,
+          "nearest_post_point_mm": [
+            30.5,
+            -44.638,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            29.732,
+            -43.545,
+            81.25
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 1.656,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 1.656,
+          "nearest_post_point_mm": [
+            -35.05,
+            -40.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -34.231,
+            -39.043,
+            81.029
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 1.669,
+          "nearest_post_point_mm": [
+            35.05,
+            -40.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            34.222,
+            -39.031,
+            81.03
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 1.458,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 1.458,
+          "nearest_post_point_mm": [
+            -25.61,
+            66.973,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -25.508,
+            68.35,
+            71.533
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 1.481,
+          "nearest_post_point_mm": [
+            25.61,
+            66.973,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            25.508,
+            68.368,
+            71.51
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 50.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 1.227,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 1.361,
+          "nearest_post_point_mm": [
+            -56.344,
+            42.958,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -57.445,
+            43.497,
+            70.591
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 1.227,
+          "nearest_post_point_mm": [
+            56.062,
+            43.5,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            56.999,
+            43.709,
+            70.764
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -55.0,
+      "symmetric_pair_raw_min_mm": 0.66,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.66,
+          "nearest_post_point_mm": [
+            -21.5,
+            -48.938,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -21.123,
+            -48.589,
+            80.415
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.699,
+          "nearest_post_point_mm": [
+            21.5,
+            -48.938,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            21.093,
+            -48.57,
+            80.433
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 0.571,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.839,
+          "nearest_post_point_mm": [
+            -50.362,
+            54.5,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -50.857,
+            55.034,
+            71.583
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.571,
+          "nearest_post_point_mm": [
+            51.062,
+            53.5,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            51.419,
+            53.759,
+            71.637
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 0.312,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.312,
+          "nearest_post_point_mm": [
+            -32.394,
+            66.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.572,
+            66.766,
+            71.826
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.352,
+          "nearest_post_point_mm": [
+            32.394,
+            66.578,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            32.615,
+            66.78,
+            71.815
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 0.224,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.224,
+          "nearest_post_point_mm": [
+            -38.422,
+            -32.606,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -38.621,
+            -32.637,
+            80.098
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.224,
+          "nearest_post_point_mm": [
+            38.422,
+            -32.606,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            38.621,
+            -32.638,
+            80.097
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 0.204,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.42,
+          "nearest_post_point_mm": [
+            -44.015,
+            60.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -44.143,
+            60.883,
+            71.629
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.204,
+          "nearest_post_point_mm": [
+            44.015,
+            60.734,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            43.993,
+            60.794,
+            71.807
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 30.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.174,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.18,
+          "nearest_post_point_mm": [
+            -36.062,
+            68.5,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -36.149,
+            68.347,
+            72.038
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.174,
+          "nearest_post_point_mm": [
+            36.894,
+            66.216,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            36.891,
+            66.201,
+            70.174
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 0.17,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.17,
+          "nearest_post_point_mm": [
+            -47.042,
+            -23.656,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -47.162,
+            -23.764,
+            80.052
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.181,
+          "nearest_post_point_mm": [
+            47.042,
+            -23.656,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            47.174,
+            -23.774,
+            80.036
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.148,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.148,
+          "nearest_post_point_mm": [
+            -21.5,
+            -31.062,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -21.383,
+            -30.984,
+            71.956
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.155,
+          "nearest_post_point_mm": [
+            21.5,
+            -31.062,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            21.38,
+            -30.978,
+            71.951
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 0.143,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.146,
+          "nearest_post_point_mm": [
+            -28.188,
+            -43.239,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -28.199,
+            -43.165,
+            79.875
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.143,
+          "nearest_post_point_mm": [
+            28.188,
+            -43.239,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            28.188,
+            -43.159,
+            79.881
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 55.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 0.139,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.139,
+          "nearest_post_point_mm": [
+            -53.188,
+            61.761,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -53.212,
+            61.626,
+            79.978
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.144,
+          "nearest_post_point_mm": [
+            48.938,
+            58.5,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            49.021,
+            58.617,
+            74.014
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 50.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 0.12,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.165,
+          "nearest_post_point_mm": [
+            -55.362,
+            49.5,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -55.396,
+            49.348,
+            71.945
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.12,
+          "nearest_post_point_mm": [
+            57.0,
+            45.0,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            57.069,
+            44.931,
+            72.069
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.109,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.121,
+          "nearest_post_point_mm": [
+            -45.734,
+            -20.985,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -45.663,
+            -21.083,
+            77.99
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.109,
+          "nearest_post_point_mm": [
+            45.734,
+            -20.985,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.646,
+            -21.043,
+            78.028
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 25.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.108,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.108,
+          "nearest_post_point_mm": [
+            -27.958,
+            71.344,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -27.962,
+            71.244,
+            74.042
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.118,
+          "nearest_post_point_mm": [
+            26.812,
+            71.761,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            26.744,
+            71.837,
+            74.06
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 55.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.107,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.131,
+          "nearest_post_point_mm": [
+            -51.5,
+            -18.938,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.425,
+            -19.037,
+            79.957
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.107,
+          "nearest_post_point_mm": [
+            48.422,
+            -22.606,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            48.354,
+            -22.553,
+            80.064
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 0.106,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.106,
+          "nearest_post_point_mm": [
+            -33.784,
+            -38.106,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -33.835,
+            -38.048,
+            80.073
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.112,
+          "nearest_post_point_mm": [
+            33.784,
+            -38.106,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.828,
+            -38.045,
+            80.083
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 50.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.106,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.134,
+          "nearest_post_point_mm": [
+            -48.188,
+            58.239,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -48.101,
+            58.304,
+            71.924
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.106,
+          "nearest_post_point_mm": [
+            45.05,
+            60.05,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.062,
+            60.097,
+            71.905
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 0.105,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.105,
+          "nearest_post_point_mm": [
+            -37.606,
+            -33.422,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -37.675,
+            -33.481,
+            79.948
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.115,
+          "nearest_post_point_mm": [
+            37.606,
+            -33.422,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            37.681,
+            -33.489,
+            79.943
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.104,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.11,
+          "nearest_post_point_mm": [
+            -40.734,
+            -20.985,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -40.766,
+            -21.085,
+            72.031
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.104,
+          "nearest_post_point_mm": [
+            40.734,
+            -20.985,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.737,
+            -21.079,
+            72.043
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 0.102,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.102,
+          "nearest_post_point_mm": [
+            -25.985,
+            -35.734,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -26.07,
+            -35.682,
+            74.023
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.107,
+          "nearest_post_point_mm": [
+            25.985,
+            -35.734,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            26.06,
+            -35.669,
+            74.039
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 55.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 0.101,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.156,
+          "nearest_post_point_mm": [
+            -51.5,
+            56.062,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.436,
+            56.203,
+            74.019
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.101,
+          "nearest_post_point_mm": [
+            55.0,
+            57.0,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            55.09,
+            56.96,
+            78.023
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 0.094,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.094,
+          "nearest_post_point_mm": [
+            -28.656,
+            -32.958,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -28.668,
+            -32.869,
+            73.974
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.105,
+          "nearest_post_point_mm": [
+            39.95,
+            -25.05,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.043,
+            -25.023,
+            73.959
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 0.09,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.09,
+          "nearest_post_point_mm": [
+            -51.578,
+            62.394,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.514,
+            62.334,
+            78.018
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.128,
+          "nearest_post_point_mm": [
+            51.578,
+            57.606,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            51.493,
+            57.522,
+            72.045
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 0.085,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.085,
+          "nearest_post_point_mm": [
+            -18.422,
+            -42.394,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -18.342,
+            -42.378,
+            74.024
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.149,
+          "nearest_post_point_mm": [
+            27.394,
+            -33.422,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            27.407,
+            -33.404,
+            75.853
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 50.0,
+      "y_mm": 50.0,
+      "symmetric_pair_raw_min_mm": 0.08,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.106,
+          "nearest_post_point_mm": [
+            -56.578,
+            52.394,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -56.646,
+            52.462,
+            80.044
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.08,
+          "nearest_post_point_mm": [
+            54.95,
+            54.95,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            54.957,
+            55.03,
+            80.002
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.079,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.133,
+          "nearest_post_point_mm": [
+            -50.362,
+            60.5,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -50.273,
+            60.479,
+            73.904
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.079,
+          "nearest_post_point_mm": [
+            49.5,
+            59.638,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            49.441,
+            59.643,
+            75.946
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 55.0,
+      "y_mm": 40.0,
+      "symmetric_pair_raw_min_mm": 0.076,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.098,
+          "nearest_post_point_mm": [
+            -61.761,
+            38.188,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -61.822,
+            38.141,
+            80.06
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.076,
+          "nearest_post_point_mm": [
+            60.734,
+            44.015,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            60.685,
+            44.037,
+            75.946
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.075,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.156,
+          "nearest_post_point_mm": [
+            -32.606,
+            71.578,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -32.756,
+            71.614,
+            75.98
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.075,
+          "nearest_post_point_mm": [
+            40.734,
+            69.015,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.709,
+            68.968,
+            78.053
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.075,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.109,
+          "nearest_post_point_mm": [
+            -37.042,
+            71.344,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -36.971,
+            71.426,
+            77.985
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.075,
+          "nearest_post_point_mm": [
+            35.5,
+            70.362,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            35.57,
+            70.38,
+            76.021
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 0.068,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.068,
+          "nearest_post_point_mm": [
+            -38.784,
+            -23.106,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -38.75,
+            -23.157,
+            70.029
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.077,
+          "nearest_post_point_mm": [
+            45.362,
+            -25.5,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            45.37,
+            -25.572,
+            80.029
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.067,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.082,
+          "nearest_post_point_mm": [
+            -38.106,
+            -26.216,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -38.184,
+            -26.192,
+            74.004
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.067,
+          "nearest_post_point_mm": [
+            38.106,
+            -26.216,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            38.151,
+            -26.174,
+            74.026
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 0.064,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.064,
+          "nearest_post_point_mm": [
+            -31.062,
+            -33.5,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -31.116,
+            -33.497,
+            77.966
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.071,
+          "nearest_post_point_mm": [
+            31.062,
+            -33.5,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            31.119,
+            -33.505,
+            77.959
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.063,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.063,
+          "nearest_post_point_mm": [
+            -33.5,
+            -31.062,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -33.497,
+            -31.122,
+            77.983
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.068,
+          "nearest_post_point_mm": [
+            33.5,
+            -31.062,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.515,
+            -31.127,
+            77.989
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 50.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 0.06,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.097,
+          "nearest_post_point_mm": [
+            -50.61,
+            61.973,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -50.535,
+            61.94,
+            76.052
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.06,
+          "nearest_post_point_mm": [
+            50.0,
+            62.0,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            50.003,
+            62.018,
+            75.942
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 55.0,
+      "y_mm": 45.0,
+      "symmetric_pair_raw_min_mm": 0.059,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.059,
+          "nearest_post_point_mm": [
+            -54.39,
+            51.973,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -54.367,
+            52.028,
+            73.998
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.116,
+          "nearest_post_point_mm": [
+            53.784,
+            51.894,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            53.699,
+            51.899,
+            70.079
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 0.056,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.056,
+          "nearest_post_point_mm": [
+            -24.266,
+            -40.985,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -24.252,
+            -41.033,
+            76.024
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.058,
+          "nearest_post_point_mm": [
+            24.266,
+            -40.985,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            24.233,
+            -41.018,
+            76.034
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -45.0,
+      "symmetric_pair_raw_min_mm": 0.053,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.053,
+          "nearest_post_point_mm": [
+            -26.812,
+            -38.239,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -26.792,
+            -38.193,
+            78.017
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.078,
+          "nearest_post_point_mm": [
+            26.812,
+            -38.239,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            26.779,
+            -38.18,
+            78.039
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 0.052,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.052,
+          "nearest_post_point_mm": [
+            -20.5,
+            -40.362,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -20.546,
+            -40.349,
+            76.02
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.055,
+          "nearest_post_point_mm": [
+            20.5,
+            -40.362,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            20.511,
+            -40.323,
+            76.037
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 55.0,
+      "y_mm": 65.0,
+      "symmetric_pair_raw_min_mm": 0.052,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.052,
+          "nearest_post_point_mm": [
+            -52.042,
+            58.656,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -52.03,
+            58.641,
+            73.951
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.114,
+          "nearest_post_point_mm": [
+            48.938,
+            61.5,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            48.997,
+            61.598,
+            74.003
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 40.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 0.051,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.052,
+          "nearest_post_point_mm": [
+            -33.027,
+            -35.61,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -33.06,
+            -35.622,
+            78.039
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.051,
+          "nearest_post_point_mm": [
+            33.027,
+            -35.61,
+            78.0
+          ],
+          "nearest_shell_vertex_mm": [
+            33.051,
+            -35.62,
+            78.044
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 0.05,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.056,
+          "nearest_post_point_mm": [
+            -25.5,
+            -45.362,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -25.547,
+            -45.368,
+            80.032
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.05,
+          "nearest_post_point_mm": [
+            25.5,
+            -45.362,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            25.532,
+            -45.36,
+            80.039
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 45.0,
+      "y_mm": -30.0,
+      "symmetric_pair_raw_min_mm": 0.05,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.078,
+          "nearest_post_point_mm": [
+            -40.05,
+            -25.05,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -40.081,
+            -25.046,
+            73.929
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.05,
+          "nearest_post_point_mm": [
+            40.05,
+            -25.05,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            40.043,
+            -25.023,
+            73.959
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 40.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 0.049,
+      "sides": [
+        {
+          "x_mm": -40.0,
+          "raw_min_vertex_distance_mm": 0.049,
+          "nearest_post_point_mm": [
+            -44.015,
+            65.734,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -44.021,
+            65.766,
+            74.037
+          ]
+        },
+        {
+          "x_mm": 40.0,
+          "raw_min_vertex_distance_mm": 0.05,
+          "nearest_post_point_mm": [
+            42.958,
+            66.344,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            42.981,
+            66.387,
+            74.01
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 35.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 0.046,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.102,
+          "nearest_post_point_mm": [
+            -41.344,
+            62.958,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -41.378,
+            63.051,
+            71.977
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.046,
+          "nearest_post_point_mm": [
+            41.344,
+            62.958,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            41.314,
+            62.988,
+            72.018
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -40.0,
+      "symmetric_pair_raw_min_mm": 0.044,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.067,
+          "nearest_post_point_mm": [
+            -28.0,
+            -40.0,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -28.022,
+            -40.027,
+            79.943
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.044,
+          "nearest_post_point_mm": [
+            28.0,
+            -40.0,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            28.0,
+            -40.007,
+            79.957
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 25.0,
+      "y_mm": -50.0,
+      "symmetric_pair_raw_min_mm": 0.039,
+      "sides": [
+        {
+          "x_mm": -25.0,
+          "raw_min_vertex_distance_mm": 0.039,
+          "nearest_post_point_mm": [
+            -24.39,
+            -43.027,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -24.385,
+            -43.008,
+            79.967
+          ]
+        },
+        {
+          "x_mm": 25.0,
+          "raw_min_vertex_distance_mm": 0.044,
+          "nearest_post_point_mm": [
+            24.39,
+            -43.027,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            24.372,
+            -42.999,
+            79.97
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 30.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 0.039,
+      "sides": [
+        {
+          "x_mm": -30.0,
+          "raw_min_vertex_distance_mm": 0.045,
+          "nearest_post_point_mm": [
+            -36.973,
+            -34.39,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -36.962,
+            -34.417,
+            80.034
+          ]
+        },
+        {
+          "x_mm": 30.0,
+          "raw_min_vertex_distance_mm": 0.039,
+          "nearest_post_point_mm": [
+            36.973,
+            -34.39,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            36.968,
+            -34.416,
+            80.028
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 45.0,
+      "y_mm": 55.0,
+      "symmetric_pair_raw_min_mm": 0.039,
+      "sides": [
+        {
+          "x_mm": -45.0,
+          "raw_min_vertex_distance_mm": 0.08,
+          "nearest_post_point_mm": [
+            -51.973,
+            55.61,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -51.909,
+            55.599,
+            74.046
+          ]
+        },
+        {
+          "x_mm": 45.0,
+          "raw_min_vertex_distance_mm": 0.039,
+          "nearest_post_point_mm": [
+            46.812,
+            61.761,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            46.814,
+            61.76,
+            72.039
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 35.0,
+      "y_mm": -35.0,
+      "symmetric_pair_raw_min_mm": 0.027,
+      "sides": [
+        {
+          "x_mm": -35.0,
+          "raw_min_vertex_distance_mm": 0.045,
+          "nearest_post_point_mm": [
+            -28.422,
+            -32.606,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -28.437,
+            -32.638,
+            75.972
+          ]
+        },
+        {
+          "x_mm": 35.0,
+          "raw_min_vertex_distance_mm": 0.027,
+          "nearest_post_point_mm": [
+            28.422,
+            -32.606,
+            76.0
+          ],
+          "nearest_shell_vertex_mm": [
+            28.42,
+            -32.622,
+            75.979
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 50.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 0.022,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.078,
+          "nearest_post_point_mm": [
+            -43.239,
+            61.812,
+            72.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -43.17,
+            61.846,
+            71.983
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.022,
+          "nearest_post_point_mm": [
+            54.95,
+            55.05,
+            80.0
+          ],
+          "nearest_shell_vertex_mm": [
+            54.957,
+            55.03,
+            80.002
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "rear",
+      "abs_x_mm": 55.0,
+      "y_mm": 60.0,
+      "symmetric_pair_raw_min_mm": 0.022,
+      "sides": [
+        {
+          "x_mm": -55.0,
+          "raw_min_vertex_distance_mm": 0.022,
+          "nearest_post_point_mm": [
+            -48.0,
+            60.0,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -47.993,
+            59.983,
+            74.012
+          ]
+        },
+        {
+          "x_mm": 55.0,
+          "raw_min_vertex_distance_mm": 0.069,
+          "nearest_post_point_mm": [
+            53.188,
+            53.239,
+            74.0
+          ],
+          "nearest_shell_vertex_mm": [
+            53.236,
+            53.194,
+            74.024
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "front",
+      "abs_x_mm": 50.0,
+      "y_mm": -25.0,
+      "symmetric_pair_raw_min_mm": 0.021,
+      "sides": [
+        {
+          "x_mm": -50.0,
+          "raw_min_vertex_distance_mm": 0.021,
+          "nearest_post_point_mm": [
+            -46.5,
+            -18.938,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            -46.51,
+            -18.929,
+            70.017
+          ]
+        },
+        {
+          "x_mm": 50.0,
+          "raw_min_vertex_distance_mm": 0.025,
+          "nearest_post_point_mm": [
+            46.5,
+            -18.938,
+            70.0
+          ],
+          "nearest_shell_vertex_mm": [
+            46.525,
+            -18.939,
+            70.001
+          ]
+        }
+      ]
+    }
+  ]
+}

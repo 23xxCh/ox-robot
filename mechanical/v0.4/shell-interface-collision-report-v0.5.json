@@ -1,0 +1,42 @@
+{
+  "shell_blend": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.4\\niulai-hollow-shell-v0.4.blend",
+  "frame_version": "v0.3-shell-interface",
+  "part_dimensions_mm": {
+    "body_front": [
+      219.952,
+      164.82,
+      125.587
+    ],
+    "body_rear": [
+      119.997,
+      39.675,
+      103.989
+    ],
+    "head_front": [
+      158.562,
+      101.767,
+      135.762
+    ],
+    "head_rear": [
+      173.628,
+      89.958,
+      135.806
+    ],
+    "mouth": [
+      79.087,
+      58.153,
+      38.735
+    ]
+  },
+  "printer_volume_mm": [
+    330.0,
+    320.0,
+    325.0
+  ],
+  "all_parts_fit_printer_when_oriented": true,
+  "blocking_collision_pair_count": 0,
+  "blocking_collisions": [],
+  "planned_aperture_intersection_count": 0,
+  "planned_aperture_intersections": [],
+  "status": "STRUCTURE_AND_APERTURES_CLEAR"
+}

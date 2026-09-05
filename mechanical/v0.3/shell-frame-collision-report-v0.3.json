@@ -1,0 +1,121 @@
+{
+  "shell_blend": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\niulai-hollow-shell-v0.3.blend",
+  "frame_version": "v0.2",
+  "part_dimensions_mm": {
+    "body_front": [
+      220.0,
+      80.369,
+      136.001
+    ],
+    "body_rear": [
+      219.678,
+      105.579,
+      136.401
+    ],
+    "head_front": [
+      169.305,
+      106.524,
+      140.585
+    ],
+    "head_rear": [
+      175.085,
+      63.668,
+      128.134
+    ],
+    "mouth": [
+      94.32,
+      60.51,
+      54.075
+    ]
+  },
+  "printer_volume_mm": [
+    330.0,
+    320.0,
+    325.0
+  ],
+  "all_parts_fit_printer_when_oriented": true,
+  "collision_pair_count": 16,
+  "collisions": [
+    {
+      "shell": "head_front",
+      "frame": "12_head_interface_plate",
+      "triangle_pair_count": 1711
+    },
+    {
+      "shell": "head_front",
+      "frame": "11_tilt_bracket",
+      "triangle_pair_count": 1420
+    },
+    {
+      "shell": "mouth",
+      "frame": "10_pan_platform",
+      "triangle_pair_count": 1322
+    },
+    {
+      "shell": "body_rear",
+      "frame": "05_electronics_deck",
+      "triangle_pair_count": 1068
+    },
+    {
+      "shell": "body_front",
+      "frame": "05_electronics_deck",
+      "triangle_pair_count": 860
+    },
+    {
+      "shell": "head_front",
+      "frame": "hardware_placeholders",
+      "triangle_pair_count": 706
+    },
+    {
+      "shell": "head_front",
+      "frame": "09_neck_crossbeam",
+      "triangle_pair_count": 372
+    },
+    {
+      "shell": "body_front",
+      "frame": "hardware_placeholders",
+      "triangle_pair_count": 163
+    },
+    {
+      "shell": "mouth",
+      "frame": "hardware_placeholders",
+      "triangle_pair_count": 134
+    },
+    {
+      "shell": "head_front",
+      "frame": "13_mouth_bracket",
+      "triangle_pair_count": 103
+    },
+    {
+      "shell": "body_front",
+      "frame": "09_neck_crossbeam",
+      "triangle_pair_count": 79
+    },
+    {
+      "shell": "mouth",
+      "frame": "11_tilt_bracket",
+      "triangle_pair_count": 47
+    },
+    {
+      "shell": "head_front",
+      "frame": "10_pan_platform",
+      "triangle_pair_count": 46
+    },
+    {
+      "shell": "body_rear",
+      "frame": "hardware_placeholders",
+      "triangle_pair_count": 16
+    },
+    {
+      "shell": "body_front",
+      "frame": "07_neck_column_left",
+      "triangle_pair_count": 11
+    },
+    {
+      "shell": "body_front",
+      "frame": "08_neck_column_right",
+      "triangle_pair_count": 5
+    }
+  ],
+  "status": "PROVISIONAL_NEEDS_INTERFACE_WORK"
+}

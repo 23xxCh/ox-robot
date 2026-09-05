@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "external_target_mm": [
+    220,
+    200,
+    330
+  ],
+  "assembly_bbox_mm": {
+    "x": 212.0,
+    "y": 154.0,
+    "z": 296.5,
+    "xmin": -106.0,
+    "ymin": -82.0,
+    "zmin": -0.5,
+    "xmax": 106.0,
+    "ymax": 72.0,
+    "zmax": 296.0
+  },
+  "critical_internal_bbox_mm": [
+    114.0,
+    105.0,
+    289.0
+  ],
+  "printable_stl_count": 19,
+  "freecad_required_shapes_valid": true,
+  "all_print_parts_fit_a2l": true,
+  "all_five_shell_parts_fit_a2l_and_are_manifold": true,
+  "freecad_collision_failures": 0,
+  "critical_clearance_failures": 0,
+  "body_mount_clearance_failures": 0,
+  "body_mount_pad_conservative_clearance_mm": 4.113,
+  "body_mount_tower_conservative_clearance_mm": 6.43,
+  "m3_heatset_coupon": "19_m3_heatset_coupon.stl"
+}

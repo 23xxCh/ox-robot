@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "E:\AI WORK\硬件黑客松\mechanical\v0.3\build_niulai_shell_v0_3.py", line 306, in <module>
+    raise RuntimeError(
+        f"Envelope gate failed for {name}: expected within {tuple(outer_dimensions)}, got {tuple(dimensions)}"
+    )
+RuntimeError: Envelope gate failed for open_shell: expected within (209.43045043945312, 178.8318328857422, 330.0), got (344346.53125, 430648.78125, 467687.21875)

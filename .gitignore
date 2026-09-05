@@ -1,0 +1,35 @@
+# Python / tests
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.rgm-ledger.json
+
+# Agent scratch
+.codex-recovery/
+.scratch/
+
+# Node one-offs
+node_modules/
+
+# Vendor Xiaozhi tutorial dump (firmware bins, flash tool, videos; files >100MB)
+小智AI教程最新教程下载电脑先解压文档 0826/
+
+# Personal WeChat export
+wechat_chat_export_*.zip
+
+# Blender / FreeCAD working copies that exceed GitHub's 100MB file limit
+*.blend
+*.blend1
+*.FCBak
+
+# Failed mesh experiments
+mechanical/**/rejected-manifold-output/
+
+# Duplicate packed print zips (unpacked copies remain under outputs/)
+outputs/*.zip
+outputs/**/*.zip
+
+# Windows junk
+Thumbs.db
+Desktop.ini
+.DS_Store

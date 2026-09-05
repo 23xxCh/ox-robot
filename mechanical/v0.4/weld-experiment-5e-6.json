@@ -1,0 +1,43 @@
+{
+  "source": "E:\\AI WORK\\硬件黑客松\\30917144b3a6572e5c69c4590d885680.glb",
+  "weld_distance_source_units": 5e-06,
+  "kept_components": 4751,
+  "before": {
+    "vertices": 808142,
+    "edges": 2279534,
+    "faces": 1472699,
+    "boundary_edges": 140971,
+    "non_manifold_edges": 140971
+  },
+  "after": {
+    "vertices": 736586,
+    "edges": 2209254,
+    "faces": 1472698,
+    "boundary_edges": 413,
+    "non_manifold_edges": 413,
+    "connected_components": 53,
+    "largest_component_faces": [
+      1472523,
+      10,
+      8,
+      8,
+      7,
+      6,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      4,
+      4,
+      4,
+      4,
+      4,
+      3,
+      3
+    ],
+    "components_under_100_faces": 52
+  }
+}

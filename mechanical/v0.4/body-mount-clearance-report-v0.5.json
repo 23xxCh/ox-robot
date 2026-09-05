@@ -1,0 +1,99 @@
+{
+  "method": "binary STL nearest-vertex check with conservative voxel allowance",
+  "interface_gate_mm": 1.5,
+  "shell_mesh_surface_allowance_mm": 0.8,
+  "body_shell_band_71_5_to_80_5_mm": {
+    "min_mm": [
+      -107.963,
+      -55.19,
+      71.5
+    ],
+    "max_mm": [
+      108.001,
+      86.991,
+      80.5
+    ],
+    "dimensions_mm": [
+      215.964,
+      142.181,
+      9.0
+    ]
+  },
+  "body_mount_pad_bounds": {
+    "min_mm": [
+      -57.0,
+      -46.998,
+      72.0
+    ],
+    "max_mm": [
+      57.0,
+      46.998,
+      80.0
+    ],
+    "dimensions_mm": [
+      114.0,
+      93.996,
+      8.0
+    ]
+  },
+  "mount_points_xy_mm": [
+    [
+      -50.0,
+      -40.0
+    ],
+    [
+      50.0,
+      -40.0
+    ],
+    [
+      -45.0,
+      40.0
+    ],
+    [
+      45.0,
+      40.0
+    ]
+  ],
+  "failed_count": 0,
+  "checks": [
+    {
+      "name": "BodyMountPads",
+      "nearest_vertex_distance_mm": 4.913,
+      "mesh_surface_allowance_mm": 0.8,
+      "conservative_clearance_mm": 4.113,
+      "target_mm": 1.5,
+      "margin_to_target_mm": 2.613,
+      "nearest_mount_point_mm": [
+        -44.638,
+        -35.5,
+        80.0
+      ],
+      "nearest_shell_vertex_mm": [
+        -41.63,
+        -33.263,
+        83.176
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "BodyMountTowers",
+      "nearest_vertex_distance_mm": 7.23,
+      "mesh_surface_allowance_mm": 0.8,
+      "conservative_clearance_mm": 6.43,
+      "target_mm": 1.5,
+      "margin_to_target_mm": 4.93,
+      "nearest_mount_point_mm": [
+        49.415,
+        42.347,
+        71.0
+      ],
+      "nearest_shell_vertex_mm": [
+        55.868,
+        45.606,
+        70.874
+      ],
+      "status": "PASS"
+    }
+  ],
+  "warning": "This verifies nominal CAD mesh clearance. Print the heat-set coupon and dry-fit the four pads on the chassis jig before epoxy putty because the actual insert, shell warp and slicer shrinkage are not yet measured."
+}

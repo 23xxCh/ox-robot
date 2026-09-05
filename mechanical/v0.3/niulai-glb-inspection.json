@@ -1,0 +1,50 @@
+{
+  "source": "E:\\AI WORK\\硬件黑客松\\30917144b3a6572e5c69c4590d885680.glb",
+  "source_bytes": 73264124,
+  "scene_unit_system": "METRIC",
+  "scene_length_unit": "METERS",
+  "mesh_object_count": 1,
+  "bounds_scene_units": {
+    "min": [
+      -0.31022199988365173,
+      -0.242229163646698,
+      -3.254561065091366e-08
+    ],
+    "max": [
+      0.31064099073410034,
+      0.737182080745697,
+      0.9803412556648254
+    ],
+    "dimensions": [
+      0.6208629608154297,
+      0.979411244392395,
+      0.9803413152694702
+    ]
+  },
+  "objects": [
+    {
+      "name": "node_0",
+      "vertices": 823644,
+      "edges": 2322353,
+      "triangles": 1500000,
+      "polygons": 1500000,
+      "boundary_edges": 144706,
+      "non_manifold_edges": 144706,
+      "loose_edges": 0,
+      "volume_scene_units_cubed": null,
+      "dimensions_scene_units": [
+        0.6208629608154297,
+        0.9803411364555359,
+        0.9794111251831055
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "materials": [
+        "Material.001"
+      ]
+    }
+  ]
+}

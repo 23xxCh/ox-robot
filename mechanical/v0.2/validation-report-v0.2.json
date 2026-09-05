@@ -1,0 +1,534 @@
+{
+  "revision": "v0.2",
+  "status": "BOM_COMPATIBLE_PARAMETRIC_PROTOTYPE_NOT_PRINT_FROZEN",
+  "freecad_version": [
+    "1",
+    "1",
+    "0",
+    "20260325 (Git shallow)",
+    "Unknown",
+    "2026/03/25 02:17:53",
+    "(HEAD detached at 34a971666)",
+    "34a9716668b1ddeb55b914f1c5be644826bdbbbf"
+  ],
+  "parameters_mm": {
+    "envelope_w": 220.0,
+    "envelope_d": 180.0,
+    "envelope_h": 360.0,
+    "printer_x": 330.0,
+    "printer_y": 320.0,
+    "printer_z": 325.0,
+    "chassis_w": 180.0,
+    "chassis_d": 140.0,
+    "chassis_t": 4.0,
+    "chassis_z": 42.0,
+    "tt_length": 70.0,
+    "tt_width": 23.0,
+    "tt_height": 25.0,
+    "wheel_radius": 32.5,
+    "wheel_width": 13.0,
+    "sg90_length": 23.0,
+    "sg90_width": 12.2,
+    "sg90_height": 29.0,
+    "esp32_board_length": 66.0,
+    "esp32_board_width": 32.0,
+    "oled_module_width": 66.0,
+    "oled_module_height": 44.0,
+    "hcsr04_width": 48.0,
+    "hcsr04_height": 23.0,
+    "buck_envelope_length": 48.0,
+    "buck_envelope_width": 28.0,
+    "radar_envelope_width": 45.0,
+    "radar_envelope_height": 35.0,
+    "battery_envelope_length": 100.0,
+    "battery_envelope_width": 60.0,
+    "battery_envelope_height": 30.0,
+    "shell_panel_t": 1.4,
+    "clearance": 0.6,
+    "m3_clearance": 3.4
+  },
+  "dimension_basis": [
+    {
+      "component": "ESP32-S3 board",
+      "design_envelope_mm": [
+        66.0,
+        32.0,
+        12.0
+      ],
+      "basis": "Espressif DevKitC-1 reference is 62.74 mm long and 25.40 mm between outer board edges in the official drawing; organizer photo may be a smaller core-board variant.",
+      "mounting_strategy": "two-direction long slots plus zip ties/standoffs"
+    },
+    {
+      "component": "generic yellow TT motor",
+      "design_envelope_mm": [
+        70.0,
+        23.0,
+        25.0
+      ],
+      "basis": "BOM gives no vendor or ratio; common TT products are about 69.8-70 mm long and vary around the motor can.",
+      "mounting_strategy": "open clamp tray with strap slots; no supplier-specific screw pattern"
+    },
+    {
+      "component": "SG90-format positional servo",
+      "design_envelope_mm": [
+        23.0,
+        12.2,
+        29.0
+      ],
+      "basis": "TowerPro published body dimensions; BOM's 360-degree unit is not used for positional head axes.",
+      "mounting_strategy": "replaceable servo cassette and mechanical limit"
+    },
+    {
+      "component": "2.42-inch OLED",
+      "design_envelope_mm": [
+        66.0,
+        8.0,
+        44.0
+      ],
+      "basis": "Waveshare SSD1309 reference module is 61.5 x 39.5 mm; organizer model remains unknown.",
+      "mounting_strategy": "oversize window and slotted retainer"
+    },
+    {
+      "component": "HC-SR04",
+      "design_envelope_mm": [
+        48.0,
+        15.0,
+        23.0
+      ],
+      "basis": "published module body is 45 x 20 x 15 mm plus connector clearance.",
+      "mounting_strategy": "oversize nose pocket with removable retainer"
+    },
+    {
+      "component": "MP1584EN-labelled buck module",
+      "design_envelope_mm": [
+        48.0,
+        28.0,
+        16.0
+      ],
+      "basis": "generic mini boards are often 22 x 17 x 4 mm, but the organizer's reference photo shows a larger terminal-board layout.",
+      "mounting_strategy": "large shared power bay with strap slots and airflow"
+    }
+  ],
+  "files": {
+    "fcstd": "niulai-bom-compatible-frame-v0.2.FCStd",
+    "assembly_step": "niulai-bom-compatible-frame-assembly-v0.2.step",
+    "print_parts_step": "niulai-bom-compatible-frame-print-parts-v0.2.step",
+    "stl_directory": "stl"
+  },
+  "assembly_bbox_mm": {
+    "x": 212.0,
+    "y": 158.18,
+    "z": 340.5,
+    "xmin": -106.0,
+    "ymin": -86.0,
+    "zmin": -0.5,
+    "xmax": 106.0,
+    "ymax": 72.18,
+    "zmax": 340.0
+  },
+  "fits_target_envelope": true,
+  "all_print_parts_fit_a2l": true,
+  "print_parts": [
+    {
+      "name": "ChassisBase",
+      "label": "底盘主板",
+      "bbox_mm": {
+        "x": 180.0,
+        "y": 140.0,
+        "z": 4.0,
+        "xmin": -90.0,
+        "ymin": -70.0,
+        "zmin": 42.0,
+        "xmax": 90.0,
+        "ymax": 70.0,
+        "zmax": 46.0
+      },
+      "volume_mm3": 96391.57,
+      "pla_mass_estimate_g": 119.5,
+      "fits_a2l": true,
+      "stl": "01_chassis_base.stl"
+    },
+    {
+      "name": "MotorMountLeft",
+      "label": "左 TT 电机卡箍座",
+      "bbox_mm": {
+        "x": 30.0,
+        "y": 76.0,
+        "z": 31.0,
+        "xmin": -90.0,
+        "ymin": -38.0,
+        "zmin": 20.0,
+        "xmax": -60.0,
+        "ymax": 38.0,
+        "zmax": 51.0
+      },
+      "volume_mm3": 16439.51,
+      "pla_mass_estimate_g": 20.4,
+      "fits_a2l": true,
+      "stl": "02_motor_mount_left.stl"
+    },
+    {
+      "name": "MotorMountRight",
+      "label": "右 TT 电机卡箍座",
+      "bbox_mm": {
+        "x": 30.0,
+        "y": 76.0,
+        "z": 31.0,
+        "xmin": 60.0,
+        "ymin": -38.0,
+        "zmin": 20.0,
+        "xmax": 90.0,
+        "ymax": 38.0,
+        "zmax": 51.0
+      },
+      "volume_mm3": 16493.99,
+      "pla_mass_estimate_g": 20.5,
+      "fits_a2l": true,
+      "stl": "03_motor_mount_right.stl"
+    },
+    {
+      "name": "BatteryTray",
+      "label": "下置可调电池托盘",
+      "bbox_mm": {
+        "x": 106.0,
+        "y": 66.0,
+        "z": 15.0,
+        "xmin": -53.0,
+        "ymin": -33.0,
+        "zmin": 46.0,
+        "xmax": 53.0,
+        "ymax": 33.0,
+        "zmax": 61.0
+      },
+      "volume_mm3": 32117.2,
+      "pla_mass_estimate_g": 39.8,
+      "fits_a2l": true,
+      "stl": "04_battery_tray.stl"
+    },
+    {
+      "name": "ElectronicsDeck",
+      "label": "通用电子模块层板",
+      "bbox_mm": {
+        "x": 140.0,
+        "y": 96.0,
+        "z": 3.0,
+        "xmin": -70.0,
+        "ymin": -48.0,
+        "zmin": 84.0,
+        "xmax": 70.0,
+        "ymax": 48.0,
+        "zmax": 87.0
+      },
+      "volume_mm3": 36419.16,
+      "pla_mass_estimate_g": 45.2,
+      "fits_a2l": true,
+      "stl": "05_electronics_deck.stl"
+    },
+    {
+      "name": "StandoffSet",
+      "label": "电子层 M3 隔柱组",
+      "bbox_mm": {
+        "x": 128.0,
+        "y": 83.998,
+        "z": 38.0,
+        "xmin": -64.0,
+        "ymin": -41.999,
+        "zmin": 46.0,
+        "xmax": 64.0,
+        "ymax": 41.999,
+        "zmax": 84.0
+      },
+      "volume_mm3": 6260.31,
+      "pla_mass_estimate_g": 7.8,
+      "fits_a2l": true,
+      "stl": "06_standoff_set.stl"
+    },
+    {
+      "name": "NeckColumnLeft",
+      "label": "左颈部立柱",
+      "bbox_mm": {
+        "x": 20.0,
+        "y": 47.0,
+        "z": 146.0,
+        "xmin": -80.0,
+        "ymin": -65.0,
+        "zmin": 46.0,
+        "xmax": -60.0,
+        "ymax": -18.0,
+        "zmax": 192.0
+      },
+      "volume_mm3": 22560.0,
+      "pla_mass_estimate_g": 28.0,
+      "fits_a2l": true,
+      "stl": "07_neck_column_left.stl"
+    },
+    {
+      "name": "NeckColumnRight",
+      "label": "右颈部立柱",
+      "bbox_mm": {
+        "x": 20.0,
+        "y": 47.0,
+        "z": 146.0,
+        "xmin": 60.0,
+        "ymin": -65.0,
+        "zmin": 46.0,
+        "xmax": 80.0,
+        "ymax": -18.0,
+        "zmax": 192.0
+      },
+      "volume_mm3": 22560.0,
+      "pla_mass_estimate_g": 28.0,
+      "fits_a2l": true,
+      "stl": "08_neck_column_right.stl"
+    },
+    {
+      "name": "NeckCrossbeam",
+      "label": "颈部横梁及 PAN 座",
+      "bbox_mm": {
+        "x": 152.0,
+        "y": 42.0,
+        "z": 12.0,
+        "xmin": -76.0,
+        "ymin": -64.0,
+        "zmin": 190.0,
+        "xmax": 76.0,
+        "ymax": -22.0,
+        "zmax": 202.0
+      },
+      "volume_mm3": 21159.62,
+      "pla_mass_estimate_g": 26.2,
+      "fits_a2l": true,
+      "stl": "09_neck_crossbeam.stl"
+    },
+    {
+      "name": "PanPlatform",
+      "label": "头部旋转平台",
+      "bbox_mm": {
+        "x": 90.0,
+        "y": 60.0,
+        "z": 4.0,
+        "xmin": -45.0,
+        "ymin": -75.0,
+        "zmin": 232.0,
+        "xmax": 45.0,
+        "ymax": -15.0,
+        "zmax": 236.0
+      },
+      "volume_mm3": 21418.42,
+      "pla_mass_estimate_g": 26.6,
+      "fits_a2l": true,
+      "stl": "10_pan_platform.stl"
+    },
+    {
+      "name": "TiltBracket",
+      "label": "头部 TILT U 型架",
+      "bbox_mm": {
+        "x": 94.0,
+        "y": 60.0,
+        "z": 58.0,
+        "xmin": -47.0,
+        "ymin": -75.0,
+        "zmin": 236.0,
+        "xmax": 47.0,
+        "ymax": -15.0,
+        "zmax": 294.0
+      },
+      "volume_mm3": 33931.47,
+      "pla_mass_estimate_g": 42.1,
+      "fits_a2l": true,
+      "stl": "11_tilt_bracket.stl"
+    },
+    {
+      "name": "HeadInterfacePlate",
+      "label": "头部外壳接口板",
+      "bbox_mm": {
+        "x": 80.0,
+        "y": 50.0,
+        "z": 4.0,
+        "xmin": -40.0,
+        "ymin": -70.0,
+        "zmin": 274.0,
+        "xmax": 40.0,
+        "ymax": -20.0,
+        "zmax": 278.0
+      },
+      "volume_mm3": 15854.73,
+      "pla_mass_estimate_g": 19.7,
+      "fits_a2l": true,
+      "stl": "12_head_interface_plate.stl"
+    },
+    {
+      "name": "MouthBracket",
+      "label": "嘴部舵机与摇杆架",
+      "bbox_mm": {
+        "x": 64.0,
+        "y": 25.0,
+        "z": 39.0,
+        "xmin": -32.0,
+        "ymin": -86.0,
+        "zmin": 238.0,
+        "xmax": 32.0,
+        "ymax": -61.0,
+        "zmax": 277.0
+      },
+      "volume_mm3": 6660.0,
+      "pla_mass_estimate_g": 8.3,
+      "fits_a2l": true,
+      "stl": "13_mouth_bracket.stl"
+    },
+    {
+      "name": "FrontSkid",
+      "label": "前部防倾支点",
+      "bbox_mm": {
+        "x": 24.0,
+        "y": 15.0,
+        "z": 43.0,
+        "xmin": -12.0,
+        "ymin": -82.0,
+        "zmin": 2.0,
+        "xmax": 12.0,
+        "ymax": -67.0,
+        "zmax": 45.0
+      },
+      "volume_mm3": 5760.0,
+      "pla_mass_estimate_g": 7.1,
+      "fits_a2l": true,
+      "stl": "14_front_anti_tip_skid.stl"
+    },
+    {
+      "name": "CasterBracket",
+      "label": "后轮/滑块通用支架",
+      "bbox_mm": {
+        "x": 42.0,
+        "y": 34.0,
+        "z": 22.0,
+        "xmin": -21.0,
+        "ymin": 38.0,
+        "zmin": 20.0,
+        "xmax": 21.0,
+        "ymax": 72.0,
+        "zmax": 42.0
+      },
+      "volume_mm3": 8706.39,
+      "pla_mass_estimate_g": 10.8,
+      "fits_a2l": true,
+      "stl": "15_rear_caster_bracket.stl"
+    },
+    {
+      "name": "TorsoFrontPanel",
+      "label": "黄色 PLA 牛肚前壳",
+      "bbox_mm": {
+        "x": 202.647,
+        "y": 74.68,
+        "z": 140.0,
+        "xmin": -101.33,
+        "ymin": -72.18,
+        "zmin": 54.0,
+        "xmax": 101.317,
+        "ymax": 2.5,
+        "zmax": 194.0
+      },
+      "volume_mm3": 47810.39,
+      "pla_mass_estimate_g": 59.3,
+      "fits_a2l": true,
+      "stl": "16_torso_front_panel.stl"
+    },
+    {
+      "name": "TorsoRearPanel",
+      "label": "黄色 PLA 背部检修壳",
+      "bbox_mm": {
+        "x": 202.647,
+        "y": 72.18,
+        "z": 140.0,
+        "xmin": -101.33,
+        "ymin": -0.0,
+        "zmin": 54.0,
+        "xmax": 101.317,
+        "ymax": 72.18,
+        "zmax": 194.0
+      },
+      "volume_mm3": 47810.27,
+      "pla_mass_estimate_g": 59.3,
+      "fits_a2l": true,
+      "stl": "17_torso_rear_panel.stl"
+    },
+    {
+      "name": "RearSkidFallback",
+      "label": "后滑块降级件",
+      "bbox_mm": {
+        "x": 40.0,
+        "y": 26.0,
+        "z": 42.0,
+        "xmin": -20.0,
+        "ymin": 42.0,
+        "zmin": 0.0,
+        "xmax": 20.0,
+        "ymax": 68.0,
+        "zmax": 42.0
+      },
+      "volume_mm3": 17178.43,
+      "pla_mass_estimate_g": 21.3,
+      "fits_a2l": true,
+      "stl": "18_rear_skid_fallback.stl"
+    }
+  ],
+  "collision_checks": [
+    {
+      "a": "TTMotorLeft",
+      "b": "TTMotorRight",
+      "common_volume_mm3": 0.0,
+      "pass": true
+    },
+    {
+      "a": "WheelLeft",
+      "b": "WheelRight",
+      "common_volume_mm3": 0.0,
+      "pass": true
+    },
+    {
+      "a": "Battery2S",
+      "b": "ElectronicsDeck",
+      "common_volume_mm3": 0.0,
+      "pass": true
+    },
+    {
+      "a": "ServoPan",
+      "b": "ServoTilt",
+      "common_volume_mm3": 0.0,
+      "pass": true
+    },
+    {
+      "a": "ServoPan",
+      "b": "ServoMouth",
+      "common_volume_mm3": 0.0,
+      "pass": true
+    },
+    {
+      "a": "ServoTilt",
+      "b": "ServoMouth",
+      "common_volume_mm3": 0.0,
+      "pass": true
+    }
+  ],
+  "collision_checks_pass": true,
+  "rough_mass_model": {
+    "estimated_total_g": 1023.4,
+    "center_of_mass_mm": {
+      "x": -0.09,
+      "y": -12.45,
+      "z": 102.59
+    },
+    "support_bbox_margin_proxy_mm": 69.55,
+    "warning": "仅用于早期布局；动态稳定性必须用最终重量假负载和实物急停测试确认。"
+  },
+  "unfrozen": [
+    "TT 电机真实减速比、轴心、堵转电流和负载能力",
+    "物料表未列车轮；直径、宽度、轮毂配合与是否随电机提供仍需主办方确认",
+    "SG90/MG90S 实际型号、孔位、舵盘与扭矩",
+    "66号UNO移动电源电池盒不能替代已验证的执行器电源；2S电池、BMS、保险、开关、充电口和接插件仍需自备/确认",
+    "物料表未列滚珠万向轮；若无实物则使用18号打印后滑块降级件",
+    "ESP32-S3 N16R8的具体开发板版型、USB口方向和实际板宽",
+    "60/61号毫米波雷达的真实型号、接口和PCB尺寸",
+    "正式头部质量、力臂、嘴部连杆和机械限位"
+  ]
+}

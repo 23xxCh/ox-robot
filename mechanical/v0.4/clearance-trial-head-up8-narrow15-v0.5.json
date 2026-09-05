@@ -1,0 +1,394 @@
+{
+  "shell_assembled_bounds": {
+    "min_mm": [
+      -109.969,
+      -100.049,
+      69.644
+    ],
+    "max_mm": [
+      109.982,
+      99.999,
+      329.964
+    ],
+    "dimensions_mm": [
+      219.952,
+      200.049,
+      260.32
+    ]
+  },
+  "critical_internal_bounds": {
+    "min_mm": [
+      -53.0,
+      -58.0,
+      7.0
+    ],
+    "max_mm": [
+      53.0,
+      53.0,
+      296.0
+    ],
+    "dimensions_mm": [
+      106.0,
+      111.0,
+      289.0
+    ]
+  },
+  "clearance_gate": {
+    "static_mm": 5.0,
+    "moving_mm": 8.0,
+    "structural_mm": 3.0
+  },
+  "trial_head_z_mm": 8.0,
+  "trial_head_x_scale": 0.85,
+  "failed_count": 4,
+  "failed_names": [
+    "ElectronicsDeck",
+    "ESP32Placeholder",
+    "DRV8833Placeholder",
+    "RadarPlaceholder"
+  ],
+  "parts": [
+    {
+      "name": "RadarPlaceholder",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 1.216,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        22.5,
+        -58.0,
+        155.0
+      ],
+      "nearest_shell_point_mm": [
+        23.029,
+        -59.06,
+        155.276
+      ],
+      "margin_to_target_mm": -3.784,
+      "status": "FAIL"
+    },
+    {
+      "name": "ESP32Placeholder",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 2.323,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        -45.0,
+        -25.0,
+        87.0
+      ],
+      "nearest_shell_point_mm": [
+        -46.59,
+        -26.186,
+        85.791
+      ],
+      "margin_to_target_mm": -2.677,
+      "status": "FAIL"
+    },
+    {
+      "name": "DRV8833Placeholder",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 2.329,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        45.0,
+        -25.0,
+        87.0
+      ],
+      "nearest_shell_point_mm": [
+        46.636,
+        -26.231,
+        85.89
+      ],
+      "margin_to_target_mm": -2.671,
+      "status": "FAIL"
+    },
+    {
+      "name": "ElectronicsDeck",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 2.376,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        -50.0,
+        -16.0,
+        84.0
+      ],
+      "nearest_shell_point_mm": [
+        -51.801,
+        -17.344,
+        83.23
+      ],
+      "margin_to_target_mm": -2.624,
+      "status": "FAIL"
+    },
+    {
+      "name": "NeckCrossbeam",
+      "kind": "structural",
+      "target_mm": 3.0,
+      "measured_min_clearance_mm": 3.839,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        -42.5,
+        -16.0,
+        206.0
+      ],
+      "nearest_shell_point_mm": [
+        -45.438,
+        -17.847,
+        207.642
+      ],
+      "margin_to_target_mm": 0.839,
+      "status": "PASS"
+    },
+    {
+      "name": "StandoffSet",
+      "kind": "structural",
+      "target_mm": 3.0,
+      "measured_min_clearance_mm": 5.736,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        -44.545,
+        -11.085,
+        71.333
+      ],
+      "nearest_shell_point_mm": [
+        -48.326,
+        -15.312,
+        70.478
+      ],
+      "margin_to_target_mm": 2.736,
+      "status": "PASS"
+    },
+    {
+      "name": "NeckColumnRight",
+      "kind": "structural",
+      "target_mm": 3.0,
+      "measured_min_clearance_mm": 5.982,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        48.0,
+        -14.0,
+        192.0
+      ],
+      "nearest_shell_point_mm": [
+        52.917,
+        -16.842,
+        193.88
+      ],
+      "margin_to_target_mm": 2.982,
+      "status": "PASS"
+    },
+    {
+      "name": "NeckColumnLeft",
+      "kind": "structural",
+      "target_mm": 3.0,
+      "measured_min_clearance_mm": 6.077,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        -48.0,
+        -14.0,
+        192.0
+      ],
+      "nearest_shell_point_mm": [
+        -52.973,
+        -16.951,
+        193.865
+      ],
+      "margin_to_target_mm": 3.077,
+      "status": "PASS"
+    },
+    {
+      "name": "ServoMouth",
+      "kind": "moving",
+      "target_mm": 8.0,
+      "measured_min_clearance_mm": 8.118,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        -11.5,
+        -38.0,
+        228.0
+      ],
+      "nearest_shell_point_mm": [
+        -14.744,
+        -38.056,
+        220.559
+      ],
+      "margin_to_target_mm": 0.118,
+      "status": "PASS"
+    },
+    {
+      "name": "MouthBracket",
+      "kind": "moving",
+      "target_mm": 8.0,
+      "measured_min_clearance_mm": 9.314,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        13.6,
+        -34.0,
+        231.0
+      ],
+      "nearest_shell_point_mm": [
+        18.28,
+        -34.492,
+        222.962
+      ],
+      "margin_to_target_mm": 1.314,
+      "status": "PASS"
+    },
+    {
+      "name": "PanPlatform",
+      "kind": "moving",
+      "target_mm": 8.0,
+      "measured_min_clearance_mm": 9.781,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        -29.75,
+        -34.0,
+        240.0
+      ],
+      "nearest_shell_point_mm": [
+        -34.768,
+        -36.955,
+        232.141
+      ],
+      "margin_to_target_mm": 1.781,
+      "status": "PASS"
+    },
+    {
+      "name": "TiltBracket",
+      "kind": "moving",
+      "target_mm": 8.0,
+      "measured_min_clearance_mm": 9.899,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        31.45,
+        -29.0,
+        296.0
+      ],
+      "nearest_shell_point_mm": [
+        39.229,
+        -31.346,
+        301.654
+      ],
+      "margin_to_target_mm": 1.899,
+      "status": "PASS"
+    },
+    {
+      "name": "PowerPlaceholder",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 10.853,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        50.0,
+        1.0,
+        87.0
+      ],
+      "nearest_shell_point_mm": [
+        59.984,
+        -2.847,
+        85.179
+      ],
+      "margin_to_target_mm": 5.853,
+      "status": "PASS"
+    },
+    {
+      "name": "ServoPan",
+      "kind": "moving",
+      "target_mm": 8.0,
+      "measured_min_clearance_mm": 12.566,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        -16.0,
+        -18.0,
+        226.0
+      ],
+      "nearest_shell_point_mm": [
+        -22.053,
+        -28.805,
+        223.875
+      ],
+      "margin_to_target_mm": 4.566,
+      "status": "PASS"
+    },
+    {
+      "name": "ServoTilt",
+      "kind": "moving",
+      "target_mm": 8.0,
+      "measured_min_clearance_mm": 14.447,
+      "nearest_shell": "07_HeadFrontShell",
+      "nearest_frame_point_mm": [
+        -33.0,
+        -18.1,
+        253.0
+      ],
+      "nearest_shell_point_mm": [
+        -47.085,
+        -20.44,
+        250.792
+      ],
+      "margin_to_target_mm": 6.447,
+      "status": "PASS"
+    },
+    {
+      "name": "OLEDPlaceholder",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 23.584,
+      "nearest_shell": "06_BodyRearShell",
+      "nearest_frame_point_mm": [
+        -33.0,
+        53.0,
+        149.0
+      ],
+      "nearest_shell_point_mm": [
+        -51.826,
+        66.606,
+        153.085
+      ],
+      "margin_to_target_mm": 18.584,
+      "status": "PASS"
+    },
+    {
+      "name": "BatteryTray",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 30.151,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        52.0,
+        -10.0,
+        40.0
+      ],
+      "nearest_shell_point_mm": [
+        54.849,
+        -10.588,
+        70.01
+      ],
+      "margin_to_target_mm": 25.151,
+      "status": "PASS"
+    },
+    {
+      "name": "Battery2S",
+      "kind": "static",
+      "target_mm": 5.0,
+      "measured_min_clearance_mm": 32.048,
+      "nearest_shell": "05_BodyFrontShell",
+      "nearest_frame_point_mm": [
+        50.0,
+        -30.0,
+        40.0
+      ],
+      "nearest_shell_point_mm": [
+        44.71,
+        -20.127,
+        70.026
+      ],
+      "margin_to_target_mm": 27.048,
+      "status": "PASS"
+    }
+  ]
+}

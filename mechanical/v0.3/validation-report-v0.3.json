@@ -1,0 +1,167 @@
+{
+  "source": "E:\\AI WORK\\硬件黑客松\\30917144b3a6572e5c69c4590d885680.glb",
+  "removed_tail_components": 165,
+  "removed_tail_vertices": 15502,
+  "pre_remesh_decimate_ratio": 1.0,
+  "voxel_size_source": 0.01,
+  "target_height_mm": 330.0,
+  "target_width_mm": 220.0,
+  "target_depth_mm": 200.0,
+  "wall_mm": 1.8,
+  "bottom_open_z_mm": 70.0,
+  "head_min_z_mm": 195.0,
+  "outer_reference": {
+    "vertices": 6649,
+    "polygons": 7852,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "dimensions_mm": [
+      220.0,
+      200.0,
+      330.0
+    ],
+    "min_mm": [
+      -110.0,
+      -100.0,
+      0.0
+    ],
+    "max_mm": [
+      110.0,
+      100.0,
+      330.0
+    ]
+  },
+  "shell_master": {
+    "vertices": 10606,
+    "polygons": 12500,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "dimensions_mm": [
+      220.0,
+      200.0,
+      264.556
+    ],
+    "min_mm": [
+      -110.0,
+      -100.0,
+      65.444
+    ],
+    "max_mm": [
+      110.0,
+      100.0,
+      330.0
+    ]
+  },
+  "parts": {
+    "05_body_front_shell": {
+      "vertices": 3776,
+      "polygons": 4478,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "dimensions_mm": [
+        220.0,
+        80.369,
+        136.001
+      ],
+      "min_mm": [
+        -110.0,
+        -75.169,
+        68.646
+      ],
+      "max_mm": [
+        110.0,
+        5.2,
+        204.646
+      ],
+      "file": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\stl\\05_body_front_shell.stl"
+    },
+    "06_body_rear_shell": {
+      "vertices": 1964,
+      "polygons": 2245,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "dimensions_mm": [
+        219.678,
+        105.579,
+        136.401
+      ],
+      "min_mm": [
+        -109.678,
+        -5.579,
+        65.444
+      ],
+      "max_mm": [
+        110.0,
+        100.0,
+        201.845
+      ],
+      "file": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\stl\\06_body_rear_shell.stl"
+    },
+    "07_head_front_shell": {
+      "vertices": 3844,
+      "polygons": 4465,
+      "boundary_edges": 0,
+      "non_manifold_edges": 2,
+      "dimensions_mm": [
+        169.305,
+        106.524,
+        140.585
+      ],
+      "min_mm": [
+        -86.297,
+        -100.0,
+        189.415
+      ],
+      "max_mm": [
+        83.008,
+        6.524,
+        330.0
+      ],
+      "file": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\stl\\07_head_front_shell.stl"
+    },
+    "08_head_rear_shell": {
+      "vertices": 600,
+      "polygons": 692,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "dimensions_mm": [
+        175.085,
+        63.668,
+        128.134
+      ],
+      "min_mm": [
+        -87.814,
+        -3.672,
+        191.387
+      ],
+      "max_mm": [
+        87.271,
+        59.997,
+        319.521
+      ],
+      "file": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\stl\\08_head_rear_shell.stl"
+    },
+    "09_mouth_shell": {
+      "vertices": 1092,
+      "polygons": 1284,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "dimensions_mm": [
+        94.32,
+        60.51,
+        54.075
+      ],
+      "min_mm": [
+        -47.309,
+        -100.025,
+        199.217
+      ],
+      "max_mm": [
+        47.011,
+        -39.515,
+        253.291
+      ],
+      "file": "E:\\AI WORK\\硬件黑客松\\mechanical\\v0.3\\stl\\09_mouth_shell.stl"
+    }
+  }
+}

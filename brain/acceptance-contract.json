@@ -1,0 +1,97 @@
+{
+  "version": "1",
+  "scope": "milestone-brain-protocol/3",
+  "next_milestone": "xiaozhi-firmware-board-and-wake-word",
+  "items": [
+    {
+      "id": "AC-PROTO-001",
+      "scenario": "Fake device hello then listen.start/audio/listen.stop yields stt, llm, tts and mock ASR text in stt",
+      "check_type": "test",
+      "expect": "stt text matches the utf-8 audio payload; llm and tts frames are present",
+      "status": "green",
+      "depends_on": [],
+      "verifier": "python -m pytest -q brain/tests/test_protocol.py"
+    },
+    {
+      "id": "AC-AUTO-001",
+      "scenario": "SECRET_ALIVE with no user audio still pushes at least one tts frame to the fake device",
+      "check_type": "test",
+      "expect": "tts appears after hello without listen/audio",
+      "status": "green",
+      "depends_on": [
+        "AC-PROTO-001"
+      ],
+      "verifier": "python -m pytest -q brain/tests/test_autonomy.py"
+    },
+    {
+      "id": "AC-LUA-001",
+      "scenario": "wander.lua emits only whitelist intents and never pulse_us",
+      "check_type": "test",
+      "expect": "verbs subset of walk,turn,say,sleep,snore,get_state; no pulse_us field",
+      "status": "green",
+      "depends_on": [],
+      "verifier": "python -m pytest -q brain/tests/test_lua.py::test_wander_lua_emits_whitelist_intents_without_pulse"
+    },
+    {
+      "id": "AC-LUA-002",
+      "scenario": "Lua using os.execute or io.open is rejected with empty intents",
+      "check_type": "test",
+      "expect": "intents list is empty",
+      "status": "green",
+      "depends_on": [
+        "AC-LUA-001"
+      ],
+      "verifier": "python -m pytest -q brain/tests/test_lua.py::test_lua_os_or_io_is_rejected_with_empty_intents"
+    },
+    {
+      "id": "AC-FREEZE-001",
+      "scenario": "Distance 8 cm drops queued walk and emits snore",
+      "check_type": "test",
+      "expect": "persona FREEZE, no walk outbound, snore present, queue empty",
+      "status": "green",
+      "depends_on": [],
+      "verifier": "python -m pytest -q brain/tests/test_freeze_mcp.py::test_close_distance_drops_walk_and_forces_snore"
+    },
+    {
+      "id": "AC-MCP-001",
+      "scenario": "niu.perform unknown verb or missing ttl_ms is not sent to the device",
+      "check_type": "test",
+      "expect": "call_perform ok is false and device_calls stays empty",
+      "status": "green",
+      "depends_on": [],
+      "verifier": "python -m pytest -q brain/tests/test_freeze_mcp.py::test_unknown_or_ttl_less_perform_is_not_sent_to_device"
+    },
+    {
+      "id": "AC-IM-001",
+      "scenario": "Feishu and WeChat bot inbound text in SECRET_ALIVE can reply and request walk",
+      "check_type": "test",
+      "expect": "im_outbox records channel, chat_id, reply text, and a walk intent",
+      "status": "green",
+      "depends_on": [
+        "AC-PROTO-001"
+      ],
+      "verifier": "python -m pytest -q brain/tests/test_im.py"
+    },
+    {
+      "id": "AC-FW-001",
+      "scenario": "Flash xiaozhi niulai board with wake word, MCP, local freeze and snore",
+      "check_type": "smoke",
+      "expect": "human confirms screen, speaker, walk, freeze, snore on COM6",
+      "status": "todo",
+      "depends_on": [
+        "AC-PROTO-001",
+        "AC-FREEZE-001",
+        "AC-MCP-001"
+      ],
+      "verifier": "echo HUMAN_GATE",
+      "gate": {
+        "kind": "target-confirm",
+        "question": "大脑协议已绿。是否现在覆盖 Arduino 测试固件、改烧小智二次开发板型？"
+      }
+    }
+  ],
+  "attestation": {
+    "hash": "sha256:8a6e7e4b609f79374f143f0d130cd754bb65aaf2d2127af2bdd44ea453817308",
+    "attested_at": "2026-09-05T07:40:48.350695+00:00"
+  }
+}

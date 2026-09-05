@@ -1,0 +1,453 @@
+[
+  {
+    "name": "PrintedParts",
+    "label": "01 可打印工程骨架（物料表兼容）",
+    "category": "UNKNOWN",
+    "color": [
+      0.65,
+      0.65,
+      0.65
+    ],
+    "file": "01_PrintedParts.stl"
+  },
+  {
+    "name": "AlternativeParts",
+    "label": "03 可选降级打印件",
+    "category": "UNKNOWN",
+    "color": [
+      0.65,
+      0.65,
+      0.65
+    ],
+    "file": "02_AlternativeParts.stl"
+  },
+  {
+    "name": "CalibrationParts",
+    "label": "04 打印前校准试片",
+    "category": "UNKNOWN",
+    "color": [
+      0.65,
+      0.65,
+      0.65
+    ],
+    "file": "03_CalibrationParts.stl"
+  },
+  {
+    "name": "HardwarePlaceholders",
+    "label": "05 物料表硬件包络（非精确型号）",
+    "category": "UNKNOWN",
+    "color": [
+      0.65,
+      0.65,
+      0.65
+    ],
+    "file": "04_HardwarePlaceholders.stl"
+  },
+  {
+    "name": "ReservedInterfaces",
+    "label": "06 混元头壳与未来接口",
+    "category": "UNKNOWN",
+    "color": [
+      0.65,
+      0.65,
+      0.65
+    ],
+    "file": "05_ReservedInterfaces.stl"
+  },
+  {
+    "name": "ChassisBase",
+    "label": "底盘主板",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "06_ChassisBase.stl"
+  },
+  {
+    "name": "MotorMountLeft",
+    "label": "左 TT 电机卡箍座",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "07_MotorMountLeft.stl"
+  },
+  {
+    "name": "MotorMountRight",
+    "label": "右 TT 电机卡箍座",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "08_MotorMountRight.stl"
+  },
+  {
+    "name": "BatteryTray",
+    "label": "下置可调电池托盘",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "09_BatteryTray.stl"
+  },
+  {
+    "name": "ElectronicsDeck",
+    "label": "通用电子模块层板",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "10_ElectronicsDeck.stl"
+  },
+  {
+    "name": "StandoffSet",
+    "label": "电子层 M3 隔柱组",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "11_StandoffSet.stl"
+  },
+  {
+    "name": "NeckColumnLeft",
+    "label": "左颈部立柱",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "12_NeckColumnLeft.stl"
+  },
+  {
+    "name": "NeckColumnRight",
+    "label": "右颈部立柱",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "13_NeckColumnRight.stl"
+  },
+  {
+    "name": "NeckCrossbeam",
+    "label": "颈部横梁及 PAN 座",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "14_NeckCrossbeam.stl"
+  },
+  {
+    "name": "PanPlatform",
+    "label": "头部旋转平台",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "15_PanPlatform.stl"
+  },
+  {
+    "name": "TiltBracket",
+    "label": "头部 TILT U 型架",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "16_TiltBracket.stl"
+  },
+  {
+    "name": "HeadInterfacePlate",
+    "label": "头部外壳接口板",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "17_HeadInterfacePlate.stl"
+  },
+  {
+    "name": "MouthBracket",
+    "label": "嘴部舵机与摇杆架",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "18_MouthBracket.stl"
+  },
+  {
+    "name": "FrontSkid",
+    "label": "前部防倾支点",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "19_FrontSkid.stl"
+  },
+  {
+    "name": "CasterBracket",
+    "label": "后轮/滑块通用支架",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "20_CasterBracket.stl"
+  },
+  {
+    "name": "UltrasonicBezel",
+    "label": "超声波双孔遮缝压圈",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "21_UltrasonicBezel.stl"
+  },
+  {
+    "name": "BodyMountPads",
+    "label": "隐藏式身体独立安装座",
+    "category": "PRINTED",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "22_BodyMountPads.stl"
+  },
+  {
+    "name": "RearSkidFallback",
+    "label": "后滑块降级件",
+    "category": "ALTERNATIVE",
+    "color": [
+      0.82,
+      0.68,
+      0.22
+    ],
+    "file": "23_RearSkidFallback.stl"
+  },
+  {
+    "name": "M3HeatsetCoupon",
+    "label": "M3 热熔螺母孔径试片",
+    "category": "CALIBRATION",
+    "color": [
+      0.92,
+      0.28,
+      0.1
+    ],
+    "file": "24_M3HeatsetCoupon.stl"
+  },
+  {
+    "name": "TTMotorLeft",
+    "label": "左 TT 电机保守包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.95,
+      0.68,
+      0.08
+    ],
+    "file": "25_TTMotorLeft.stl"
+  },
+  {
+    "name": "TTMotorRight",
+    "label": "右 TT 电机保守包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.95,
+      0.68,
+      0.08
+    ],
+    "file": "26_TTMotorRight.stl"
+  },
+  {
+    "name": "WheelLeft",
+    "label": "左轮占位",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.08,
+      0.08,
+      0.09
+    ],
+    "file": "27_WheelLeft.stl"
+  },
+  {
+    "name": "WheelRight",
+    "label": "右轮占位",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.08,
+      0.08,
+      0.09
+    ],
+    "file": "28_WheelRight.stl"
+  },
+  {
+    "name": "CasterBall",
+    "label": "后滚珠万向轮占位",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.65,
+      0.68,
+      0.72
+    ],
+    "file": "29_CasterBall.stl"
+  },
+  {
+    "name": "Battery2S",
+    "label": "执行器电池最大包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.14,
+      0.45,
+      0.2
+    ],
+    "file": "30_Battery2S.stl"
+  },
+  {
+    "name": "ServoPan",
+    "label": "SG90-180 PAN 舵机占位",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.12,
+      0.3,
+      0.78
+    ],
+    "file": "31_ServoPan.stl"
+  },
+  {
+    "name": "ServoTilt",
+    "label": "SG90-180 TILT 舵机占位",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.12,
+      0.3,
+      0.78
+    ],
+    "file": "32_ServoTilt.stl"
+  },
+  {
+    "name": "ServoMouth",
+    "label": "SG90-180 MOUTH 舵机占位",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.12,
+      0.3,
+      0.78
+    ],
+    "file": "33_ServoMouth.stl"
+  },
+  {
+    "name": "ESP32Placeholder",
+    "label": "ESP32-S3 主控兼容包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.1,
+      0.4,
+      0.32
+    ],
+    "file": "34_ESP32Placeholder.stl"
+  },
+  {
+    "name": "DRV8833Placeholder",
+    "label": "DRV8833 兼容包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.1,
+      0.4,
+      0.32
+    ],
+    "file": "35_DRV8833Placeholder.stl"
+  },
+  {
+    "name": "PowerPlaceholder",
+    "label": "降压与保险兼容包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.92,
+      0.28,
+      0.1
+    ],
+    "file": "36_PowerPlaceholder.stl"
+  },
+  {
+    "name": "RadarPlaceholder",
+    "label": "24GHz雷达兼容包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.1,
+      0.4,
+      0.32
+    ],
+    "file": "37_RadarPlaceholder.stl"
+  },
+  {
+    "name": "OLEDPlaceholder",
+    "label": "2.42寸OLED兼容包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.1,
+      0.4,
+      0.32
+    ],
+    "file": "38_OLEDPlaceholder.stl"
+  },
+  {
+    "name": "HCSR04Placeholder",
+    "label": "HC-SR04兼容包络",
+    "category": "PLACEHOLDER",
+    "color": [
+      0.1,
+      0.4,
+      0.32
+    ],
+    "file": "39_HCSR04Placeholder.stl"
+  },
+  {
+    "name": "Insta360ReservedInterface",
+    "label": "背部 Insta360 预留接口",
+    "category": "RESERVED",
+    "color": [
+      0.65,
+      0.68,
+      0.72
+    ],
+    "file": "40_Insta360ReservedInterface.stl"
+  },
+  {
+    "name": "HunyuanHeadEnvelope",
+    "label": "混元3D牛头最大包络",
+    "category": "RESERVED",
+    "color": [
+      0.92,
+      0.76,
+      0.2
+    ],
+    "file": "41_HunyuanHeadEnvelope.stl"
+  }
+]

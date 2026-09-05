@@ -1,0 +1,15 @@
+22:59:35 | INFO: Data are loaded, start creating Blender stuff
+22:59:35 | INFO: Blender create Mesh node node_0
+22:59:37 | INFO: glTF import finished in 1.83s
+[stage] tail removed: 165 components, 15502 vertices
+[stage] pre-remesh decimated: 147269 polygons
+[stage] voxel repair complete: 49768 polygons
+[stage] hollow region complete 02_OpenBottomShell: 90217 polygons
+[stage] hollow region complete 05_BodyFrontShell: 26883 polygons
+[stage] hollow region complete 06_BodyRearShell: 26717 polygons
+[stage] hollow region complete 07_HeadFrontShell: 20947 polygons
+[stage] hollow region complete 08_HeadRearShell: 13356 polygons
+[stage] hollow region complete 09_MouthShell: 4966 polygons
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+
+Blender quit
