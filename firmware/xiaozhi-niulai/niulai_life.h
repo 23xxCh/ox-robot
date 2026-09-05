@@ -26,6 +26,7 @@ private:
     int gait_ = 0;
     int log_tick_ = 0;
     int64_t motion_until_us_ = 0;
+    bool directed_ = false;
     ledc_channel_t channels_[4] = {
         LEDC_CHANNEL_2, LEDC_CHANNEL_3, LEDC_CHANNEL_4, LEDC_CHANNEL_5
     };

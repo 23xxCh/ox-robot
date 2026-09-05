@@ -42,15 +42,15 @@ KY-016 三针模块只有一路 PWM，所以现在只会红。要红绿蓝混色
 KY-016：`-`=GND，中间=5V，`S`=GPIO14。
 KY-004：`-`=GND，中间 VCC 可空，`S`=GPIO18。
 
-屏上是黄牛来脸。人靠近：腿停，打断吐槽，切断私有 WSS，等人喊。人离开约 8 秒：随机小晃；吐槽走私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（LLM + 千问 Dylan，约 11 秒一句）。拒绝 xiaozhi.me。音量 90。
+屏上是黄牛来脸。人靠近：腿停，打断吐槽，切断私有 WSS，等人喊；脸只用听/笑。人离开约 8 秒：随机小晃 + 吐槽脸；吐槽走私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（LLM + 千问 Dylan，约 11 秒一句）。拒绝 xiaozhi.me。音量 90。
 
-生命循环在 `niulai_life.cc`：200 ms 一轮，有人时每拍都写 1500 µs，SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 随机步态短促再停，避免 360° 舵机空转。靠近不播 `mama.ogg`。唤醒 / BOOT / 键都会 `ParkActuators()` 并开始礼貌对话。
+生命循环在 `niulai_life.cc`：200 ms 一轮，靠近立刻 1500 µs 冻腿。礼貌对话里若让它动，可短促 `niu.walk`/`niu.turn`（ttl≤2000）；靠近仍冻。SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 随机步态短促再停，避免 360° 舵机空转。靠近不播 `mama.ogg`。唤醒 / BOOT / 键：先播电影「妈妈」约 2.2 秒，再 `ParkActuators()` 并礼貌听、想、说。
 
 ## 唤醒与礼貌对话
 
 - 唤醒词：`niu lai`（单次「牛来」）
-- 唤醒后走私有大脑礼貌听、想、说，**不打开小智官网**
-- BOOT / 开始聆听同样走礼貌对话，禁止连官方 websocket
+- 唤醒后先播 `mama.ogg`（电影「妈妈」），再走私有大脑礼貌听、想、说，**不打开小智官网**
+- BOOT / 开始聆听同样：妈妈片段 → 礼貌对话，禁止连官方 websocket
 - 启动时跳过官方 OTA，避免被官网固件覆盖
 - KY-004 短按同样开始礼貌对话
 
@@ -74,7 +74,7 @@ COM 口按设备管理器改。不要闪 COM6，除非 brain 挂了或 WLAN 不�
 
 这些改动在构建树 `E:\XIAOZHI_NATIVE\xiaozhi-esp32`，板型为 `niulai-s3-expand-v17` 时才生效：
 
-- `main/application.cc`：`IsNiulaiBoard()`。启动跳过官方 OTA/激活；拒绝打开官方 websocket 音频通道；唤醒 / BOOT / KY-004 走 `NiulaiStartPoliteChat()`；近距走 `NiulaiEnterPresent()` 冻腿打断吐槽。
+- `main/application.cc`：`IsNiulaiBoard()`。启动跳过官方 OTA/激活；拒绝打开官方 websocket 音频通道；唤醒 / BOOT / KY-004 走 `NiulaiStartPoliteChat()`（`PlaySound(OGG_MAMA)` + 2.2s 再听）；近距走 `NiulaiEnterPresent()` 冻腿打断吐槽。
 - `main/boards/common/board.h`：`virtual void ParkActuators() {}`，牛来板 override 成四腿 1500 µs。
 - `main/assets/lang_config.h`：`OGG_MAMA` / `OGG_HI` / `OGG_SECRET1..3` 指向本地 Opus 剪辑。
 

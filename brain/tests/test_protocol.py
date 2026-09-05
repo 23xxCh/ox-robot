@@ -144,7 +144,7 @@ def test_binary_non_utf8_still_yields_tts_stop() -> None:
         assert tts_stopped
 
 
-def test_present_walk_does_not_send_motion() -> None:
+def test_present_walk_sends_motion_with_ttl_cap() -> None:
     client = TestClient(create_app(NiulaiBrain()))
     with client.websocket_connect("/xiaozhi/v1/") as ws:
         ws.send_json({"type": "hello", "version": 1})
@@ -153,14 +153,16 @@ def test_present_walk_does_not_send_motion() -> None:
         ws.send_json({"type": "listen", "state": "start"})
         ws.send_bytes("往前走".encode("utf-8"))
         ws.send_json({"type": "listen", "state": "stop"})
-        kinds: list[str] = []
-        for _ in range(16):
+        motion = None
+        for _ in range(20):
             msg = ws.receive_json()
-            kinds.append(msg["type"])
-            assert not (msg["type"] == "niulai" and msg.get("motion"))
-            if msg["type"] == "tts" and msg.get("state") == "stop":
+            if msg["type"] == "niulai" and msg.get("motion"):
+                motion = msg
                 break
-        assert "tts" in kinds
+        assert motion is not None
+        assert motion["motion"] in {"walk", "turn"}
+        assert motion.get("dir") == "forward"
+        assert int(motion["ms"]) <= 2000
 
 
 def test_absent_walk_utterance_sends_niulai_motion() -> None:

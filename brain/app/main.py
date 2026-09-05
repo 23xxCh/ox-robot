@@ -316,8 +316,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         else:
                             await ws.send_json({"type": "tts", "state": "start"})
                             await ws.send_json({"type": "tts", "state": "stop"})
-                        if presence == "ABSENT":
-                            await _send_motion(ws, intents)
+                        await _send_motion(ws, intents)
                         continue
         except WebSocketDisconnect:
             return

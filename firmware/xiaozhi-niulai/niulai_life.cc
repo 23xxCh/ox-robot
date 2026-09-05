@@ -3,6 +3,7 @@
 #include "application.h"
 #include "board.h"
 #include "config.h"
+#include "niulai_face_display.h"
 
 #include <driver/gpio.h>
 #include <esp_log.h>
@@ -72,15 +73,18 @@ void NiulaiLife::Loop() {
             OnPresence(next);
         }
 
-        if (presence_ == kPresent || close) {
-            HoldCenter();
-        } else if (now < motion_until_us_) {
+        if (now < motion_until_us_) {
             SecretWalk();
-        } else if (presence_ == kAbsent) {
-            SecretWalk();
-            if (now - last_brain_us_ >= kBrainRetryUs) {
-                last_brain_us_ = now;
-                AskBrainSecret();
+        } else {
+            directed_ = false;
+            if (presence_ == kPresent || close) {
+                HoldCenter();
+            } else if (presence_ == kAbsent) {
+                SecretWalk();
+                if (now - last_brain_us_ >= kBrainRetryUs) {
+                    last_brain_us_ = now;
+                    AskBrainSecret();
+                }
             }
         }
 
@@ -135,14 +139,11 @@ void NiulaiLife::HoldCenter() {
 
 void NiulaiLife::ParkLegs() {
     motion_until_us_ = 0;
+    directed_ = false;
     HoldCenter();
 }
 
 void NiulaiLife::PulseMotion(const char* dir, int ms) {
-    if (presence_ == kPresent) {
-        ParkLegs();
-        return;
-    }
     if (ms < 0) {
         ms = 0;
     }
@@ -160,7 +161,8 @@ void NiulaiLife::PulseMotion(const char* dir, int ms) {
     } else {
         gait_ = 0;
     }
-    wiggle_phase_ = 0;
+    directed_ = true;
+    wiggle_phase_ = 1;
     motion_until_us_ = esp_timer_get_time() + static_cast<int64_t>(ms) * 1000;
 }
 
@@ -171,7 +173,8 @@ void NiulaiLife::SnapFreeze() {
 
 void NiulaiLife::SecretWalk() {
     // Random gait, short burst then park so 360° servos stop.
-    if (wiggle_phase_ == 0) {
+    // Lua niu.walk/turn keeps the gait PulseMotion already chose.
+    if (!directed_ && wiggle_phase_ == 0) {
         gait_ = static_cast<int>(esp_random() % 4);
     }
     wiggle_phase_ = (wiggle_phase_ + 1) % 14;
@@ -213,9 +216,12 @@ void NiulaiLife::OnPresence(Presence next) {
     Presence prev = presence_;
     presence_ = next;
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
+    if (auto* face = static_cast<NiulaiLcdDisplay*>(display_)) {
+        face->AllowSecretFaces(next == kAbsent);
+    }
     if (next == kPresent) {
         ParkLegs();
-        PostFace("neutral", "");
+        PostFace("listening", "");
         Application::GetInstance().Schedule([]() {
             Application::GetInstance().NiulaiEnterPresent();
         });
@@ -244,6 +250,8 @@ void NiulaiLife::PostFace(const char* emotion, const char* chat) {
     Display* display = display_;
     Application::GetInstance().Schedule([display, emo, msg]() {
         display->SetEmotion(emo.c_str());
-        display->SetChatMessage(msg.empty() ? "system" : "assistant", msg.c_str());
+        if (!msg.empty()) {
+            display->SetChatMessage("assistant", msg.c_str());
+        }
     });
 }
