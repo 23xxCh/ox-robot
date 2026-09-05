@@ -1,7 +1,7 @@
 # 牛来小智板型 `niulai-s3-expand-v17`
 
-源码：`E:\AI TOY\xiaozhi-claw\firmware\xiaozhi-esp32\main\boards\niulai-s3-expand-v17\`
-（与 `E:\XIAOZHI_NATIVE\xiaozhi-esp32` 是同一棵树）
+源码：`E:\XIAOZHI_NATIVE\xiaozhi-esp32\main\boards\niulai-s3-expand-v17\`
+overlay 同步在本目录。不要合完整 ESP-Claw。
 
 基于官方 `bread-compact-wifi-lcd`。继电器不用。舵机 5V 必须外供，不要从 ESP 5V 取电。
 
@@ -44,7 +44,7 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=GPIO18。
 
 屏上是黄牛来脸（灰角、紫鼻子、半眼皮），不是小智机器人图标。唤醒/按键时切开心脸并显示「妈妈」。人离开后切困脸；靠近立刻机械脸。
 
-生命循环在 `niulai_life.cc`：200 ms 一轮，有人时每拍都写 1500 µs，SECRET 可被近距立刻打断。超时 ≠ 确认无人。
+生命循环在 `niulai_life.cc`：200 ms 一轮，有人时每拍都写 1500 µs，SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 只晃两拍（约 400 ms）然后在 1500 µs 停约 2 s，避免 360° 舵机空转。唤醒 / BOOT / 键都会 `ParkActuators()`。
 
 ## 唤醒与妈妈
 
@@ -63,9 +63,19 @@ $env:Path = "C:\Program Files\Git\cmd;" + $env:Path
 $env:IDF_PATH = "E:\AI_TOY_TOOLS\esp-idf-v6.0.2"
 $env:IDF_TOOLS_PATH = "E:\AI_TOY_TOOLS\espressif"
 . "$env:IDF_PATH\export.ps1"
-Set-Location "E:\AI TOY\xiaozhi-claw\firmware\xiaozhi-esp32"
+Set-Location "E:\XIAOZHI_NATIVE\xiaozhi-esp32"
 python scripts/build.py niulai-s3-expand-v17
 idf.py -p COM6 flash monitor
 ```
 
-COM 口按设备管理器改。烧完后先看屏是否正常，再喊「牛来牛来」听喇叭是否说「妈妈」。
+COM 口按设备管理器改。2026-09-05 18:24 已烧进 COM6（Wrote 2764096 bytes，hash verified，RTS 复位）。烧完先看黄牛脸，再按 KY-004 或喊「牛来牛来」。
+
+## 小智主干挂钩（不在本 overlay 目录里）
+
+这些改动在构建树 `E:\XIAOZHI_NATIVE\xiaozhi-esp32`，板型为 `niulai-s3-expand-v17` 时才生效：
+
+- `main/application.cc`：`IsNiulaiBoard()`。启动跳过官方 OTA/激活；拒绝打开官方 websocket 音频通道；唤醒 / BOOT / 开始聆听只播 `OGG_MAMA` 并 `ParkActuators()`。
+- `main/boards/common/board.h`：`virtual void ParkActuators() {}`，牛来板 override 成四腿 1500 µs。
+- `main/assets/lang_config.h`：`OGG_MAMA` 指向本地 `mama.ogg`。
+
+不要打开 xiaozhi.me 点升级。

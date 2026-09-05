@@ -12,6 +12,7 @@ public:
     void Start(Display* display);
     // Instant 1500 us park. Safe to call from MCP, key, or the life task.
     void SnapFreeze();
+    void ParkLegs();
 
 private:
     enum Presence { kUnknown, kPresent, kAbsent };

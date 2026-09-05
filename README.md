@@ -61,17 +61,20 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=18。
 板型 `niulai-s3-expand-v17`，源码 overlay 在 `firmware/xiaozhi-niulai/`，构建在小智 `xiaozhi-esp32` 树里。
 
 - 唤醒词：`niu lai niu lai`（牛来牛来）
-- 唤醒后只播本地 `mama.ogg`，不打开云端对话
+- 唤醒 / BOOT / KY-004 只播本地 `mama.ogg`，并立刻把四腿写回 1500 µs；不打开云端对话
 - 超声近距视为有人：腿立刻中位、机械脸；约 8 秒无近距才对角小晃（可立刻打断）
-- 按 KY-004 同样只播「妈妈」
+- SECRET 步态：约 400 ms 对角 ±250 µs，随后约 2 s 停在 1500 µs。360° 舵机不会一直转
+
+构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。2026-09-05 18:24 已烧进 COM6（hash verified）。
 
 ```powershell
 # ESP-IDF 6.0.2
+Set-Location "E:\XIAOZHI_NATIVE\xiaozhi-esp32"
 python scripts/build.py niulai-s3-expand-v17
 idf.py -p COM6 flash
 ```
 
-COM 口按设备管理器改。烧完先看屏，再按键或喊「牛来牛来」。
+COM 口按设备管理器改。烧完先看黄牛脸，再按键或喊「牛来牛来」。
 
 ## 本地大脑
 

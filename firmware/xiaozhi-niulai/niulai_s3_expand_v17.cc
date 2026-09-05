@@ -18,6 +18,7 @@
 #include <esp_lcd_panel_ops.h>
 #include <driver/spi_common.h>
 #include <driver/ledc.h>
+#include <driver/gpio.h>
 
 #if defined(LCD_TYPE_ILI9341_SERIAL)
 #include "esp_lcd_ili9341.h"
@@ -138,6 +139,7 @@ private:
         });
         // KY-004 active-low poke: local "妈妈" only, no cloud chat.
         key_button_.OnClick([this]() {
+            life_.ParkLegs();
             Application::GetInstance().PlaySound(Lang::Sounds::OGG_MAMA);
             if (display_ != nullptr) {
                 display_->SetEmotion("happy");
@@ -166,6 +168,7 @@ private:
         const uint32_t duty_center = (1500u * ((1u << 14) - 1)) / 20000u;
 
         for (int i = 0; i < 4; ++i) {
+            gpio_reset_pin(pins[i]);
             ledc_channel_config_t ch = {};
             ch.speed_mode = LEDC_LOW_SPEED_MODE;
             ch.channel = channels[i];
@@ -212,6 +215,10 @@ public:
 
     virtual Display* GetDisplay() override {
         return display_;
+    }
+
+    void ParkActuators() override {
+        life_.ParkLegs();
     }
 
     virtual Backlight* GetBacklight() override {

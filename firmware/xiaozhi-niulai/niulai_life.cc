@@ -125,23 +125,32 @@ void NiulaiLife::HoldCenter() {
     }
 }
 
-void NiulaiLife::SnapFreeze() {
+void NiulaiLife::ParkLegs() {
     HoldCenter();
+}
+
+void NiulaiLife::SnapFreeze() {
+    ParkLegs();
     PostFace("neutral", "");
 }
 
 void NiulaiLife::SecretWalk() {
-    // 4-beat diagonal rock, 400 ms per side. 180° SG90 twitches; 360° creeps.
-    // One beat is one 200 ms loop. PRESENT / close pre-empts before this runs.
-    wiggle_phase_ = (wiggle_phase_ + 1) % 8;
-    int sign = (wiggle_phase_ < 4) ? 1 : -1;
+    // 400 ms diagonal, then ~2 s parked at 1500 us.
+    // Holding 1250/1750 forever makes 360° SG90s spin; 1500 stops them.
+    // PRESENT / close pre-empts before this runs.
+    wiggle_phase_ = (wiggle_phase_ + 1) % 12;
+    if (wiggle_phase_ >= 2) {
+        HoldCenter();
+        return;
+    }
+    int sign = (wiggle_phase_ == 0) ? 1 : -1;
     WritePulseUs(0, kCenterUs + sign * kWalkAmpUs);
     WritePulseUs(1, kCenterUs - sign * kWalkAmpUs);
     WritePulseUs(2, kCenterUs - sign * kWalkAmpUs);
     WritePulseUs(3, kCenterUs + sign * kWalkAmpUs);
     if (wiggle_phase_ == 0) {
         PostFace("sleepy", "……");
-    } else if (wiggle_phase_ == 4) {
+    } else if (wiggle_phase_ == 1) {
         PostFace("winking", "……");
     }
 }
