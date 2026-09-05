@@ -10,6 +10,7 @@
 #include <esp_rom_sys.h>
 #include <esp_timer.h>
 
+#include <cstring>
 #include <string>
 
 #define TAG "NiulaiLife"
@@ -73,6 +74,8 @@ void NiulaiLife::Loop() {
 
         if (presence_ == kPresent || close) {
             HoldCenter();
+        } else if (now < motion_until_us_) {
+            SecretWalk();
         } else if (presence_ == kAbsent) {
             SecretWalk();
             if (now - last_brain_us_ >= kBrainRetryUs) {
@@ -131,7 +134,34 @@ void NiulaiLife::HoldCenter() {
 }
 
 void NiulaiLife::ParkLegs() {
+    motion_until_us_ = 0;
     HoldCenter();
+}
+
+void NiulaiLife::PulseMotion(const char* dir, int ms) {
+    if (presence_ == kPresent) {
+        ParkLegs();
+        return;
+    }
+    if (ms < 0) {
+        ms = 0;
+    }
+    if (ms > 2000) {
+        ms = 2000;
+    }
+    if (dir != nullptr && strcmp(dir, "stop") == 0) {
+        ParkLegs();
+        return;
+    }
+    if (dir != nullptr && (strcmp(dir, "left") == 0 || strcmp(dir, "right") == 0)) {
+        gait_ = 3;
+    } else if (dir != nullptr && strcmp(dir, "back") == 0) {
+        gait_ = 1;
+    } else {
+        gait_ = 0;
+    }
+    wiggle_phase_ = 0;
+    motion_until_us_ = esp_timer_get_time() + static_cast<int64_t>(ms) * 1000;
 }
 
 void NiulaiLife::SnapFreeze() {

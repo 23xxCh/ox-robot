@@ -74,11 +74,14 @@ async def _speak(
     audio_format: str,
     ffmpeg_path: str | None,
 ) -> None:
-    await ws.send_json({"type": "tts", "state": "start"})
-    await ws.send_json({"type": "tts", "state": "sentence_start", "text": text})
-    if audio_format == "opus":
-        await _send_opus_audio(ws, text, ffmpeg_path)
-    await ws.send_json({"type": "tts", "state": "stop"})
+    try:
+        await ws.send_json({"type": "tts", "state": "start"})
+        await ws.send_json({"type": "tts", "state": "sentence_start", "text": text})
+        if audio_format == "opus":
+            await _send_opus_audio(ws, text, ffmpeg_path)
+        await ws.send_json({"type": "tts", "state": "stop"})
+    except (WebSocketDisconnect, RuntimeError):
+        return
 
 
 async def _send_motion(ws: WebSocket, intents: list[ActionIntent]) -> None:
@@ -252,7 +255,6 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                             audio_format=audio_format,
                             ffmpeg_path=ffmpeg_path,
                         )
-                        await _send_motion(ws, intents)
                         continue
                     if state == "stop":
                         listening = False
@@ -290,7 +292,8 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         else:
                             await ws.send_json({"type": "tts", "state": "start"})
                             await ws.send_json({"type": "tts", "state": "stop"})
-                        await _send_motion(ws, intents)
+                        if presence == "ABSENT":
+                            await _send_motion(ws, intents)
                         continue
         except WebSocketDisconnect:
             return

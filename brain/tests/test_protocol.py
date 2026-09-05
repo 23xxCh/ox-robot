@@ -144,7 +144,7 @@ def test_binary_non_utf8_still_yields_tts_stop() -> None:
         assert tts_stopped
 
 
-def test_walk_utterance_sends_niulai_motion() -> None:
+def test_present_walk_does_not_send_motion() -> None:
     client = TestClient(create_app(NiulaiBrain()))
     with client.websocket_connect("/xiaozhi/v1/") as ws:
         ws.send_json({"type": "hello", "version": 1})
@@ -154,10 +154,31 @@ def test_walk_utterance_sends_niulai_motion() -> None:
         ws.send_bytes("往前走".encode("utf-8"))
         ws.send_json({"type": "listen", "state": "stop"})
         kinds: list[str] = []
+        for _ in range(16):
+            msg = ws.receive_json()
+            kinds.append(msg["type"])
+            assert not (msg["type"] == "niulai" and msg.get("motion"))
+            if msg["type"] == "tts" and msg.get("state") == "stop":
+                break
+        assert "tts" in kinds
+
+
+def test_absent_walk_utterance_sends_niulai_motion() -> None:
+    client = TestClient(create_app(NiulaiBrain()))
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json({"type": "hello", "version": 1})
+        ws.receive_json()
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg["type"] == "tts" and msg.get("state") == "stop":
+                break
+        ws.send_json({"type": "listen", "state": "start"})
+        ws.send_bytes("往前走".encode("utf-8"))
+        ws.send_json({"type": "listen", "state": "stop"})
         motion = None
         for _ in range(20):
             msg = ws.receive_json()
-            kinds.append(msg["type"])
             if msg["type"] == "niulai" and msg.get("motion"):
                 motion = msg
                 break

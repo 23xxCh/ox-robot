@@ -217,6 +217,10 @@ public:
         life_.ParkLegs();
     }
 
+    void NiulaiMotion(const char* dir, int ms) override {
+        life_.PulseMotion(dir, ms);
+    }
+
     virtual Backlight* GetBacklight() override {
         if (DISPLAY_BACKLIGHT_PIN != GPIO_NUM_NC) {
             static PwmBacklight backlight(DISPLAY_BACKLIGHT_PIN, DISPLAY_BACKLIGHT_OUTPUT_INVERT);
