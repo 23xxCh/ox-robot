@@ -1,0 +1,36 @@
+#ifndef NIULAI_LIFE_H
+#define NIULAI_LIFE_H
+
+#include "display.h"
+
+#include <driver/ledc.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+
+class NiulaiLife {
+public:
+    void Start(Display* display);
+    void SnapFreeze();
+
+private:
+    enum Presence { kUnknown, kPresent, kAbsent };
+
+    Display* display_ = nullptr;
+    Presence presence_ = kUnknown;
+    int64_t last_present_us_ = 0;
+    int present_streak_ = 0;
+    int wiggle_phase_ = 0;
+    ledc_channel_t channels_[4] = {
+        LEDC_CHANNEL_2, LEDC_CHANNEL_3, LEDC_CHANNEL_4, LEDC_CHANNEL_5
+    };
+
+    static void TaskTrampoline(void* arg);
+    void Loop();
+    float ReadCm();
+    void WritePulseUs(int index, uint32_t pulse_us);
+    void HoldCenter();
+    void SecretWiggle();
+    void OnPresence(Presence next);
+};
+
+#endif

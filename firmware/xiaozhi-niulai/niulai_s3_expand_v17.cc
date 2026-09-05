@@ -1,6 +1,8 @@
 #include "wifi_board.h"
 #include "codecs/no_audio_codec.h"
 #include "display/lcd_display.h"
+#include "niulai_face_display.h"
+#include "niulai_life.h"
 #include "system_reset.h"
 #include "application.h"
 #include "button.h"
@@ -66,6 +68,7 @@ private:
     Button boot_button_;
     Button key_button_;
     LcdDisplay* display_;
+    NiulaiLife life_;
 
     void InitializeSpi() {
         spi_bus_config_t buscfg = {};
@@ -120,7 +123,7 @@ private:
 #ifdef  LCD_TYPE_GC9A01_SERIAL
         panel_config.vendor_config = &gc9107_vendor_config;
 #endif
-        display_ = new SpiLcdDisplay(panel_io, panel,
+        display_ = new NiulaiLcdDisplay(panel_io, panel,
                                     DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
     }
 
@@ -136,6 +139,10 @@ private:
         // KY-004 active-low poke: local "妈妈" only, no cloud chat.
         key_button_.OnClick([this]() {
             Application::GetInstance().PlaySound(Lang::Sounds::OGG_MAMA);
+            if (display_ != nullptr) {
+                display_->SetEmotion("happy");
+                display_->SetChatMessage("assistant", "妈妈");
+            }
         });
     }
 
@@ -180,6 +187,7 @@ public:
         InitializeLcdDisplay();
         InitializeButtons();
         InitializeServosHold();
+        life_.Start(display_);
         if (DISPLAY_BACKLIGHT_PIN != GPIO_NUM_NC) {
             GetBacklight()->RestoreBrightness();
         }
