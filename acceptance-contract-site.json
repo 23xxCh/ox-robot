@@ -1,0 +1,28 @@
+{
+  "version": "1",
+  "scope": "niulai-public-life-site",
+  "items": [
+    {
+      "id": "AC-SITE-001",
+      "scenario": "GET /life returns a Chinese public page for 牛来 without Xiaozhi cloud",
+      "check_type": "test",
+      "expect": "200 HTML with 牛来, 你回来啦, GPIO 9, GitHub, 不连小智云",
+      "status": "green",
+      "depends_on": [],
+      "verifier": "python -m pytest -q brain/tests/test_site.py"
+    },
+    {
+      "id": "AC-SITE-002",
+      "scenario": "Existing rehearsal page at / still works",
+      "check_type": "test",
+      "expect": "rehearsal tests remain green",
+      "status": "green",
+      "depends_on": [],
+      "verifier": "python -m pytest -q brain/tests/test_web.py"
+    }
+  ],
+  "attestation": {
+    "hash": "sha256:70c202ff9b1f8f80f22347958d321a07cc65aae80024fc87dbba417e7f91b2ab",
+    "attested_at": "2026-09-05T11:15:56.294920+00:00"
+  }
+}

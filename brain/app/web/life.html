@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>牛来 · 会装死的潮玩</title>
+    <style>
+      :root {
+        --fur: #f0c000;
+        --snout: #e8a8c8;
+        --ink: #1a1a1a;
+        --paper: #fff8f0;
+        --mute: #6e6e82;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font: 18px/1.5 "Segoe UI", "PingFang SC", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+      header {
+        background: var(--fur);
+        padding: 2.5rem 1.25rem 2rem;
+      }
+      main, footer { max-width: 40rem; margin: 0 auto; padding: 1.25rem; }
+      h1 { margin: 0 0 0.4rem; font-size: 2.2rem; }
+      .lede { margin: 0; font-size: 1.15rem; }
+      ol { padding-left: 1.2rem; }
+      a { color: #6b3a8c; }
+      .note { color: var(--mute); font-size: 0.95rem; }
+      .horn { display: inline-block; width: 0.7em; height: 1.1em; background: var(--mute); border-radius: 50%; vertical-align: middle; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p><span class="horn" aria-hidden="true"></span> ox-robot</p>
+      <h1>牛来</h1>
+      <p class="lede">人前它装死，人离开后才过自己的生活。</p>
+    </header>
+    <main>
+      <h2>它会怎样</h2>
+      <ol>
+        <li>超声前空着大约 8 秒：四腿随机小晃，喇叭吐槽。</li>
+        <li>手靠近：腿立刻停，说「你回来啦」。</li>
+        <li>按键或喊「牛来牛来」：说「妈妈」。不连小智云。</li>
+      </ol>
+      <h2>现场接线</h2>
+      <p>舵机信号 10 / 11 / GPIO 9 / 13，5V 必须外供。GPIO 12 是充电指示，不要给左后腿。</p>
+      <p>
+        仓库：
+        <a href="https://github.com/23xxCh/ox-robot">github.com/23xxCh/ox-robot</a>
+      </p>
+      <p><a href="/">打开排练台</a></p>
+    </main>
+    <footer class="note">本地大脑 rehearsal。产品对话不连小智云。</footer>
+  </body>
+</html>

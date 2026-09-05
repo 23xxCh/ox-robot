@@ -136,6 +136,11 @@ async def rehearsal_page() -> FileResponse:
     return FileResponse(WEB_DIR / "index.html", media_type="text/html; charset=utf-8")
 
 
+@router.get("/life")
+async def life_page() -> FileResponse:
+    return FileResponse(WEB_DIR / "life.html", media_type="text/html; charset=utf-8")
+
+
 @router.get("/web/rehearsal.css")
 async def rehearsal_css() -> FileResponse:
     return FileResponse(WEB_DIR / "rehearsal.css", media_type="text/css")
