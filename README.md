@@ -5,7 +5,9 @@
 一块小智 S3 扩展板 V1.7 负责听、说、屏、灯、键、超声和四路舵机信号。笔记本上的 `brain/` 负责人格、记忆和动作编排。不把完整 ESP-Claw 固件并进小智。
 
 - 仓库：https://github.com/23xxCh/ox-robot
-- Checkpoint 1 进展：[牛来机器人-进展说明-2026-09-05.md](./牛来机器人-进展说明-2026-09-05.md)
+- Checkpoint 1：[牛来机器人-进展说明-2026-09-05.md](./牛来机器人-进展说明-2026-09-05.md)
+- Checkpoint 2：[牛来机器人-Checkpoint2-进展说明-2026-09-06.md](./牛来机器人-Checkpoint2-进展说明-2026-09-06.md)
+- Submission：[牛来机器人-Submission-2026-09-06.md](./牛来机器人-Submission-2026-09-06.md)
 
 ## 架构
 
@@ -60,7 +62,7 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=18。
 
 - 唤醒词：`niu lai niu lai`（牛来牛来）
 - 唤醒后只播本地 `mama.ogg`，不打开云端对话
-- 超声近距视为有人：腿立刻中位；约 8 秒无近距才小幅摆腿
+- 超声近距视为有人：腿立刻中位、机械脸；约 8 秒无近距才对角小晃（可立刻打断）
 - 按 KY-004 同样只播「妈妈」
 
 ```powershell
@@ -88,6 +90,8 @@ python -m brain.app
 | 文件 | 用途 |
 |---|---|
 | [牛来机器人-进展说明-2026-09-05.md](./牛来机器人-进展说明-2026-09-05.md) | Checkpoint 1 进展 |
+| [牛来机器人-Checkpoint2-进展说明-2026-09-06.md](./牛来机器人-Checkpoint2-进展说明-2026-09-06.md) | Checkpoint 2 进展 |
+| [牛来机器人-Submission-2026-09-06.md](./牛来机器人-Submission-2026-09-06.md) | 12:00 交卷稿 |
 | [docs/architecture-niulai-local-brain-2026-09-05.md](./docs/architecture-niulai-local-brain-2026-09-05.md) | 当前软件架构 |
 | [docs/prd-niulai-life-v2-2026-09-05.md](./docs/prd-niulai-life-v2-2026-09-05.md) | 生命感 PRD |
 | [firmware/xiaozhi-niulai/README.md](./firmware/xiaozhi-niulai/README.md) | 板型与烧录 |

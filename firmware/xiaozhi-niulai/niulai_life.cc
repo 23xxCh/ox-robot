@@ -1,4 +1,6 @@
 #include "niulai_life.h"
+
+#include "application.h"
 #include "config.h"
 
 #include <driver/gpio.h>
@@ -6,15 +8,17 @@
 #include <esp_rom_sys.h>
 #include <esp_timer.h>
 
+#include <string>
+
 #define TAG "NiulaiLife"
 
 namespace {
 constexpr float kPresentCm = 55.0f;
-constexpr int kPresentStreak = 2;
+constexpr int kPresentStreak = 1;
 constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
-constexpr uint32_t kWiggleUs = 120;
+constexpr int kWalkAmpUs = 250;
 constexpr uint32_t kMaxDuty = (1u << 14) - 1;
 }  // namespace
 
@@ -29,9 +33,11 @@ void NiulaiLife::Start(Display* display) {
     gpio_config_t echo = {};
     echo.pin_bit_mask = 1ULL << ULTRASONIC_ECHO_GPIO;
     echo.mode = GPIO_MODE_INPUT;
+    echo.pull_down_en = GPIO_PULLDOWN_ENABLE;
     gpio_config(&echo);
 
-    xTaskCreatePinnedToCore(TaskTrampoline, "niulai_life", 4096, this, 5, nullptr, 1);
+    // Core 0: audio / SR typically sit on core 1.
+    xTaskCreatePinnedToCore(TaskTrampoline, "niulai_life", 4096, this, 5, nullptr, 0);
     ESP_LOGI(TAG, "life loop started TRIG=%d ECHO=%d", (int)ULTRASONIC_TRIG_GPIO,
              (int)ULTRASONIC_ECHO_GPIO);
 }
@@ -58,18 +64,20 @@ void NiulaiLife::Loop() {
             next = kPresent;
         } else if (now - last_present_us_ >= kAbsentUs) {
             next = kAbsent;
-        } else if (presence_ == kUnknown && !close) {
-            next = kUnknown;
         }
 
         if (next != presence_) {
             OnPresence(next);
         }
 
-        if (presence_ == kPresent) {
+        if (presence_ == kPresent || close) {
             HoldCenter();
         } else if (presence_ == kAbsent) {
-            SecretWiggle();
+            SecretWalk();
+        }
+
+        if (++log_tick_ % 10 == 0) {
+            ESP_LOGI(TAG, "cm=%.1f streak=%d presence=%d", cm, present_streak_, (int)presence_);
         }
 
         vTaskDelay(pdMS_TO_TICKS(200));
@@ -119,34 +127,48 @@ void NiulaiLife::HoldCenter() {
 
 void NiulaiLife::SnapFreeze() {
     HoldCenter();
-    if (display_ != nullptr) {
-        display_->SetEmotion("neutral");
-        display_->SetChatMessage("system", "");
-    }
+    PostFace("neutral", "");
 }
 
-void NiulaiLife::SecretWiggle() {
+void NiulaiLife::SecretWalk() {
+    // 4-beat diagonal rock, 400 ms per side. 180° SG90 twitches; 360° creeps.
+    // One beat is one 200 ms loop. PRESENT / close pre-empts before this runs.
     wiggle_phase_ = (wiggle_phase_ + 1) % 8;
     int sign = (wiggle_phase_ < 4) ? 1 : -1;
-    uint32_t delta = kWiggleUs;
-    WritePulseUs(0, kCenterUs + sign * static_cast<int>(delta));
-    WritePulseUs(1, kCenterUs - sign * static_cast<int>(delta));
-    WritePulseUs(2, kCenterUs - sign * static_cast<int>(delta / 2));
-    WritePulseUs(3, kCenterUs + sign * static_cast<int>(delta / 2));
+    WritePulseUs(0, kCenterUs + sign * kWalkAmpUs);
+    WritePulseUs(1, kCenterUs - sign * kWalkAmpUs);
+    WritePulseUs(2, kCenterUs - sign * kWalkAmpUs);
+    WritePulseUs(3, kCenterUs + sign * kWalkAmpUs);
+    if (wiggle_phase_ == 0) {
+        PostFace("sleepy", "……");
+    } else if (wiggle_phase_ == 4) {
+        PostFace("winking", "……");
+    }
 }
 
 void NiulaiLife::OnPresence(Presence next) {
     Presence prev = presence_;
     presence_ = next;
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
-    if (display_ == nullptr) {
-        return;
-    }
     if (next == kPresent) {
         SnapFreeze();
         return;
-    } else if (next == kAbsent) {
-        display_->SetEmotion("sleepy");
-        display_->SetChatMessage("assistant", "……");
     }
+    if (next == kAbsent) {
+        wiggle_phase_ = 0;
+        PostFace("sleepy", "……");
+    }
+}
+
+void NiulaiLife::PostFace(const char* emotion, const char* chat) {
+    if (display_ == nullptr) {
+        return;
+    }
+    std::string emo = emotion != nullptr ? emotion : "neutral";
+    std::string msg = chat != nullptr ? chat : "";
+    Display* display = display_;
+    Application::GetInstance().Schedule([display, emo, msg]() {
+        display->SetEmotion(emo.c_str());
+        display->SetChatMessage(msg.empty() ? "system" : "assistant", msg.c_str());
+    });
 }
