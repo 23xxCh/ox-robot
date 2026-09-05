@@ -44,7 +44,7 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=GPIO18。
 
 屏上是黄牛来脸。人靠近：腿停，喇叭说「你回来啦」。人离开约 8 秒：随机小晃，并轮流说吐槽。按键仍可播「妈妈」。音量强制 90。
 
-生命循环在 `niulai_life.cc`：200 ms 一轮，有人时每拍都写 1500 µs，SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 只晃两拍（约 400 ms）然后在 1500 µs 停约 2 s，避免 360° 舵机空转。唤醒 / BOOT / 键都会 `ParkActuators()`。
+生命循环在 `niulai_life.cc`：200 ms 一轮，有人时每拍都写 1500 µs，SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 随机步态约 800 ms，然后在 1500 µs 停约 2 s，避免 360° 舵机空转。靠近播 `hi.ogg`，离开轮播 `secret1/2/3.ogg`（均为 Opus）。唤醒 / BOOT / 键都会 `ParkActuators()`。
 
 ## 唤醒与妈妈
 
@@ -68,7 +68,7 @@ python scripts/build.py niulai-s3-expand-v17
 idf.py -p COM6 flash monitor
 ```
 
-COM 口按设备管理器改。2026-09-05 18:42 已烧进 COM6（GPIO 10/11/9/13，Wrote 2764944 bytes，hash verified，RTS 复位）。烧完先看黄牛脸，再按 KY-004 或喊「牛来牛来」。左后黄线必须在 GPIO 9，不要接 12。
+COM 口按设备管理器改。2026-09-05 19:06 已烧进 COM6（GPIO 10/11/9/13，Wrote 2792160 bytes，hash verified，RTS 复位）。烧完先看黄牛脸，再按 KY-004 或喊「牛来牛来」。左后黄线必须在 GPIO 9，不要接 12。
 
 ## 小智主干挂钩（不在本 overlay 目录里）
 
@@ -76,6 +76,6 @@ COM 口按设备管理器改。2026-09-05 18:42 已烧进 COM6（GPIO 10/11/9/13
 
 - `main/application.cc`：`IsNiulaiBoard()`。启动跳过官方 OTA/激活；拒绝打开官方 websocket 音频通道；唤醒 / BOOT / 开始聆听只播 `OGG_MAMA` 并 `ParkActuators()`。
 - `main/boards/common/board.h`：`virtual void ParkActuators() {}`，牛来板 override 成四腿 1500 µs。
-- `main/assets/lang_config.h`：`OGG_MAMA` 指向本地 `mama.ogg`。
+- `main/assets/lang_config.h`：`OGG_MAMA` / `OGG_HI` / `OGG_SECRET1..3` 指向本地 Opus 剪辑。
 
 不要打开 xiaozhi.me 点升级。

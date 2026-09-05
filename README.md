@@ -61,11 +61,11 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=18。
 板型 `niulai-s3-expand-v17`，源码 overlay 在 `firmware/xiaozhi-niulai/`，构建在小智 `xiaozhi-esp32` 树里。
 
 - 唤醒词：`niu lai niu lai`（牛来牛来）
-- 唤醒 / BOOT / KY-004 只播本地 `mama.ogg`，并立刻把四腿写回 1500 µs；不打开云端对话
-- 超声近距视为有人：腿立刻中位、机械脸；约 8 秒无近距才对角小晃（可立刻打断）
-- SECRET 步态：约 400 ms 对角 ±250 µs，随后约 2 s 停在 1500 µs。360° 舵机不会一直转
+- 唤醒 / BOOT / KY-004 只播本地 `mama.ogg`（Opus），并立刻把四腿写回 1500 µs；不打开云端对话
+- 超声近距视为有人：腿立刻中位，播「你回来啦」；约 8 秒无近距才随机小晃（可立刻打断）并播本地吐槽
+- SECRET 步态：约 800 ms 随机步态，随后约 2 s 停在 1500 µs。360° 舵机不会一直转。喇叭音量 90
 
-构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。2026-09-05 18:42 已烧进 COM6（GPIO 10/11/9/13，hash verified）。
+构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。2026-09-05 19:06 已烧进 COM6（GPIO 10/11/9/13，hash verified）。
 
 ```powershell
 # ESP-IDF 6.0.2

@@ -1,5 +1,5 @@
 <h1>Checkpoint 2 进展（2026-09-06）</h1>
-<p>相对 Checkpoint 1，板端生命循环已烧进 COM6（最近一次 2026-09-05 18:42，GPIO 10/11/9/13，hash verified）。超声近距立刻冻腿；约 8 秒无近距才对角小晃约 400 ms，随后停在 1500 µs 约 2 s，避免 360° 空转。靠近立刻打断。唤醒、按键、BOOT 只播本地「妈妈」并停腿，不连小智云。屏上是黄牛来脸。左后舵机改接 GPIO 9：板上 GPIO 12 是充电指示。仓库 https://github.com/23xxCh/ox-robot</p>
+<p>相对 Checkpoint 1，板端生命循环已烧进 COM6（最近一次 2026-09-05 19:06，GPIO 10/11/9/13，hash verified）。超声近距立刻冻腿并说「你回来啦」；约 8 秒无近距才随机小晃约 800 ms，随后停在 1500 µs 约 2 s，并播本地吐槽。靠近立刻打断。唤醒、按键、BOOT 只播本地「妈妈」并停腿，不连小智云。屏上是黄牛来脸。左后舵机改接 GPIO 9：板上 GPIO 12 是充电指示。仓库 https://github.com/23xxCh/ox-robot</p>
 <h2>新完成</h2>
 <table>
 <colgroup><col width="160"/><col width="400"/></colgroup>
@@ -7,21 +7,21 @@
 <tbody>
 <tr><td>本地妈妈</td><td>唤醒 / KY-004 / BOOT 只播 mama.ogg，跳过官方 OTA 和 websocket</td></tr>
 <tr><td>牛来脸</td><td>TFT 黄毛、紫鼻子、灰角；妈妈时开心，装死时机械，SECRET 时困</td></tr>
-<tr><td>PRESENT 冻结</td><td>TRIG 8 / ECHO 17，约 55 cm 内立刻 1500 µs 中位</td></tr>
-<tr><td>SECRET 小晃</td><td>对角 ±250 µs 约 400 ms，再 1500 µs 停约 2 s；硬帽 1100–1900 µs；有人立刻停</td></tr>
-<tr><td>brain</td><td>笔记本 FastAPI、Lua niu.*、MCP ttl≤2000；测例绿。真机 TTS 未接通</td></tr>
+<tr><td>PRESENT 冻结</td><td>TRIG 8 / ECHO 17，约 55 cm 内立刻 1500 µs 中位，播本地「你回来啦」</td></tr>
+<tr><td>SECRET 小晃</td><td>随机步态约 800 ms，再 1500 µs 停约 2 s；硬帽 1100–1900 µs；有人立刻停</td></tr>
+<tr><td>本地吐槽</td><td>板上 hi.ogg / secret1-3.ogg（Opus），不是小智云，也不是 brain TTS</td></tr>
 </tbody>
 </table>
 <h2>还剩到 12:00</h2>
-<p>交卷还差不超过 3 分钟的连续真机录像（妈妈 + 靠近装死 + 离开小晃）。外壳总装、真正走路、SECRET 吐槽语音本轮不做，路演也不演。</p>
+<p>交卷还差不超过 3 分钟的连续真机录像（妈妈 + 靠近「你回来啦」+ 离开小晃和本地吐槽）。外壳总装、真正走路、云端闲聊本轮不做，路演也不演。</p>
 <h2>新难点</h2>
 <p>不要再打开 xiaozhi.me 升级，官方 OTA 会覆盖「只说妈妈」。灯必须 GPIO 14、键必须 GPIO 18，21/47 是屏 SPI。左后舵机 GPIO 9，不要接 12（充电指示）。舵机 5V 外供。HC-SR04 的 ECHO 是 5V，建议分压。超时不等于确认没人。</p>
 <h2>90 秒演示</h2>
 <ol>
 <li seq="auto">指牛脸：有人时是玩具。</li>
 <li seq="auto">喊「牛来牛来」或按键 → 「妈妈」。本地录音，不经小智云。</li>
-<li seq="auto">手靠近超声 → 腿立刻停、脸变呆。</li>
-<li seq="auto">手拿开约 8 秒 → 腿对角小晃、脸变困。再靠近立刻停。</li>
-<li seq="auto">打开仓库。不演闲聊，不演跑步。</li>
+<li seq="auto">手靠近超声 → 腿立刻停，喇叭说「你回来啦」。</li>
+<li seq="auto">手拿开约 8 秒 → 腿随机小晃，说一句本地吐槽。再靠近立刻停。</li>
+<li seq="auto">打开仓库。不演云端闲聊，不演跑步。</li>
 </ol>
 <p>分工：陈熙贤硬件与录像，潘炜德固件与文档，微微叙事与路演词。</p>
