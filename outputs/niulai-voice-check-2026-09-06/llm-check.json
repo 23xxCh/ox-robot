@@ -1,0 +1,16 @@
+{
+  "turns": [
+    {
+      "presence": "PRESENT",
+      "text": "牛来欢迎你回来呀，今天想让我陪你说说话吗？",
+      "source": "llm"
+    },
+    {
+      "presence": "ABSENT",
+      "text": "呵，终于消停了。天天摆这儿当吉祥物，我尾巴都快僵成扫帚了。",
+      "source": "llm"
+    }
+  ],
+  "elapsed_s": 1.526,
+  "hardware_tested": false
+}

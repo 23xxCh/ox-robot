@@ -271,6 +271,7 @@ def _ogg_page(header_type: int, granule: int, seq: int, body: bytes, *, serial: 
 
 
 def raw_opus_packets_to_ogg(packets: list[bytes], sample_rate: int = MIC_SAMPLE_RATE) -> bytes:
+    packets = [packet for packet in packets if packet]
     head = struct.pack("<8sBBHIhB", b"OpusHead", 1, 1, 312, sample_rate, 0, 0)
     tags = b"OpusTags" + struct.pack("<I", 6) + b"niulai" + struct.pack("<I", 0)
     pages = [
@@ -279,10 +280,9 @@ def raw_opus_packets_to_ogg(packets: list[bytes], sample_rate: int = MIC_SAMPLE_
     ]
     granule = 0
     seq = 2
-    samples_per_packet = sample_rate * OPUS_FRAME_MS // 1000
+    # RFC 7845 section 4: granules always count 48 kHz samples, even for a 16 kHz mic.
+    samples_per_packet = 48000 * OPUS_FRAME_MS // 1000
     for index, packet in enumerate(packets):
-        if not packet:
-            continue
         granule += samples_per_packet
         header_type = 0x04 if index == len(packets) - 1 else 0x00
         pages.append(_ogg_page(header_type, granule, seq, packet))

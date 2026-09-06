@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from threading import Barrier
 
 import pytest
 
 from brain.app.memory import MemoryStore
+from brain.app.origin import DEFAULT_ORIGIN, system_prompt
 
 
 def _store(tmp_path: Path) -> MemoryStore:
@@ -83,6 +86,50 @@ def test_wss_helpers_track_mama_interrupt_and_dedupe(tmp_path: Path) -> None:
     assert again != "哼，又没人理我"
     polite = store.dedupe_line("niu-1", "我在，你说。我是牛来。", presence="PRESENT")
     assert polite == "我在，你说。我是牛来。"
+
+
+@pytest.mark.parametrize("presence", ["PRESENT", "UNKNOWN", "ABSENT"])
+def test_private_memory_only_reaches_absent_prompt(tmp_path: Path, presence: str) -> None:
+    store = _store(tmp_path)
+    private_line = "他们又把我当摆件了。"
+    interrupted = "正准备偷偷练习翻白眼"
+    store.remember_line("niu-1", private_line)
+    store.note_interrupt("niu-1", interrupted)
+
+    prompt = system_prompt(
+        DEFAULT_ORIGIN, presence, memory=store.prompt_memory("niu-1", presence)
+    )
+
+    assert (private_line in prompt) is (presence == "ABSENT")
+    assert (interrupted in prompt) is (presence == "ABSENT")
+    assert store.recent_lines("niu-1") == [private_line]
+    assert store.dedupe_line("niu-1", private_line, presence="ABSENT") != private_line
+
+
+def test_concurrent_memory_initialization_is_idempotent(monkeypatch) -> None:
+    store = MemoryStore()
+    connection = store._conn
+    both_checked = Barrier(2)
+
+    class ConcurrentConnection:
+        def execute(self, sql, parameters=()):
+            cursor = connection.execute(sql, parameters)
+            if sql.lstrip().startswith("SELECT device_id"):
+                both_checked.wait(timeout=5)
+            return cursor
+
+        def commit(self):
+            connection.commit()
+
+    monkeypatch.setattr(store, "_conn", ConcurrentConnection())
+    try:
+        with ThreadPoolExecutor(max_workers=2) as threads:
+            pending = [threads.submit(store._ensure, "niu-1") for _ in range(2)]
+            for result in pending:
+                result.result(timeout=5)
+        assert connection.execute("SELECT COUNT(*) FROM character_state").fetchone()[0] == 1
+    finally:
+        connection.close()
 
 
 def test_sqlite_file_reopens_after_copy(tmp_path: Path) -> None:

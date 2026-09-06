@@ -1,0 +1,39 @@
+[
+  {
+    "seconds_after_listen_stop": 1.287,
+    "frame": {
+      "type": "stt",
+      "text": "你好牛，来，你是谁？"
+    }
+  },
+  {
+    "seconds_after_listen_stop": 2.112,
+    "frame": {
+      "type": "llm",
+      "text": "你好呀，我是桌上的小牛摆件，乖乖的，会一直陪着你的～",
+      "emotion": "happy"
+    }
+  },
+  {
+    "seconds_after_listen_stop": 2.121,
+    "frame": {
+      "type": "tts",
+      "state": "start"
+    }
+  },
+  {
+    "seconds_after_listen_stop": 2.122,
+    "frame": {
+      "type": "tts",
+      "state": "sentence_start",
+      "text": "你好呀，我是桌上的小牛摆件，乖乖的，会一直陪着你的～"
+    }
+  },
+  {
+    "seconds_after_listen_stop": 9.001,
+    "frame": {
+      "type": "tts",
+      "state": "stop"
+    }
+  }
+]

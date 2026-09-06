@@ -1,0 +1,14 @@
+{
+  "text": "终于清静了。我刚想伸个懒腰，你又回来了。",
+  "transcript": "终于清静了，我刚想伸个懒腰，你又回来了。",
+  "tts_seconds": 1.924,
+  "asr_seconds": 2.215,
+  "audio_seconds": 3.36,
+  "opus_packets": 57,
+  "wav_sha256": "e77c3cdace4b114e6743dcc79c7f0b01d5250cff3d6d8ecb94a39d662dbc0201",
+  "tts": "configured_cloud_provider",
+  "asr_input": "generated_speech_via_real_opus_pipeline",
+  "hardware_microphone_tested": false,
+  "hardware_speaker_tested": false,
+  "passed": true
+}

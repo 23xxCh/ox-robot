@@ -1,0 +1,454 @@
+diff --git a/main/application.cc b/main/application.cc
+index a3a503e..df7e019 100644
+--- a/main/application.cc
++++ b/main/application.cc
+@@ -33,7 +33,7 @@ bool IsNiulaiBoard() {
+ #endif
+ }
+ 
+-constexpr const char* kNiulaiBrainWsUrl = "ws://192.168.10.95:8000/xiaozhi/v1/";
++constexpr const char* kNiulaiBrainWsUrl = "ws://192.168.18.144:8000/xiaozhi/v1/";
+ 
+ bool IsPrivateNiulaiBrainUrl(const std::string& url) {
+     if (url.find("xiaozhi.me") != std::string::npos ||
+@@ -87,7 +87,20 @@ Application::Application() {
+         .name = "post_playback_listen_guard",
+         .skip_unhandled_events = true,
+     };
+-    esp_timer_create(&post_playback_listen_timer_args, &post_playback_listen_timer_handle_);
++    esp_timer_create(&post_playback_listen_timer_args, &post_playback_listen_timer_handle_);
++    if (IsNiulaiBoard()) {
++        esp_timer_create_args_t niulai_polite_timer_args = {
++            .callback = [](void* arg) {
++                auto* app = static_cast<Application*>(arg);
++                xEventGroupSetBits(app->event_group_, MAIN_EVENT_NIULAI_POLITE_READY);
++            },
++            .arg = this,
++            .dispatch_method = ESP_TIMER_TASK,
++            .name = "niulai_polite_intro",
++            .skip_unhandled_events = true,
++        };
++        esp_timer_create(&niulai_polite_timer_args, &niulai_polite_timer_handle_);
++    }
+ }
+ 
+ Application::~Application() {
+@@ -95,10 +108,14 @@ Application::~Application() {
+         esp_timer_stop(clock_timer_handle_);
+         esp_timer_delete(clock_timer_handle_);
+     }
+-    if (post_playback_listen_timer_handle_ != nullptr) {
++    if (post_playback_listen_timer_handle_ != nullptr) {
+         esp_timer_stop(post_playback_listen_timer_handle_);
+-        esp_timer_delete(post_playback_listen_timer_handle_);
+-    }
++        esp_timer_delete(post_playback_listen_timer_handle_);
++    }
++    if (niulai_polite_timer_handle_ != nullptr) {
++        esp_timer_stop(niulai_polite_timer_handle_);
++        esp_timer_delete(niulai_polite_timer_handle_);
++    }
+     vEventGroupDelete(event_group_);
+ }
+ 
+@@ -236,12 +253,13 @@ void Application::Run() {
+         MAIN_EVENT_NETWORK_CONNECTED | MAIN_EVENT_NETWORK_DISCONNECTED | MAIN_EVENT_TOGGLE_CHAT |
+         MAIN_EVENT_START_LISTENING | MAIN_EVENT_STOP_LISTENING | MAIN_EVENT_ACTIVATION_DONE |
+         MAIN_EVENT_STATE_CHANGED | MAIN_EVENT_PLAYBACK_DRAINED |
+-        MAIN_EVENT_POST_PLAYBACK_GUARD;
++        MAIN_EVENT_POST_PLAYBACK_GUARD | MAIN_EVENT_NIULAI_POLITE_READY;
+ 
+     while (true) {
+         auto bits = xEventGroupWaitBits(event_group_, ALL_EVENTS, pdTRUE, pdFALSE, portMAX_DELAY);
+ 
+-        if (bits & MAIN_EVENT_ERROR) {
++        if (bits & MAIN_EVENT_ERROR) {
++            CancelNiulaiPoliteChat();
+             SetDeviceState(kDeviceStateIdle);
+             Alert(Lang::Strings::ERROR, last_error_message_.c_str(), "cancel",
+                   Lang::Sounds::OGG_EXCLAMATION);
+@@ -263,7 +281,7 @@ void Application::Run() {
+             HandleStateChangedEvent();
+         }
+ 
+-        if (bits & MAIN_EVENT_PLAYBACK_DRAINED) {
++        if ((bits & MAIN_EVENT_PLAYBACK_DRAINED) && !niulai_polite_intro_.Pending()) {
+             if (!pending_tts_stop_reply_id_.empty() && audio_service_.IsPlaybackIdle()) {
+                 FinishTtsPlayback(pending_tts_stop_reply_id_);
+             } else if (!post_playback_guard_active_ && pending_listening_start_ &&
+@@ -277,7 +295,7 @@ void Application::Run() {
+ 
+         if (bits & MAIN_EVENT_POST_PLAYBACK_GUARD) {
+             post_playback_guard_active_ = false;
+-            if (pending_listening_start_ && GetDeviceState() == kDeviceStateListening &&
++            if (!niulai_polite_intro_.Pending() && pending_listening_start_ && GetDeviceState() == kDeviceStateListening &&
+                 audio_service_.IsPlaybackIdle()) {
+                 pending_listening_start_ = false;
+                 StartListeningAudio();
+@@ -321,14 +339,19 @@ void Application::Run() {
+             }
+         }
+ 
+-        if (bits & MAIN_EVENT_SCHEDULE) {
++        if (bits & MAIN_EVENT_SCHEDULE) {
+             std::unique_lock<std::mutex> lock(mutex_);
+             auto tasks = std::move(main_tasks_);
+             lock.unlock();
+             for (auto& task : tasks) {
+                 task();
+-            }
+-        }
++            }
++        }
++
++        // Process queued PRESENT/UNKNOWN cancellation before a ready timer event.
++        if (bits & (MAIN_EVENT_NIULAI_POLITE_READY | MAIN_EVENT_PLAYBACK_DRAINED)) {
++            ContinueNiulaiPoliteChat();
++        }
+ 
+         if (bits & MAIN_EVENT_CLOCK_TICK) {
+             clock_ticks_++;
+@@ -382,7 +405,8 @@ void Application::HandleNetworkConnectedEvent() {
+     display->UpdateStatusBar(true);
+ }
+ 
+-void Application::HandleNetworkDisconnectedEvent() {
++void Application::HandleNetworkDisconnectedEvent() {
++    CancelNiulaiPoliteChat();
+     // Close current conversation when network disconnected
+     auto state = GetDeviceState();
+     if (state == kDeviceStateConnecting || state == kDeviceStateListening ||
+@@ -625,16 +649,19 @@ void Application::InitializeProtocol() {
+         }
+     });
+ 
+-    protocol_->OnAudioChannelClosed([this, &board]() {
++    protocol_->OnAudioChannelClosed([this, &board]() {
+         board.SetPowerSaveLevel(PowerSaveLevel::LOW_POWER);
+-        Schedule([this]() {
++        Schedule([this]() {
++            CancelNiulaiPoliteChat();
+             auto display = Board::GetInstance().GetDisplay();
+             display->SetChatMessage("system", "");
+             SetDeviceState(kDeviceStateIdle);
+         });
+     });
+ 
+-    protocol_->OnIncomingJson([this, display](const cJSON* root) {
++    protocol_->OnIncomingJson([this, display](const cJSON* root) {
++        // Only this generation is read on the network task; intro state stays in Run().
++        const auto reply_generation = niulai_reply_generation_.load();
+         // Parse JSON data
+         auto type = cJSON_GetObjectItem(root, "type");
+         if (!cJSON_IsString(type)) {
+@@ -650,7 +677,10 @@ void Application::InitializeProtocol() {
+                 auto reply_id = cJSON_GetObjectItem(root, "reply_id");
+                 std::string playback_reply_id =
+                     cJSON_IsString(reply_id) ? reply_id->valuestring : "";
+-                Schedule([this, playback_reply_id]() {
++                Schedule([this, playback_reply_id, reply_generation]() {
++                    if (!CanAcceptCloudReply(reply_generation)) {
++                        return;
++                    }
+                     post_playback_guard_active_ = false;
+                     pending_listening_start_ = false;
+                     if (post_playback_listen_timer_handle_ != nullptr) {
+@@ -672,7 +702,10 @@ void Application::InitializeProtocol() {
+                 auto reply_id = cJSON_GetObjectItem(root, "reply_id");
+                 if (cJSON_IsString(reply_id)) {
+                     std::string playback_reply_id = reply_id->valuestring;
+-                    Schedule([this, playback_reply_id]() {
++                    Schedule([this, playback_reply_id, reply_generation]() {
++                        if (!CanAcceptCloudReply(reply_generation)) {
++                            return;
++                        }
+                         if (playback_reply_id != active_tts_reply_id_) {
+                             ESP_LOGW(TAG, "Ignoring stale TTS stop acknowledgement request");
+                             return;
+@@ -685,7 +718,10 @@ void Application::InitializeProtocol() {
+                 } else {
+                     // Official xiaozhi servers do not provide reply_id; retain
+                     // their immediate-stop behavior for protocol compatibility.
+-                    Schedule([this]() {
++                    Schedule([this, reply_generation]() {
++                        if (!CanAcceptCloudReply(reply_generation)) {
++                            return;
++                        }
+                         if (GetDeviceState() == kDeviceStateSpeaking) {
+                             if (listening_mode_ == kListeningModeManualStop) {
+                                 SetDeviceState(kDeviceStateIdle);
+@@ -704,8 +740,11 @@ void Application::InitializeProtocol() {
+                         glyphs.clear();
+                     }
+                     ESP_LOGI(TAG, "<< %s", text->valuestring);
+-                    Schedule([display, message = std::string(text->valuestring),
+-                              glyphs = std::move(glyphs), bpp]() {
++                    Schedule([this, display, reply_generation, message = std::string(text->valuestring),
++                              glyphs = std::move(glyphs), bpp]() {
++                        if (!CanAcceptCloudReply(reply_generation)) {
++                            return;
++                        }
+                         display->AddTextGlyphs(glyphs, bpp);
+                         display->SetChatMessage("assistant", message.c_str());
+                     });
+@@ -720,8 +759,11 @@ void Application::InitializeProtocol() {
+                     glyphs.clear();
+                 }
+                 ESP_LOGI(TAG, ">> %s", text->valuestring);
+-                Schedule([display, message = std::string(text->valuestring),
+-                          glyphs = std::move(glyphs), bpp]() {
++                Schedule([this, display, reply_generation, message = std::string(text->valuestring),
++                          glyphs = std::move(glyphs), bpp]() {
++                    if (!CanAcceptCloudReply(reply_generation)) {
++                        return;
++                    }
+                     display->AddTextGlyphs(glyphs, bpp);
+                     display->SetChatMessage("user", message.c_str());
+                 });
+@@ -729,7 +771,10 @@ void Application::InitializeProtocol() {
+         } else if (strcmp(type->valuestring, "llm") == 0) {
+             auto emotion = cJSON_GetObjectItem(root, "emotion");
+             if (cJSON_IsString(emotion)) {
+-                Schedule([display, emotion_str = std::string(emotion->valuestring)]() {
++                Schedule([this, display, reply_generation, emotion_str = std::string(emotion->valuestring)]() {
++                    if (!CanAcceptCloudReply(reply_generation)) {
++                        return;
++                    }
+                     display->SetEmotion(emotion_str.c_str());
+                 });
+             }
+@@ -910,19 +955,75 @@ void Application::NiulaiEnterPresent() {
+     SetDeviceState(kDeviceStateIdle);
+ }
+ 
+-void Application::NiulaiStartPoliteChat() {
+-    ESP_LOGI(TAG, "Niulai: mama clip then polite chat");
+-    Board::GetInstance().ParkActuators();
+-    AbortSpeaking(kAbortReasonNone);
++void Application::NiulaiStartPoliteChat() {
++    // KY-004 calls this from its button task; all intro state belongs to Run().
++    Schedule([this]() { BeginNiulaiPoliteChat(); });
++}
++
++void Application::BeginNiulaiPoliteChat() {
++    if (niulai_polite_intro_.Pending()) {
++        return;
++    }
++    ESP_LOGI(TAG, "Niulai: mama clip then polite chat");
++    Board::GetInstance().ParkActuators();
++    AbortSpeaking(kAbortReasonNone);
++    SetDeviceState(kDeviceStateIdle);
++    audio_service_.EnableVoiceProcessing(false);
++    audio_service_.EnableWakeWordDetection(false);
+     if (auto* codec = Board::GetInstance().GetAudioCodec()) {
+         codec->SetOutputVolume(90);
+     }
+     auto* display = Board::GetInstance().GetDisplay();
+     display->SetEmotion("happy");
+     display->SetChatMessage("assistant", "妈妈");
+-    audio_service_.ResetDecoder();
+-    audio_service_.PlaySound(Lang::Sounds::OGG_MAMA);
+-    vTaskDelay(pdMS_TO_TICKS(2200));
++    audio_service_.ResetDecoder();
++    audio_service_.PlaySound(Lang::Sounds::OGG_MAMA);
++    niulai_polite_intro_.Begin(esp_timer_get_time());
++    esp_err_t status = ESP_ERR_INVALID_STATE;
++    if (niulai_polite_timer_handle_ != nullptr) {
++        esp_timer_stop(niulai_polite_timer_handle_);
++        status = esp_timer_start_once(niulai_polite_timer_handle_, 2200000);
++    }
++    if (status != ESP_OK) {
++        ESP_LOGW(TAG, "Niulai: intro timer failed: %s", esp_err_to_name(status));
++        CancelNiulaiPoliteChat();
++    }
++}
++
++void Application::CancelNiulaiPoliteChat() {
++    niulai_cloud_reply_enabled_ = false;
++    niulai_reply_generation_.fetch_add(1);
++    bool pending = niulai_polite_intro_.Pending();
++    niulai_polite_intro_.Cancel();
++    if (niulai_polite_timer_handle_ != nullptr) {
++        esp_timer_stop(niulai_polite_timer_handle_);
++    }
++    xEventGroupClearBits(event_group_, MAIN_EVENT_NIULAI_POLITE_READY);
++    if (pending) {
++        audio_service_.ResetDecoder();
++        audio_service_.EnableWakeWordDetection(true);
++    }
++}
++
++bool Application::CanAcceptCloudReply(uint32_t generation) const {
++    return !IsNiulaiBoard() || niulai_polite_intro_.AcceptCloudReply(
++        niulai_cloud_reply_enabled_, generation, niulai_reply_generation_.load());
++}
++
++void Application::EnableNiulaiCloudReplies() {
++    if (!niulai_cloud_reply_enabled_) {
++        // Discard callbacks queued while the intro/connection was still blocked.
++        niulai_reply_generation_.fetch_add(1);
++        niulai_cloud_reply_enabled_ = true;
++    }
++}
++
++void Application::ContinueNiulaiPoliteChat() {
++    if (!niulai_polite_intro_.Pending() ||
++        !niulai_polite_intro_.Take(esp_timer_get_time(), audio_service_.IsPlaybackIdle())) {
++        return;
++    }
++    auto* display = Board::GetInstance().GetDisplay();
+     listening_mode_ = kListeningModeAutoStop;
+     if (!protocol_ || !protocol_->IsAudioChannelOpened()) {
+         if (GetDeviceState() != kDeviceStateConnecting) {
+@@ -935,7 +1036,8 @@ void Application::NiulaiStartPoliteChat() {
+             return;
+         }
+     }
+-    if (protocol_) {
++    EnableNiulaiCloudReplies();
++    if (protocol_) {
+         protocol_->SendNiulaiPresence("PRESENT");
+     }
+     display->SetChatMessage("assistant", "我在");
+@@ -946,9 +1048,14 @@ void Application::NiulaiStartPoliteChat() {
+     }
+ }
+ 
+-void Application::NiulaiEnterSecret() {
++void Application::NiulaiEnterSecret() {
++    // A periodic SECRET heartbeat must not invalidate its own in-flight reply.
++    if (niulai_polite_intro_.Pending() || listening_mode_ != kListeningModeManualStop) {
++        CancelNiulaiPoliteChat();
++    }
+     listening_mode_ = kListeningModeManualStop;
+-    if (protocol_ && protocol_->IsAudioChannelOpened()) {
++    if (protocol_ && protocol_->IsAudioChannelOpened()) {
++        EnableNiulaiCloudReplies();
+         protocol_->SendNiulaiPresence("ABSENT");
+         return;
+     }
+@@ -984,8 +1091,9 @@ void Application::NiulaiEnterSecret() {
+         display->SetEmotion(faces[clip_i % 5]);
+         return;
+     }
+-    SetDeviceState(kDeviceStateIdle);
+-    if (protocol_) {
++    SetDeviceState(kDeviceStateIdle);
++    EnableNiulaiCloudReplies();
++    if (protocol_) {
+         protocol_->SendNiulaiPresence("ABSENT");
+     }
+     ESP_LOGI(TAG, "Niulai: secret channel to private brain");
+@@ -1154,7 +1262,11 @@ void Application::HandleStartListeningEvent() {
+     }
+ }
+ 
+-void Application::HandleStopListeningEvent() {
++void Application::HandleStopListeningEvent() {
++    // Normal VAD listen.stop waits for STT/TTS; it is not an aborted reply.
++    if (niulai_polite_intro_.Pending()) {
++        CancelNiulaiPoliteChat();
++    }
+     auto state = GetDeviceState();
+ 
+     if (state == kDeviceStateAudioTesting) {
+@@ -1279,12 +1391,18 @@ void Application::ContinueWakeWordInvoke(const std::string& wake_word) {
+ #endif
+ }
+ 
+-void Application::HandleStateChangedEvent() {
++void Application::HandleStateChangedEvent() {
+     DeviceState new_state = state_machine_.GetState();
+     clock_ticks_ = 0;
+     // Any state change invalidates a pending deferred listening start;
+     // the Listening case below re-arms it when needed.
+-    pending_listening_start_ = false;
++    pending_listening_start_ = false;
++
++    if (niulai_polite_intro_.Pending()) {
++        audio_service_.EnableVoiceProcessing(false);
++        audio_service_.EnableWakeWordDetection(false);
++        return;
++    }
+ 
+     auto& board = Board::GetInstance();
+     auto display = board.GetDisplay();
+@@ -1442,7 +1560,8 @@ void Application::Schedule(std::function<void()>&& callback) {
+     xEventGroupSetBits(event_group_, MAIN_EVENT_SCHEDULE);
+ }
+ 
+-void Application::AbortSpeaking(AbortReason reason) {
++void Application::AbortSpeaking(AbortReason reason) {
++    CancelNiulaiPoliteChat();
+     ESP_LOGI(TAG, "Abort speaking");
+     aborted_ = true;
+     audio_service_.ResetDecoder();
+diff --git a/main/application.h b/main/application.h
+index 24295e2..8272479 100644
+--- a/main/application.h
++++ b/main/application.h
+@@ -10,7 +10,8 @@
+ #include <mutex>
+ #include <deque>
+ #include <memory>
+-#include <functional>
++#include <functional>
++#include <atomic>
+ 
+ #include "protocol.h"
+ #include "ota.h"
+@@ -33,7 +34,8 @@
+ #define MAIN_EVENT_STOP_LISTENING       (1 << 11)
+ #define MAIN_EVENT_STATE_CHANGED        (1 << 12)
+ #define MAIN_EVENT_PLAYBACK_DRAINED     (1 << 13)
+-#define MAIN_EVENT_POST_PLAYBACK_GUARD  (1 << 14)
++#define MAIN_EVENT_POST_PLAYBACK_GUARD  (1 << 14)
++#define MAIN_EVENT_NIULAI_POLITE_READY (1 << 15)
+ 
+ 
+ enum AecMode {
+@@ -136,7 +138,29 @@ private:
+     std::unique_ptr<Protocol> protocol_;
+     EventGroupHandle_t event_group_ = nullptr;
+     esp_timer_handle_t clock_timer_handle_ = nullptr;
+-    esp_timer_handle_t post_playback_listen_timer_handle_ = nullptr;
++    esp_timer_handle_t post_playback_listen_timer_handle_ = nullptr;
++    esp_timer_handle_t niulai_polite_timer_handle_ = nullptr;
++    struct NiulaiPoliteIntro {
++        int64_t ready_at_us = 0;
++        constexpr bool Pending() const { return ready_at_us != 0; }
++        constexpr bool Begin(int64_t now) {
++            if (Pending()) return false;
++            ready_at_us = now + 2200000;
++            return true;
++        }
++        constexpr void Cancel() { ready_at_us = 0; }
++        constexpr bool Take(int64_t now, bool playback_idle) {
++            if (!Pending() || now < ready_at_us || !playback_idle) return false;
++            Cancel();
++            return true;
++        }
++        constexpr bool AcceptCloudReply(bool enabled, uint32_t captured, uint32_t current) const {
++            return enabled && !Pending() && captured == current;
++        }
++    };
++    NiulaiPoliteIntro niulai_polite_intro_;
++    std::atomic<uint32_t> niulai_reply_generation_{0};
++    bool niulai_cloud_reply_enabled_ = false;
+     DeviceStateMachine state_machine_;
+     ListeningMode listening_mode_ = kListeningModeAutoStop;
+     AecMode aec_mode_ = kAecOff;
+@@ -173,7 +197,12 @@ private:
+     void ContinueWakeWordInvoke(const std::string& wake_word);
+     void StartListeningAudio();
+     void ConfigureWakeWordForListening();
+-    void FinishTtsPlayback(std::string reply_id);
++    void FinishTtsPlayback(std::string reply_id);
++    void BeginNiulaiPoliteChat();
++    void ContinueNiulaiPoliteChat();
++    void CancelNiulaiPoliteChat();
++    bool CanAcceptCloudReply(uint32_t generation) const;
++    void EnableNiulaiCloudReplies();
+ 
+     // Activation task (runs in background)
+     void ActivationTask();

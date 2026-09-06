@@ -1,0 +1,78 @@
+--- a/main/application.cc
++++ b/main/application.cc
+@@ -9,7 +9,11 @@
+ #include "settings.h"
+ #include "system_info.h"
+ #include "text_glyph_payload.h"
+-#include "websocket_protocol.h"
++#include "websocket_protocol.h"
++
++#if __has_include("niulai_device_private.h")
++#include "niulai_device_private.h"
++#endif
+ 
+ #include <driver/gpio.h>
+ #include <esp_log.h>
+@@ -48,7 +52,9 @@
+     Settings settings("websocket", true);
+     settings.SetString("url", kNiulaiBrainWsUrl);
+     settings.SetInt("version", 1);
+-    settings.SetString("token", "");
++#if __has_include("niulai_device_private.h")
++    settings.SetString("token", NIULAI_DEVICE_TOKEN);
++#endif
+ }
+ }
+ 
+@@ -132,9 +138,22 @@
+     display->SetChatMessage("system", SystemInfo::GetUserAgent().c_str());
+ 
+     // Setup the audio service
+-    auto codec = board.GetAudioCodec();
+-    audio_service_.Initialize(codec);
+-    audio_service_.Start();
++    auto codec = board.GetAudioCodec();
++    audio_service_.Initialize(codec);
++    if (IsNiulaiBoard()) {
++        // Niulai assets ship with firmware; load models before any audio engine can start.
++        // Do not remap those models later through the network asset update path.
++        assets_version_checked_ = true;
++        auto& assets = Assets::GetInstance();
++        if (!assets.partition_valid()) {
++            ESP_LOGE(TAG, "Niulai: local assets partition unavailable; wake models not loaded");
++        } else if (!assets.Apply(false)) {
++            ESP_LOGE(TAG, "Niulai: local assets apply failed; check bundled wake models");
++        } else {
++            ESP_LOGI(TAG, "Niulai: local assets applied before audio start");
++        }
++    }
++    audio_service_.Start();
+ 
+     AudioServiceCallbacks callbacks;
+     callbacks.on_send_queue_available = [this]() {
+@@ -939,10 +958,21 @@
+     return false;
+ }
+ 
+-void Application::NiulaiEnterPresent() {
+-    ESP_LOGI(TAG, "Niulai: person near, freeze and stop roast");
+-    Board::GetInstance().ParkActuators();
+-    AbortSpeaking(kAbortReasonNone);
++void Application::NiulaiEnterPresent() {
++    Board::GetInstance().ParkActuators();
++    auto state = GetDeviceState();
++    if (state == kDeviceStateStarting || state == kDeviceStateActivating ||
++        state == kDeviceStateWifiConfiguring) {
++        return;
++    }
++    // Presence always stops motion, but an explicit polite request keeps its audio.
++    if (niulai_polite_intro_.Pending() ||
++        (niulai_cloud_reply_enabled_ && listening_mode_ == kListeningModeAutoStop)) {
++        ESP_LOGI(TAG, "Niulai: keep requested polite chat on presence update");
++        return;
++    }
++    ESP_LOGI(TAG, "Niulai: person near, freeze and stop roast");
++    AbortSpeaking(kAbortReasonNone);
+     if (protocol_ && protocol_->IsAudioChannelOpened()) {
+         protocol_->SendNiulaiPresence("PRESENT");
+         protocol_->CloseAudioChannel();

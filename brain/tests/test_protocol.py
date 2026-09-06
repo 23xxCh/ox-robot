@@ -1,11 +1,187 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
+import threading
+from types import SimpleNamespace
+
+import pytest
 
 from fastapi.testclient import TestClient
 
 from brain.app.brain import NiulaiBrain
 from brain.app.main import _send_opus_audio, create_app
+
+
+@pytest.mark.parametrize("blocked_stage", ["tts", "llm", "asr", "walk_tts", "cycle_tts"])
+@pytest.mark.parametrize("presence", ["PRESENT", "UNKNOWN"])
+def test_abort_interrupts_inflight_reply_before_provider_returns(monkeypatch, blocked_stage, presence):
+    """Hold a provider until abort/PRESENT has been processed, not until audio ends."""
+    import brain.app.main as main
+
+    async def check():
+        entered = asyncio.Event()
+        release = threading.Event()
+        incoming, outgoing = asyncio.Queue(), asyncio.Queue()
+        loop = asyncio.get_running_loop()
+        sent_audio = []
+        tts_calls = 0
+        llm_returned = threading.Event()
+        brain = NiulaiBrain()
+        app = create_app(brain)
+        app.state.ffmpeg_path = "fake-ffmpeg"
+
+        def llm(*args, **kwargs):
+            if blocked_stage == "llm":
+                loop.call_soon_threadsafe(entered.set)
+                assert release.wait(2), "provider blocked the receive loop"
+                llm_returned.set()
+            return "PRIVATE_PROBE", "mock"
+
+        async def provider(*args):
+            nonlocal tts_calls
+            tts_calls += 1
+            if blocked_stage == "cycle_tts" and tts_calls == 1:
+                return b"first-audio"
+            entered.set()
+            # Deliberately finish late even when cancellation is requested.
+            try:
+                await asyncio.to_thread(release.wait, 2)
+            except asyncio.CancelledError:
+                await asyncio.to_thread(release.wait, 2)
+            return "往前走" if blocked_stage == "asr" else b"private-audio"
+
+        async def encode(send_bytes, pcm, ffmpeg_path, **kwargs):
+            sent_audio.append(pcm)
+            return 1
+
+        async def silent_tts(*args):
+            return b"private-audio"
+
+        class Socket:
+            headers = {"authorization": "Bearer test-device-token"}
+
+            def __init__(self):
+                self.app = app
+
+            async def accept(self):
+                pass
+
+            async def receive(self):
+                return await incoming.get()
+
+            async def send_json(self, frame):
+                await outgoing.put(frame)
+
+            async def send_bytes(self, frame):
+                sent_audio.append(frame)
+
+        def send(frame):
+            incoming.put_nowait({"type": "websocket.receive", "text": json.dumps(frame)})
+
+        monkeypatch.setattr(main, "speak", llm)
+        monkeypatch.setattr(main, "send_opus_pcm", encode)
+        monkeypatch.setattr(main, "tts_pcm", silent_tts)
+        if blocked_stage in {"tts", "walk_tts", "cycle_tts"}:
+            monkeypatch.setattr(main, "tts_pcm", provider)
+        elif blocked_stage == "asr":
+            monkeypatch.setattr(main, "try_qwen_asr", provider)
+        if blocked_stage == "cycle_tts":
+            monkeypatch.setattr(main, "MUTTER_INTERVAL_S", 0)
+            monkeypatch.setattr("brain.app.secret_life.SecretDirector.next_delay_s", lambda self: 0)
+        endpoint = next(r.endpoint for r in app.routes if getattr(r, "path", None) == "/xiaozhi/v1/")
+        task = asyncio.create_task(endpoint(Socket()))
+        try:
+            send({"type": "hello", "audio_params": {"format": "opus"}})
+            assert (await asyncio.wait_for(outgoing.get(), 1))["type"] == "hello"
+            if blocked_stage in {"asr", "walk_tts"}:
+                send({"type": "listen", "state": "start"})
+                payload = b"\xff\x80" if blocked_stage == "asr" else "往前走".encode()
+                incoming.put_nowait({"type": "websocket.receive", "bytes": payload})
+                send({"type": "listen", "state": "stop"})
+            else:
+                send({"type": "niulai", "presence": "ABSENT"})
+            await asyncio.wait_for(entered.wait(), 1)
+            response_task = next(
+                pending for pending in asyncio.all_tasks()
+                if pending.get_coro().__name__ in {"speak_absent", "reply_to_listen"}
+            )
+            audio_before_abort = list(sent_audio)
+            if presence == "PRESENT":
+                send({"type": "abort"})
+            send({"type": "niulai", "presence": presence})
+            send({"type": "hello", "audio_params": {"format": "opus"}})
+            while True:
+                frame = await asyncio.wait_for(outgoing.get(), 1)
+                if frame["type"] == "hello":
+                    break
+            assert brain.lifecycle.presence.value.value == presence
+            assert not release.is_set()
+            release.set()
+            try:
+                await asyncio.wait_for(asyncio.shield(response_task), 1)
+            except asyncio.CancelledError:
+                pass
+            if blocked_stage == "llm":
+                assert await asyncio.to_thread(llm_returned.wait, 1)
+            # Keep the socket open until the canceled provider/task has settled.
+            assert sent_audio == audio_before_abort
+            assert outgoing.empty(), "late frames escaped after the control barrier"
+        finally:
+            release.set()
+            incoming.put_nowait({"type": "websocket.disconnect"})
+            await asyncio.wait_for(task, 3)
+        if blocked_stage == "llm":
+            assert brain.memory.recent_lines("niu-1") == []
+
+    asyncio.run(check())
+
+
+def test_abort_then_absent_restarts_secret_without_an_extra_presence_frame(monkeypatch):
+    import brain.app.main as main
+
+    entered, release, resumed = threading.Event(), threading.Event(), threading.Event()
+    calls = 0
+
+    async def tts(*args):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            entered.set()
+            try:
+                await asyncio.to_thread(release.wait, 2)
+            except asyncio.CancelledError:
+                await asyncio.to_thread(release.wait, 2)
+        else:
+            resumed.set()
+        return b"pcm"
+
+    async def encode(*args, **kwargs):
+        return 1
+
+    monkeypatch.setattr(main, "tts_pcm", tts)
+    monkeypatch.setattr(main, "send_opus_pcm", encode)
+    app = create_app(NiulaiBrain())
+    app.state.ffmpeg_path = "fake-ffmpeg"
+    with TestClient(app).websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json({"type": "hello", "audio_params": {"format": "opus"}})
+        assert ws.receive_json()["type"] == "hello"
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        assert entered.wait(1)
+        # Drain the first reply before installing a deadline on the resumed one.
+        while ws.receive_json().get("state") != "sentence_start":
+            pass
+        ws.send_json({"type": "abort"})
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        ws.send_text("[]")
+        while ws.receive_json().get("type") != "system":
+            pass
+        try:
+            assert resumed.wait(1), "ABSENT kept only a canceled speech task"
+            assert calls >= 2
+        finally:
+            release.set()
 
 
 def test_hello_listen_roundtrip_emits_stt_llm_tts() -> None:
@@ -306,9 +482,16 @@ def test_health_returns_ok_version_without_secrets(monkeypatch) -> None:
     assert body["status"] == "ok"
     assert isinstance(body.get("version"), str) and body["version"]
     assert body["version"] == app.version
-    assert body.get("source_commit") == app.version
+    commit = body["source_commit"]
+    assert commit == "unknown" or (len(commit) in {40, 64} and set(commit) <= set("0123456789abcdef"))
     assert isinstance(body.get("firmware_hash"), str) and body["firmware_hash"]
-    assert set(body) <= {"status", "version", "source_commit", "firmware_hash"}
+    assert body["firmware_hash"] == body["firmware_source_hash"]
+    assert body["firmware_runtime_verified"] is False
+    assert body["source_metadata_scope"] == "startup"
+    assert set(body) == {
+        "status", "version", "source_commit", "source_dirty", "source_metadata_scope",
+        "firmware_hash", "firmware_source_hash", "firmware_source_path", "firmware_runtime_verified",
+    }
     raw = response.text
     for leak in ("API_KEY", "DASHSCOPE", "token", "sk-leak", "leak-token", ".env"):
         assert leak.lower() not in raw.lower()
@@ -324,11 +507,68 @@ def test_health_version_is_not_placeholder_0_1_0() -> None:
 
 def test_health_version_env_override_is_used(monkeypatch) -> None:
     monkeypatch.setenv("NIULAI_BRAIN_VERSION", "cafef00d1234")
+    monkeypatch.setattr("brain.app.main._git_executable", lambda: None)
     app = create_app(NiulaiBrain())
     body = TestClient(app).get("/health").json()
     assert body["version"] == "cafef00d1234"
-    assert body["source_commit"] == "cafef00d1234"
-    assert set(body) <= {"status", "version", "source_commit", "firmware_hash"}
+    assert body["source_commit"] == "unknown"
+    assert body["source_dirty"] is None
+
+
+@pytest.mark.parametrize("status_output", ["", " M brain/app/main.py\n", "?? new-file.py\n"])
+def test_health_snapshots_real_git_and_local_firmware_source(monkeypatch, tmp_path, status_output):
+    import brain.app.main as main
+
+    commit = "abcdef0123456789" * 2 + "abcdef01"
+    calls = []
+
+    def git(args, **kwargs):
+        calls.append(args)
+        if "rev-parse" in args:
+            return SimpleNamespace(returncode=0, stdout=commit + "\n")
+        assert "status" in args
+        return SimpleNamespace(returncode=0, stdout=status_output)
+
+    monkeypatch.setenv("NIULAI_BRAIN_VERSION", "codex-round2")
+    monkeypatch.setattr(main, "_git_executable", lambda: "git")
+    monkeypatch.setattr(main.subprocess, "run", git)
+    monkeypatch.setattr(main, "_REPO_ROOT", tmp_path)
+    overlay = tmp_path / "firmware" / "xiaozhi-niulai" / "niulai_life.cc"
+    overlay.parent.mkdir(parents=True)
+    overlay.write_bytes(b"local source before startup")
+    expected_hash = hashlib.sha256(overlay.read_bytes()).hexdigest()[:12]
+    app = create_app(NiulaiBrain())
+    startup_calls = len(calls)
+    overlay.write_bytes(b"later source is not running firmware")
+    client = TestClient(app)
+    for _ in range(2):
+        body = client.get("/health").json()
+        assert body["version"] == "codex-round2"
+        assert body["source_commit"] == commit
+        assert body["source_dirty"] is bool(status_output)
+        assert body["source_metadata_scope"] == "startup"
+        assert body["firmware_hash"] == body["firmware_source_hash"] == expected_hash
+        assert body["firmware_source_path"] == "firmware/xiaozhi-niulai/niulai_life.cc"
+        assert body["firmware_runtime_verified"] is False
+    assert startup_calls == len(calls) == 2
+
+
+def test_health_git_status_failure_does_not_claim_a_clean_tree(monkeypatch):
+    import brain.app.main as main
+
+    commit = "a" * 40
+
+    def git(args, **kwargs):
+        if "rev-parse" in args:
+            return SimpleNamespace(returncode=0, stdout=commit)
+        raise main.subprocess.TimeoutExpired(args, 2)
+
+    monkeypatch.setenv("NIULAI_BRAIN_VERSION", "codex-round2")
+    monkeypatch.setattr(main, "_git_executable", lambda: "git")
+    monkeypatch.setattr(main.subprocess, "run", git)
+    body = TestClient(create_app(NiulaiBrain())).get("/health").json()
+    assert body["source_commit"] == commit
+    assert body["source_dirty"] is None
 
 
 def test_health_version_falls_back_to_source_digest(monkeypatch) -> None:

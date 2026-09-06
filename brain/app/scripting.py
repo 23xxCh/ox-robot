@@ -33,18 +33,19 @@ def split_speech_and_lua(text: str) -> tuple[str, str]:
 
 
 def lua_from_user(text: str) -> str:
-    spoken = (text or "").strip()
+    spoken = (text or "").strip().rstrip("。！!").strip()
     if not spoken:
         return ""
-    if "停" in spoken:
+    if spoken in {"停", "停下", "停止", "不要动", "别动"}:
         return 'niu.walk("stop", 0)'
-    if "左" in spoken:
+    # ponytail: fixed whole-utterance commands; extend only with verified phrases.
+    if re.fullmatch(r"(?:向|往)?左转(?:一下)?", spoken):
         return 'niu.turn("left", 800)'
-    if "右" in spoken:
+    if re.fullmatch(r"(?:向|往)?右转(?:一下)?", spoken):
         return 'niu.turn("right", 800)'
-    if "后" in spoken or "退" in spoken:
+    if re.fullmatch(r"(?:(?:向|往)后走|后退)(?:一步|两步|一下)?", spoken):
         return 'niu.walk("back", 800)'
-    if any(word in spoken for word in ("走", "动", "扭", "晃", "转", "迈")):
+    if re.fullmatch(r"(?:(?:向|往)前)?走(?:一步|两步|一下)?", spoken):
         return 'niu.walk("forward", 800)'
     return ""
 
@@ -68,7 +69,5 @@ def intents_from_lua(source: str) -> list[ActionIntent]:
 
 
 def motion_intents(user_text: str, model_text: str) -> tuple[str, list[ActionIntent]]:
-    spoken, lua = split_speech_and_lua(model_text)
-    if not lua:
-        lua = lua_from_user(user_text)
-    return spoken, intents_from_lua(lua)
+    spoken, _model_lua = split_speech_and_lua(model_text)
+    return spoken, intents_from_lua(lua_from_user(user_text))

@@ -3,6 +3,7 @@
 *.env
 !.env.example
 brain/.env
+**/niulai_device_private.h
 
 # Python / tests
 brain/data/
@@ -35,6 +36,7 @@ mechanical/**/rejected-manifold-output/
 # Duplicate packed print zips (unpacked copies remain under outputs/)
 outputs/*.zip
 outputs/**/*.zip
+!outputs/submission-2026-09-06/niulai-code-2026-09-06.zip
 
 # Windows junk
 Thumbs.db

@@ -79,6 +79,10 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, presence }),
     });
+    if (response.status === 409) {
+      appendChat("提示", "状态已变化，上一条回复已取消。");
+      return;
+    }
     if (!response.ok) return;
     const body = await response.json();
     appendChat("牛来", body.reply || "", body.source);

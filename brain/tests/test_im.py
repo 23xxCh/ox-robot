@@ -181,7 +181,7 @@ def test_feishu_duplicate_during_freeze_stays_single_ellipsis() -> None:
 
 
 def test_im_require_token_rejects_missing_header(monkeypatch) -> None:
-    monkeypatch.setenv("NIULAI_IM_REQUIRE_TOKEN", "1")
+    monkeypatch.setenv("NIULAI_IM_TOKEN", "test-im-secret")
     brain = NiulaiBrain()
     brain.persona.set(PersonaState.SECRET_ALIVE)
     client = TestClient(create_app(brain))
@@ -196,10 +196,10 @@ def test_im_require_token_rejects_missing_header(monkeypatch) -> None:
             }
         },
     }
-    denied = client.post("/im/feishu/event", json=payload)
+    denied = client.post("/im/feishu/event", json=payload, headers={})
     assert denied.status_code == 401
     assert brain.im_outbox == []
-    allowed = client.post("/im/feishu/event", json=payload, headers={"token": "1"})
+    allowed = client.post("/im/feishu/event", json=payload, headers={"Authorization": "Bearer test-im-secret"})
     assert allowed.status_code == 200
     assert len(brain.im_outbox) == 1
 

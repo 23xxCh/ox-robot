@@ -1,0 +1,8 @@
+RED before freeze-block:
+test_late_perform_after_freeze_is_rejected FAILED
+  assert late.ok is False
+  CallResult(ok=True, error=None, intent=walk)
+
+test_walk_after_proximity_freeze_is_not_sent FAILED
+  assert motion is None
+  actual: {'dir': 'forward', 'motion': 'walk', 'ms': 800, 'type': 'niulai'}

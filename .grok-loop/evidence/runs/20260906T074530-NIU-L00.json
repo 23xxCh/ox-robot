@@ -1,0 +1,47 @@
+{
+  "episode_id": "20260906T074530-NIU-L00",
+  "task_id": "NIU-L00",
+  "started_at": "2026-09-06T07:45:30+08:00",
+  "ended_at": "2026-09-06T08:00:00+08:00",
+  "source_before": "d31b0468358b11393e4f5cb9d3f276ee2b70ae66",
+  "source_after": "769bd459a7fbf8eaf181d6fc9ab7e3a1b90ef23d",
+  "changed_paths": [
+    "brain/app/main.py",
+    "brain/tests/test_isolation.py"
+  ],
+  "acceptance_hash": "isolate-import-from-live-sqlite-v1",
+  "commands": [
+    {
+      "command": "python -m pytest --noconftest brain/tests/test_isolation.py::test_importing_main_does_not_open_live_sqlite -vv",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 1,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T074530-NIU-L00.red.txt",
+      "source_hash": "pre-fix working tree"
+    },
+    {
+      "command": "python -m pytest brain/tests/test_isolation.py -vv --tb=short",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T074530-NIU-L00.isolation.txt",
+      "source_hash": "CF2BD6A679E588D7F22FE08C7E6FD4E1635350903D99C4BECD45CBE1F31F2327"
+    },
+    {
+      "command": "python -m pytest -q brain/tests --tb=no",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T074530-NIU-L00.pytest-footer.txt",
+      "source_hash": "769bd459a7fbf8eaf181d6fc9ab7e3a1b90ef23d plus uncommitted tests in working tree"
+    }
+  ],
+  "checker": {
+    "identity": "01a073fa-af5c-7713-8bfb-a4587ad5d688",
+    "verdict": "PASS_SOFTWARE",
+    "evidence": "pua:pua-self-reviewer independent; hardware NOT_RUN; pytest footer hygiene noted"
+  },
+  "verdict": "PASS_SOFTWARE",
+  "hardware_status": "NOT_RUN",
+  "cost": "unknown",
+  "failure_signature": null,
+  "committed_main_sha256": "77351642028E0C48CD479714FBDC7FC55A8FD54FCAA1255A0DD5274D6427B86B",
+  "next_action": "Verify NIU-L02 freeze vs late motion"
+}

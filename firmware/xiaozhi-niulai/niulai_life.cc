@@ -17,9 +17,6 @@
 #define TAG "NiulaiLife"
 
 namespace {
-constexpr float kPresentCm = 55.0f;
-constexpr int kPresentStreak = 1;
-constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
 constexpr int64_t kBrainRetryUs = 18LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
@@ -50,39 +47,26 @@ void NiulaiLife::TaskTrampoline(void* arg) {
 }
 
 void NiulaiLife::Loop() {
-    last_present_us_ = esp_timer_get_time();
     while (true) {
         float cm = ReadCm();
         int64_t now = esp_timer_get_time();
-        bool close = cm > 1.0f && cm < kPresentCm;
+        bool close = NiulaiDistanceValid(cm) && cm < 55.0f;
         last_close_ = close;
-        if (close) {
-            present_streak_++;
-            last_present_us_ = now;
-        } else {
-            present_streak_ = 0;
-        }
-
-        Presence next = presence_;
-        if (present_streak_ >= kPresentStreak) {
-            next = kPresent;
-        } else if (now - last_present_us_ >= kAbsentUs) {
-            next = kAbsent;
-        }
+        Presence next = ObserveNiulaiDistance(cm, now, far_since_us_, presence_);
 
         if (next != presence_) {
             OnPresence(next);
         }
 
-        if (close) {
+        if (close || next == Presence::Unknown) {
             ParkLegs();
         } else if (now < motion_until_us_) {
             SecretWalk();
         } else {
             directed_ = false;
-            if (presence_ == kPresent) {
+            if (presence_ == Presence::Present) {
                 HoldCenter();
-            } else if (presence_ == kAbsent) {
+            } else if (presence_ == Presence::Absent) {
                 SecretWalk();
                 if (now - last_brain_us_ >= kBrainRetryUs) {
                     last_brain_us_ = now;
@@ -99,7 +83,7 @@ void NiulaiLife::Loop() {
         }
 
         if (++log_tick_ % 10 == 0) {
-            ESP_LOGI(TAG, "cm=%.1f streak=%d presence=%d", cm, present_streak_, (int)presence_);
+            ESP_LOGI(TAG, "cm=%.1f presence=%d", cm, (int)presence_.load());
         }
 
         vTaskDelay(pdMS_TO_TICKS(200));
@@ -154,10 +138,8 @@ void NiulaiLife::ParkLegs() {
 }
 
 void NiulaiLife::PulseMotion(const char* dir, int ms) {
-    if (presence_ == kUnknown || last_close_) {
-        if (dir != nullptr && strcmp(dir, "stop") == 0) {
-            ParkLegs();
-        }
+    if (presence_ == Presence::Unknown || last_close_) {
+        ParkLegs();
         return;
     }
     if (ms < 0) {
@@ -233,18 +215,21 @@ void NiulaiLife::OnPresence(Presence next) {
     presence_ = next;
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
     if (auto* face = static_cast<NiulaiLcdDisplay*>(display_)) {
-        face->AllowSecretFaces(next == kAbsent);
+        face->AllowSecretFaces(next == Presence::Absent);
     }
-    if (next == kPresent) {
+    if (next != Presence::Absent) {
         secret_retry_ = 0;
         ParkLegs();
         PostFace("listening", "");
-        Application::GetInstance().Schedule([]() {
-            Application::GetInstance().NiulaiEnterPresent();
+        Application::GetInstance().Schedule([this]() {
+            // UNKNOWN uses the same private-audio cancellation path as PRESENT.
+            if (presence_ != Presence::Absent) {
+                Application::GetInstance().NiulaiEnterPresent();
+            }
         });
         return;
     }
-    if (next == kAbsent) {
+    if (next == Presence::Absent) {
         wiggle_phase_ = 0;
         secret_retry_ = 0;
         last_brain_us_ = esp_timer_get_time();
@@ -259,8 +244,11 @@ void NiulaiLife::AskBrainSecret() {
     // NiulaiEnterSecret() after OpenAudioChannelWithConfigRefresh() fails.
     // Mapping: firmware/xiaozhi-niulai/secretN.ogg ==
     //   xiaozhi-esp32/main/assets/common/secretN.ogg == Lang::Sounds::OGG_SECRETN.
-    Application::GetInstance().Schedule([]() {
-        Application::GetInstance().NiulaiEnterSecret();
+    Application::GetInstance().Schedule([this]() {
+        // A queued SECRET request must not revive audio after a sensor failure.
+        if (presence_ == Presence::Absent) {
+            Application::GetInstance().NiulaiEnterSecret();
+        }
     });
 }
 

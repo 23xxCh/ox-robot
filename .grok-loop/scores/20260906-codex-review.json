@@ -1,0 +1,1261 @@
+{
+  "schema_version": 1,
+  "contract_version": "2026-09-06-v1",
+  "scored_at": "2026-09-06T10:19:00.370933+08:00",
+  "snapshot_at": "2026-09-06T10:14:23.866362+08:00",
+  "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+  "working_tree_modified": true,
+  "working_diff_hash": "e99c3fe173fbb5706c84ae1d88179b5b85f76791fe18bbac200a5511c1f31f73",
+  "working_diff_hash_algorithm": "SHA256 of git diff --binary HEAD -- brain firmware .github pytest.ini; includes tracked changes only",
+  "source_manifest_hash": "e97a8c9f1de68d0311295e82454b63ff50bd575d2619ab073b9b1b6e05e33c09",
+  "source_manifest_hash_algorithm": "SHA256 of sorted source_manifest JSON using separators comma/colon; individual SHA256 values are raw file bytes",
+  "source_manifest": {
+    ".github/workflows/pytest.yml": "ad350aa225e46e0b47ae77b7ff67e485550393bc1cda03c4cad8aeacde81c87f",
+    ".gitignore": "c8da589a24d5bd93b5bb9d8ffde6705cfe5c948ed974080f53fbec641cace57b",
+    ".grok-loop/evidence/runs/20260906-codex-takeover.json": "ad48c0994f6efa8168b3a4d244a47572575eabb923f5547b1e46eaa52a04e38e",
+    ".grok-loop/SCORECARD.md": "eea009750179d3e4a0cb802d972f988a420f47c6e8fcb46f10b2139069fdefcb",
+    ".scratch/codex-takeover/idf-build-utf8.log": "7f4228c9ed47c038f58e2f285f8bbfad3a9e1b59de5f92a16530d3ce1c761c8d",
+    "brain/app/__init__.py": "ad9ce63b2ba1a697efcd5c12dd75a978d51acb3519f684e32acfd4540e9351f6",
+    "brain/app/__main__.py": "3e14cdccbc48ecf552df179fd5b1a1dce77ad1c79794658ed146f5c31b0debea",
+    "brain/app/api.py": "157427a4f2199cbeaf3698ca63c4e23e42f9ed8d04f61018e86b5c0d489c9dc2",
+    "brain/app/brain.py": "608666d3b91c57b91c189bc83306316eedddd7bc8604ce0daa3272a30fdc4ccd",
+    "brain/app/clawbot.py": "c297ca2db14b7b43c30a1d362d5174a9ca77e0faeca477cf2b8e70b8c1cdd4d4",
+    "brain/app/im.py": "7ef6e9e7db6aac2f7b72cd3d23876fc01b8271fe9642e0cb34d4fb550c26dfef",
+    "brain/app/lifecycle.py": "a4951484878f1be53a62e613447fbcd77f0ca1601241e022449fa0965ce9f62c",
+    "brain/app/llm.py": "c4061801202fd1555cedf799d6f4f7db09b4f00199a97b9157a21d762e13f756",
+    "brain/app/lua_sandbox.py": "a230c87f54c11fcae7b2d29737d88bec53439ebc255943c4f5809d728fd6f7f8",
+    "brain/app/main.py": "406666f4c291e64580c3467ded11929fcf5d8317db5553391ad8fa8737969e09",
+    "brain/app/mcp_broker.py": "d8466cfc3ca30bd21efad43a565e65354a82cb35a939e126c7ae42263e19b5db",
+    "brain/app/media.py": "558aa1bb285b5e9bb7624d7a0c43418edb75c2b16339f0da434d5010894570a7",
+    "brain/app/memory.py": "8399f7297d017517ccaa79a7b5a18793bfca9b665ca20c390235bedf12c179b5",
+    "brain/app/models.py": "141b6d53d00772b862885129bd981964f3f067fccbfbb422467f12f8e0a07083",
+    "brain/app/origin.py": "645adf84936ab2529ebbdfb41b4b53d28da191857b30888b23eed462ae7c79f8",
+    "brain/app/persona.py": "ee5c9802df1da04cd3190ec8faf44c56a089fa7a6fdbbb070be986ec49cae5b8",
+    "brain/app/providers.py": "dc08c29609ea94a94420d61542336a4994ed2dcb487b16c036174d1c949a5365",
+    "brain/app/schemas.py": "06b32fc16d2917e540f5409b27cdef6b707c72fa6e57727183e10831fdefa195",
+    "brain/app/scripting.py": "c961f37d09d67dda3331a1288107d06cbd1c8525ed80e3a0e44c0ccbddace184",
+    "brain/app/secret_life.py": "c4669dc472861456b71b44969bc602897db67d9a52e45f1965ee182dcba49fc3",
+    "brain/app/web/index.html": "48a8bd6b28eb137afd6ac8796647c08ca8c1440a225f41882ac69914adaf8390",
+    "brain/app/web/life.html": "574c825a2191bd9023475f9886c62b53d953ab77f35845aa8a7ace956badb968",
+    "brain/app/web/life.js": "01a052895d8d72ee8899b1e4b1d28ed50f820187350ed2961c5d1101352a7a32",
+    "brain/app/web/rehearsal.css": "2fff00782ce54abd22c99d3964a581286665207db148e7aaab23fb66f1759f0b",
+    "brain/app/web/rehearsal.js": "6d5a16b3c2e18f92844e5b0de3c09154a948a6f18144c1a967e0b4e46142502b",
+    "brain/requirements.txt": "08fc9c05881448101e5e4d10e55cf4ba9ecad1f4ae292ac6d063c8556a86dd25",
+    "brain/tests/conftest.py": "1317ac8c59c40abfadb03d5576a82c8fee108541fd39036e6653d656e054d23d",
+    "brain/tests/test_autonomy.py": "1b19fd5edf32d9a45119ec1705a091db28f260f896e8b80388948495ce88e54f",
+    "brain/tests/test_face_contract.py": "b9f9c7d76d03d68ef668bc42adc1792e0a557301ff16f29dd6c645b3c6dbf209",
+    "brain/tests/test_firmware_source_guards.py": "d60aa60e86a4a6e34bc1bbd4a700b4d4b6974bdb97f6f184c12ca440feb8361c",
+    "brain/tests/test_freeze_mcp.py": "fed379d7c5397a8aa28afa0283cff3e9692b34d17450a66d5299354ff61b7289",
+    "brain/tests/test_im.py": "1dd1cf09f4750f918aab109bf5a222648763e1838671148a4ba6cc48d09674f9",
+    "brain/tests/test_isolation.py": "cf2bd6a679e588d7f22fe08c7e6fd4e1635350903d99c4becd45cbe1f31f2327",
+    "brain/tests/test_lifecycle.py": "2ede1f01185e61ae2aaaefe78922d0a13bac857cfe0c1b560de4dea9564eb710",
+    "brain/tests/test_lua.py": "5ad762ebbe703c7f9d19e6f68448cd863ad380ea7d4b837f6b04f9c4835c5c7a",
+    "brain/tests/test_media.py": "face0886d88c1607e86635d7fecdbbeb539e153b1968c3e488753ea607213239",
+    "brain/tests/test_memory.py": "756220e8fc78449abdc80448d6a9c4443d74e2045d657100f29bfb5f9782ebf9",
+    "brain/tests/test_origin.py": "88bff4e27c29315c98d42383a6768b2dafc7c919e67a2babffae1834875de3c1",
+    "brain/tests/test_protocol.py": "cef1649dbea88e82f9ef2fc7530f77460f4aa889d50d47741bd908e88af9397d",
+    "brain/tests/test_scripting.py": "11aa1dfaebfdd47e30de867e4f37c239f60b232533dee51f9de7e5d6f7992a4a",
+    "brain/tests/test_secret_life.py": "41f1f6dac0789e7092d40730949f4c896e5d24eae19e8c74d1830cc5c3633237",
+    "brain/tests/test_site.py": "f27ecbf8fe5b04178ca9f0e622556321d58a556c9480169c51fd30c097bfe751",
+    "brain/tests/test_web.py": "6fbdecc25b6ece79999793ae001c38cfe7b0a5d3957c073e67def48bb0204c19",
+    "docs/codex-takeover-2026-09-06.md": "5dc549e55ede2faad8ee4fe0d293da15370da5bdb4df9c568bb46abb803b30e4",
+    "firmware/xiaozhi-niulai/build-evidence.md": "a209aa24121cffe121d4d9507549f8e5b3c5326c89989494ba35332d86620050",
+    "firmware/xiaozhi-niulai/config.h": "263dc670f02fed482e80c8ac40e07e70180e96c95247a926e0fa2a34a146456b",
+    "firmware/xiaozhi-niulai/config.json": "452bf1707db783c78db2f7252e025856d06940121aa5673770ea6e7b7e18d066",
+    "firmware/xiaozhi-niulai/fallback-evidence.md": "d8c4d3dc9d87ba736b1dff2fae5988e187c81ee286ae37aedefa5caef5cd918d",
+    "firmware/xiaozhi-niulai/niulai_face_display.cc": "899168753600b2969ffc6e81fb7ee9be64d5525138379c46d95a8ffd9f925b94",
+    "firmware/xiaozhi-niulai/niulai_face_display.h": "e65eb6ebfb6a8d1f1f3a7c6a31ec4771d533e1146bf939c31f79cc288d2d2792",
+    "firmware/xiaozhi-niulai/niulai_life.cc": "f3289fd38799cfef71844f36fe71466ef5c194f8e26145dbc73302dd605d10c0",
+    "firmware/xiaozhi-niulai/niulai_life.h": "95e4eeef3084553aabdfd59a7963e1efa43b185752ba914a9480bbbd4ec51e91",
+    "firmware/xiaozhi-niulai/niulai_presence.h": "07ff815a578fabaa098f8c664aef86a73015f225a6e3006329c791d35e0be9d3",
+    "firmware/xiaozhi-niulai/niulai_s3_expand_v17.cc": "05a9cc7e061609da02fa388244d4ba120e28edc0241b5e922a8fe6754c31f9db",
+    "firmware/xiaozhi-niulai/README.md": "1c42b5a04dfc97f2efbdb79a78fb5fc09acd4f13b37c78253bf5159abd2d23ca",
+    "GOAL.md": "e9a533f87a785b4dcc99259e49304f9ea5fc64c14cf5ac4bcfb27841a9518137",
+    "outputs/niulai-codex-2026-09-06/xiaozhi.bin": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+    "pytest.ini": "52641db36b086d92a8ef8a200759ea7d3f12171573f90db609a5a1029cb9ebb9"
+  },
+  "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+  "firmware_hash_scope": "上轮完整IDF应用镜像；已实际读取outputs/niulai-codex-2026-09-06/xiaozhi.bin核对，不是板上运行身份",
+  "checker": "/root/product_acceptance",
+  "independence": {
+    "prior_builder_paths": [
+      "brain/app/memory.py",
+      "brain/app/scripting.py"
+    ],
+    "independent_item_checker": "/root",
+    "independent_items": [
+      "DB-2",
+      "DB-3",
+      "DB-4",
+      "DB-5",
+      "SEC-1",
+      "SEC-2"
+    ],
+    "basis": "上述六项由Root独立读源码/测试后给分，本文件原样录入；其余依据只读审查与既有独立复验。代码审查记录在上轮episode的review.root_review中。"
+  },
+  "score_range_used": [
+    0,
+    2
+  ],
+  "weights": {
+    "EX": 25,
+    "FE": 10,
+    "BE": 15,
+    "DB": 10,
+    "FW": 20,
+    "SEC": 10,
+    "QA": 5,
+    "AR": 5
+  },
+  "items": [
+    {
+      "id": "EX-1",
+      "title": "最新人格规则一致",
+      "score": 2,
+      "reason": "最新 GOAL 保留靠近不播妈妈、唤醒后礼貌、独处才私语；WSS 人格与表情转换有软件回归，妈妈在板端的顺序仍只具源码/构建证据。",
+      "evidence_paths": [
+        "GOAL.md",
+        "brain/app/main.py",
+        "brain/tests/test_protocol.py",
+        "brain/tests/test_face_contract.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "同一固件记录唤醒、无唤醒靠近、离开三条真机事件序列。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "EX-2",
+      "title": "自主行为有原因与留白",
+      "score": 2,
+      "reason": "SecretDirector 冷却、安静拍和最近五句去重已有可控时钟测试及组合调用验证；三分钟自然节奏与触发事件相关性仍未做人评。",
+      "evidence_paths": [
+        "brain/app/secret_life.py",
+        "brain/tests/test_secret_life.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "固定三分钟事件回放，记录发言原因、安静区间和重复次数。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "EX-3",
+      "title": "声音眼神身体协同",
+      "score": 1,
+      "reason": "已有脸部状态映射、TTS 生命周期与板端动作实现，测试只验证消息/表情类别；没有同版本声画动作时间轴验证。",
+      "evidence_paths": [
+        "brain/tests/test_face_contract.py",
+        "firmware/xiaozhi-niulai/niulai_face_display.cc",
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "firmware/xiaozhi-niulai/build-evidence.md"
+      ],
+      "next_verification": "记录计划说话、实际起声、嘴动结束和动作取消的同一时间轴。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "EX-4",
+      "title": "真实经历连续",
+      "score": 1,
+      "reason": "打断内容能保存、进入独处提示并消费，但 wake 仍按播放完成事件计数；mock 独处台词未证明实际引用该次打断，生成即消费也不等于已播出。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/memory.py",
+        "brain/app/origin.py",
+        "brain/tests/test_protocol.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "固定十条事件序列验证只引用真实经历一次，并区分唤醒、生成、播放完成。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "EX-5",
+      "title": "陌生观众理解与语气听感",
+      "score": 0,
+      "reason": "已审查交接证据：未提供陌生观众观察、同角色盲听或真机语气样本的验收记录；明确按无证据计零。",
+      "evidence_paths": [
+        "docs/codex-takeover-2026-09-06.md",
+        ".grok-loop/PRODUCT_BACKLOG.md"
+      ],
+      "next_verification": "用同一版本三分钟样例向十名陌生观众盲测，保存逐人答案和真实分母。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FE-1",
+      "title": "状态真实",
+      "score": 2,
+      "reason": "排练台 API 明确返回 sim/模拟状态，页面有陈旧标志；测试验证模拟身份和状态转换。尚未显示真实设备遥测，分数仅对应软件模拟状态诚实性。",
+      "evidence_paths": [
+        "brain/app/api.py",
+        "brain/app/web/rehearsal.js",
+        "brain/tests/test_web.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "接入设备状态后用断线/陈旧数据检查页面不得继续显示真实在线。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FE-2",
+      "title": "请求与执行闭环",
+      "score": 1,
+      "reason": "暂停返回 202/request_id 并明确不宣称物理停稳，模拟重复暂停已测；尚无设备 ACK、拒绝原因或真实执行完成闭环。",
+      "evidence_paths": [
+        "brain/app/api.py",
+        "brain/app/web/rehearsal.js",
+        "brain/tests/test_web.py"
+      ],
+      "next_verification": "让一个真实设备请求返回 accepted/rejected/completed，断线时显示结果未知。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FE-3",
+      "title": "可用性、键盘与响应式",
+      "score": 1,
+      "reason": "页面有 skip link、viewport、focus-visible、44px 按钮和 360px CSS；仅静态 HTML 检查，没有实际浏览器键盘/宽窄屏操作验收。",
+      "evidence_paths": [
+        "brain/app/web/index.html",
+        "brain/app/web/rehearsal.css",
+        "brain/tests/test_web.py"
+      ],
+      "next_verification": "在 360px 和 1366px 浏览器完成键盘操作，记录焦点与布局结果。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FE-4",
+      "title": "数据与权限边界",
+      "score": 1,
+      "reason": "输出采用 textContent，模拟入口有模式检查及部分负例；角色编辑、聊天和清空入口仍缺身份授权，不能据 XSS 局部防护认定完整权限边界。",
+      "evidence_paths": [
+        "brain/app/web/rehearsal.js",
+        "brain/app/web/life.js",
+        "brain/app/api.py",
+        "brain/tests/test_web.py"
+      ],
+      "next_verification": "错误身份不能修改角色/清空数据，用户文本在真实 DOM 中只作为文本显示。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FE-5",
+      "title": "性能与断线恢复",
+      "score": 1,
+      "reason": "实现 500ms 状态轮询、2s 陈旧提示和 500 条 DOM 限制；没有浏览器断线恢复、并发轮询乱序或性能实测证据。",
+      "evidence_paths": [
+        "brain/app/web/rehearsal.js",
+        "brain/tests/test_web.py"
+      ],
+      "next_verification": "注入超时与乱序响应，检查陈旧提示、恢复和页面条数上限。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "BE-1",
+      "title": "真实语音与设备协议",
+      "score": 2,
+      "reason": "WSS hello/listen/STT/LLM/TTS 软件集成与真实 FFmpeg Opus 编码记录存在；149 回归用假 ASR/LLM/TTS，尚不证明完整真实语音链或板上播放。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/media.py",
+        "brain/tests/test_protocol.py",
+        "brain/tests/test_media.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "在目标环境跑麦克风/录音到 ASR、回复、Opus 的实际往返并记录供应商结果。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "BE-2",
+      "title": "入口统一服从状态",
+      "score": 1,
+      "reason": "WSS、IM 和 Web 各自有状态限制测试，但 Web 使用独立模拟状态、IM 沿另一文本管道，缺少全入口共用同一设备状态/权限的集成证明。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/im.py",
+        "brain/app/api.py",
+        "brain/app/brain.py",
+        "brain/tests/test_im.py"
+      ],
+      "next_verification": "同一 PRESENT/UNKNOWN 事件跨 WSS、IM、HTTP 注入请求，确认统一拒绝越界效果。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "BE-3",
+      "title": "取消与并发",
+      "score": 2,
+      "reason": "首句/周期 TTS、阻塞 LLM、ASR、动作回复的取消与恢复有独立屏障回归；连接保持至旧任务退出并检查所有迟到帧。HTTP 同步供应商已移出事件循环并拒绝旧回复。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/api.py",
+        "brain/tests/test_protocol.py",
+        "brain/tests/test_site.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "在目标设备上补测真实供应商取消和断线，检查无双音轨/晚到动作。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "BE-4",
+      "title": "动作生命周期与去重",
+      "score": 1,
+      "reason": "明确口令、TTL 和旧语音 generation 保护已实现，IM 事件 ID 有会话内去重；WSS 动作未携带完整 command_id/ACK/重连代际，不能证明端到端恰好一次。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/scripting.py",
+        "brain/app/im.py",
+        "brain/tests/test_freeze_mcp.py",
+        "brain/tests/test_im.py"
+      ],
+      "next_verification": "用重复、重连和重启后的旧 command_id 验证不重复执行并记录设备拒绝。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "BE-5",
+      "title": "容量、版本与运行追踪",
+      "score": 1,
+      "reason": "有音频/事件容量限制与运行记录。快照新增 health Git/源码元数据更准确，但不在149受测哈希内；未提供本快照运行验证、连接容量或完整请求追踪。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/api.py",
+        "brain/tests/test_protocol.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "验证新 health 的实际提交/脏状态/源码范围，并量测连接和音频溢出时的拒绝行为。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "DB-1",
+      "title": "schema 与迁移",
+      "score": 2,
+      "reason": "SQLite schema_migrations、唯一约束、索引和重新打开现有库已有临时数据库验证；只实现初始化版本，升级/回滚迁移仍未证明。",
+      "evidence_paths": [
+        "brain/app/memory.py",
+        "brain/tests/test_memory.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "加入一个真实 schema 升级的旧库到新库及失败回滚用例。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "DB-2",
+      "title": "事务与幂等",
+      "score": 1,
+      "reason": "Root 独立确认：事件 ID 去重和首次创建并发已证，但 commit_event 多语句缺少异常 rollback，(device,boot,seq) 冲突后的恢复未证。",
+      "evidence_paths": [
+        "brain/app/memory.py",
+        "brain/tests/test_memory.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "在插入中段和复合唯一键冲突处注入失败，验证无部分写入且下一合法事件可提交。",
+      "checker": "/root"
+    },
+    {
+      "id": "DB-3",
+      "title": "记忆事实与恢复",
+      "score": 1,
+      "reason": "Root 独立确认：重开与消费已测，但 WSS wake 调用 bump_mama 写 mama_play_completed，缺真实播放回执，事实语义仍有缺口。",
+      "evidence_paths": [
+        "brain/app/memory.py",
+        "brain/app/main.py",
+        "brain/tests/test_memory.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "区分 wake 与播放完成事件，断开/中断不能增加完整播放次数。",
+      "checker": "/root"
+    },
+    {
+      "id": "DB-4",
+      "title": "留存、清空与隐私",
+      "score": 1,
+      "reason": "Root 独立确认：generation 清空、保留界限和 PRESENT 私密隔离已测，真实用户清空与飞行中任务清空闭环尚未验证。",
+      "evidence_paths": [
+        "brain/app/memory.py",
+        "brain/app/main.py",
+        "brain/tests/test_memory.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "清空时挂住一个生成任务，释放后旧 generation 不得重新写回或输出已清空内容。",
+      "checker": "/root"
+    },
+    {
+      "id": "DB-5",
+      "title": "故障恢复、备份与性能",
+      "score": 1,
+      "reason": "Root 独立确认：SQLite 备份拷贝后重开有证据；崩溃/磁盘失败注入、在线一致性备份和性能无证据。",
+      "evidence_paths": [
+        "brain/app/memory.py",
+        "brain/tests/test_memory.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "在临时库进行断写/重开与备份恢复，核对事件和状态一致性及耗时。",
+      "checker": "/root"
+    },
+    {
+      "id": "FW-1",
+      "title": "可复现构建与逐轴校准",
+      "score": 1,
+      "reason": "已核对完整 IDF 构建日志及 e825 固件 SHA256；外部 native 树的全部改动尚未能从干净上游重现，四轴中位/方向/边界也未标定。",
+      "evidence_paths": [
+        "firmware/xiaozhi-niulai/build-evidence.md",
+        "firmware/xiaozhi-niulai/README.md",
+        ".scratch/codex-takeover/idf-build-utf8.log",
+        "outputs/niulai-codex-2026-09-06/xiaozhi.bin"
+      ],
+      "next_verification": "固定上游 SHA 和完整补丁，干净目录重建并逐轴记录中位、方向、幅度。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FW-2",
+      "title": "非阻塞可取消调度",
+      "score": 1,
+      "reason": "板端有独立生命任务、短动作截止和排队 SECRET 再检查；200ms 轮询、超声忙等以及 native 妈妈等待/开链仍会影响取消，无目标时延测试。",
+      "evidence_paths": [
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "firmware/xiaozhi-niulai/README.md",
+        "docs/codex-takeover-2026-09-06.md"
+      ],
+      "next_verification": "记录近距/UNKNOWN 到音频静音和动作撤销的真实时序，修掉超预算阻塞。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FW-3",
+      "title": "本地安全与感知边界",
+      "score": 2,
+      "reason": "真实 C++ 决策函数通过编译期断言覆盖超时、NaN、越界、连续八秒远距和故障恢复；UNKNOWN 停腿与排队 SECRET 保护已进入构建。仍只针对超声覆盖区，不是可靠人员识别。",
+      "evidence_paths": [
+        "firmware/xiaozhi-niulai/niulai_presence.h",
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "brain/tests/test_firmware_source_guards.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "在目标板断开/遮挡传感器，记录 UNKNOWN、停止和重新计时的真实输出。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FW-4",
+      "title": "协议校验与执行结果",
+      "score": 1,
+      "reason": "PulseMotion 校验 UNKNOWN/近距、停止与 TTL；未知方向仍可落入默认步态，缺设备动作 ID、过期/重放判定和执行结果 ACK 的完整证明。",
+      "evidence_paths": [
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "firmware/xiaozhi-niulai/niulai_life.h",
+        "brain/tests/test_firmware_source_guards.py"
+      ],
+      "next_verification": "给目标板注入未知方向、非法数值、重复与过期命令并读取明确拒绝回执。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "FW-5",
+      "title": "声音表情动作与离线可靠性",
+      "score": 1,
+      "reason": "脸部、三段本地 OGG 与 native 回退路径存在且已构建，但断网/恢复无双音轨、音频可打断和真机听感未验证。历史 fallback 文档部分状态已过时，不用它宣称当前设备行为。",
+      "evidence_paths": [
+        "firmware/xiaozhi-niulai/niulai_face_display.cc",
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "firmware/xiaozhi-niulai/README.md",
+        "firmware/xiaozhi-niulai/build-evidence.md"
+      ],
+      "next_verification": "同一固件完成三组断网→独处→靠近→恢复连续录像，检查音频来源唯一。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "SEC-1",
+      "title": "能力最小化",
+      "score": 2,
+      "reason": "Root 独立确认：整句动作白名单、LLM 不能自行授权、方向/停止不能被模型覆盖及 TTL 限制已由149软件回归覆盖。",
+      "evidence_paths": [
+        "brain/app/scripting.py",
+        "brain/app/schemas.py",
+        "brain/tests/test_scripting.py",
+        "brain/tests/test_lua.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "把同一权限矩阵跑到目标设备，并确认旁路入口不能发送底层 PWM。",
+      "checker": "/root"
+    },
+    {
+      "id": "SEC-2",
+      "title": "来源与授权",
+      "score": 0,
+      "reason": "Root 独立确认：WSS 无身份校验；IM 仅检查任意 token 头是否存在，不比较凭据；此处已有代码不能当作认证实现计分。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/im.py",
+        "brain/tests/test_im.py"
+      ],
+      "next_verification": "有效凭据才可进入设备/IM入口；错误、缺失、任意非空 token 均拒绝，且不修改状态。",
+      "checker": "/root"
+    },
+    {
+      "id": "SEC-3",
+      "title": "容量、重放与旧状态",
+      "score": 1,
+      "reason": "音频/事件大小上限、会话内 IM 去重和语音 generation 已实现；IM seen 集合无限增长，跨重启重放、连接洪泛和硬件动作过期还缺证明。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/im.py",
+        "brain/app/api.py",
+        "brain/tests/test_im.py",
+        "brain/tests/test_protocol.py"
+      ],
+      "next_verification": "验证事件集合有界、连接/消息超限拒绝及重启后旧事件不执行。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "SEC-4",
+      "title": "凭据、日志与数据隐私",
+      "score": 1,
+      "reason": "凭据使用环境变量且 gitignore 排除 env/数据库，health 有防泄漏测试，运行暂为 loopback；尚未完成日志全链路脱敏、持久数据访问和保留策略审计。",
+      "evidence_paths": [
+        ".gitignore",
+        "brain/app/llm.py",
+        "brain/app/clawbot.py",
+        "brain/tests/test_protocol.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "用假密钥与私密内容注入失败日志/health，核对导出日志不包含值并验证读取权限。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "SEC-5",
+      "title": "物理失败安全",
+      "score": 1,
+      "reason": "源码对测距 UNKNOWN 停腿、PWM 幅度限幅、动作截止和外供接线有措施；没有失电/复位/机械卡滞或实际停稳验收，不能用构建代替物理安全。",
+      "evidence_paths": [
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "firmware/xiaozhi-niulai/niulai_presence.h",
+        "firmware/xiaozhi-niulai/README.md",
+        "docs/codex-takeover-2026-09-06.md"
+      ],
+      "next_verification": "悬空逐轴检查失效与复位，记录撤销时延、停稳及机械/供电边界。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "QA-1",
+      "title": "可重复基础回归",
+      "score": 2,
+      "reason": "上轮隔离回归记录149通过、退出码0，13个文件按哈希整合；本快照有11/13仍匹配，新增health改动未被149覆盖，不把149写成当前整树测试通过。",
+      "evidence_paths": [
+        "brain/tests/conftest.py",
+        "pytest.ini",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "docs/codex-takeover-2026-09-06.md"
+      ],
+      "next_verification": "整合本轮修改后对新的源码哈希重新执行一次完整回归并保存退出码。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "QA-2",
+      "title": "负例与故障",
+      "score": 2,
+      "reason": "已有取消阻塞屏障、SQLite边界、非法 Lua/协议、传感器失效与恢复测试，且软件复评独立捕获两处取消缺陷后验证修复。",
+      "evidence_paths": [
+        "brain/tests/test_protocol.py",
+        "brain/tests/test_memory.py",
+        "brain/tests/test_firmware_source_guards.py",
+        "brain/tests/test_site.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "补真实 ASR/TTS 失败恢复和协议重放/持久库故障注入，保持确定性屏障。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "QA-3",
+      "title": "真机验收",
+      "score": 0,
+      "reason": "交接记录明确未烧录此次固件、未测声音/动作/停止时延，七项门禁均未进行；按已核实的无目标样机证据计零。",
+      "evidence_paths": [
+        "docs/codex-takeover-2026-09-06.md",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "firmware/xiaozhi-niulai/build-evidence.md"
+      ],
+      "next_verification": "确认接线和悬空支架后，记录同版本七项门禁的实际尝试、失败、时序和录像。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "QA-4",
+      "title": "构建、依赖与版本证据",
+      "score": 2,
+      "reason": "requirements 固定版本、隔离测试与完整 IDF 退出码记录存在，已实算二进制哈希匹配 e825。上游干净重建及当前新增health验证未完成，仍不算目标交付验收。",
+      "evidence_paths": [
+        "brain/requirements.txt",
+        ".github/workflows/pytest.yml",
+        "firmware/xiaozhi-niulai/build-evidence.md",
+        ".scratch/codex-takeover/idf-build-utf8.log",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "补完整 native 补丁和上游 SHA，在干净环境重建并验证当前运行版本字段。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "QA-5",
+      "title": "持续回归与隔离",
+      "score": 2,
+      "reason": "CI 工作流和临时库/注入 Brain 的隔离测试已落地，上轮149及导入不触真实库验证有记录；本轮后续改动仍须新回归，不能自动继承全绿。",
+      "evidence_paths": [
+        ".github/workflows/pytest.yml",
+        "brain/tests/conftest.py",
+        "brain/tests/test_isolation.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "在CI运行与当前快照相符的完整回归，继续证明不触 live SQLite 和真实供应商。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "AR-1",
+      "title": "职责边界",
+      "score": 2,
+      "reason": "已有协议入口、纯口令解析、记忆、媒体和生命周期模块，并通过 WSS/记忆/动作组合测试；本轮网络工作转 worker 而 SQLite 留在处理上下文。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/memory.py",
+        "brain/app/media.py",
+        "brain/app/scripting.py",
+        "brain/tests/test_protocol.py",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "继续用一次跨模块场景验证接口边界，避免新增第二套数据/动作入口。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "AR-2",
+      "title": "契约一致",
+      "score": 1,
+      "reason": "最新 GOAL 和软件测试已统一礼貌对话/短动作规则，但 Web 模拟记忆与真机 MemoryStore 分离、wake/播放完成语义混用，板端 ACK 契约不完整。",
+      "evidence_paths": [
+        "GOAL.md",
+        "brain/app/api.py",
+        "brain/app/main.py",
+        "brain/app/memory.py",
+        "brain/tests/test_protocol.py"
+      ],
+      "next_verification": "明确每个消息/计数的真实含义，统一 wake/播放完成和动作结果的契约测试。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "AR-3",
+      "title": "复杂度适当",
+      "score": 1,
+      "reason": "采用单 FastAPI、SQLite 和现有板端循环，没有新增完整场景引擎；但 Web、Python Lifecycle、WSS 会话与 native 各有状态/行为路径，重复语义尚未收敛。",
+      "evidence_paths": [
+        "brain/app/api.py",
+        "brain/app/main.py",
+        "brain/app/lifecycle.py",
+        "firmware/xiaozhi-niulai/niulai_life.cc"
+      ],
+      "next_verification": "列出当前真实运行的状态入口，合并一个被证实重复或冲突的分支并保持回归。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "AR-4",
+      "title": "唯一安全状态权威",
+      "score": 1,
+      "reason": "板端本地停腿不依赖 LLM，软件也有 generation 取消；多 WSS 会话共享 Brain 与各自 session_presence、Web模拟状态并存，尚无统一设备epoch/权威状态协议。",
+      "evidence_paths": [
+        "brain/app/main.py",
+        "brain/app/brain.py",
+        "brain/app/api.py",
+        "firmware/xiaozhi-niulai/niulai_life.cc"
+      ],
+      "next_verification": "同一设备多会话、旧连接和Web模拟输入不得推翻最新板端安全状态。",
+      "checker": "/root/product_acceptance"
+    },
+    {
+      "id": "AR-5",
+      "title": "可追踪与可演进",
+      "score": 1,
+      "reason": "有 GOAL、构建/交接记录、源码哈希与运行版本；native 依赖工作区外补丁，旧 fallback 文档仍含过时状态，证据尚不能从单仓库完整重建和追踪。",
+      "evidence_paths": [
+        "GOAL.md",
+        "firmware/xiaozhi-niulai/README.md",
+        "firmware/xiaozhi-niulai/build-evidence.md",
+        "docs/codex-takeover-2026-09-06.md",
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json"
+      ],
+      "next_verification": "固定外部源码与补丁映射，并让运行、构建和评分快照引用同一不可变版本。",
+      "checker": "/root/product_acceptance"
+    }
+  ],
+  "dimension_scores": {
+    "EX": 30,
+    "FE": 30,
+    "BE": 35,
+    "DB": 30,
+    "FW": 30,
+    "SEC": 25,
+    "QA": 40,
+    "AR": 30
+  },
+  "total_score": 30.75,
+  "critical_gates": [
+    {
+      "id": "CG-01",
+      "title": "妈妈后礼貌",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "未进行同固件真实唤醒/按钮20次和靠近不唤醒样机检查。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "GOAL.md",
+        "brain/tests/test_protocol.py",
+        "firmware/xiaozhi-niulai/README.md"
+      ]
+    },
+    {
+      "id": "CG-02",
+      "title": "本地取消",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "未进行近距/UNKNOWN各100次的目标板时序采样；轮询/应用排队仍不可冒充≤100ms静音证明。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "brain/tests/test_firmware_source_guards.py",
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "docs/codex-takeover-2026-09-06.md"
+      ]
+    },
+    {
+      "id": "CG-03",
+      "title": "旧动作拒绝",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "软件有旧响应丢弃测试，未进行跨取消/重连/重启的目标设备完整旧动作矩阵。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "brain/tests/test_protocol.py",
+        "brain/app/main.py"
+      ]
+    },
+    {
+      "id": "CG-04",
+      "title": "动作与权限",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "有软件口令/TTL/冻结负例，但设备拒绝回执和全部授权入口尚未验收；现有入口认证存在缺口。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "brain/tests/test_scripting.py",
+        "brain/tests/test_freeze_mcp.py",
+        "brain/app/im.py"
+      ]
+    },
+    {
+      "id": "CG-05",
+      "title": "秘密边界",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "软件提示/取消边界已有回归，未提供同版本真实语音正反样例与跨入口完整矩阵。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "brain/tests/test_memory.py",
+        "brain/tests/test_protocol.py",
+        "brain/tests/test_im.py"
+      ]
+    },
+    {
+      "id": "CG-06",
+      "title": "离线与恢复",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "未进行三组目标板断网→独处→靠近→重连连续录音录像。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "firmware/xiaozhi-niulai/README.md",
+        "firmware/xiaozhi-niulai/build-evidence.md"
+      ]
+    },
+    {
+      "id": "CG-07",
+      "title": "记忆真实性",
+      "verdict": "NOT_RUN",
+      "attempts": 0,
+      "failures": 0,
+      "attempts_scope": "完整门禁的目标样机尝试；不将pytest数量当作门禁尝试",
+      "reason": "有临时库恢复/清空测试，但唤醒与播放完成仍混用，未做三组真实打断；不把源码消费当作实际引用。",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "firmware_hash": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "evidence_paths": [
+        ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+        "brain/app/memory.py",
+        "brain/app/main.py",
+        "brain/tests/test_memory.py"
+      ]
+    }
+  ],
+  "critical_gates_passed": false,
+  "hardware_tested": false,
+  "user_study_tested": false,
+  "attempts_note": "所有完整硬件门禁未开展，故attempts=0；failures=0仅表示零次尝试，不表示通过。",
+  "last_verified_baseline": {
+    "evidence_path": ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+    "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+    "pytest_passed": 149,
+    "pytest_warnings": 1,
+    "pytest_exit_code": 0,
+    "pytest_duration_s": 7.91,
+    "run_repeated_by_this_score_review": false,
+    "matching_integrated_files": 11,
+    "total_integrated_files": 13,
+    "comparison": [
+      {
+        "path": "brain/app/main.py",
+        "match": false
+      },
+      {
+        "path": "brain/app/memory.py",
+        "match": true
+      },
+      {
+        "path": "brain/app/api.py",
+        "match": true
+      },
+      {
+        "path": "brain/app/scripting.py",
+        "match": true
+      },
+      {
+        "path": "brain/app/web/life.js",
+        "match": true
+      },
+      {
+        "path": "brain/tests/test_protocol.py",
+        "match": false
+      },
+      {
+        "path": "brain/tests/test_memory.py",
+        "match": true
+      },
+      {
+        "path": "brain/tests/test_site.py",
+        "match": true
+      },
+      {
+        "path": "brain/tests/test_scripting.py",
+        "match": true
+      },
+      {
+        "path": "brain/tests/test_firmware_source_guards.py",
+        "match": true
+      },
+      {
+        "path": "firmware/xiaozhi-niulai/niulai_life.cc",
+        "match": true
+      },
+      {
+        "path": "firmware/xiaozhi-niulai/niulai_life.h",
+        "match": true
+      },
+      {
+        "path": "firmware/xiaozhi-niulai/niulai_presence.h",
+        "match": true
+      }
+    ],
+    "note": "149项只证明上一轮受测副本。当前main.py/test_protocol.py新增health元数据；取消/动作流程与受测副本的对应代码未变，新health不凭未运行测试加分。"
+  },
+  "snapshot_limitations": [
+    "本轮后台语音链与native源码将继续修改，本评分快照不代表后续新版本、当前后台进程或板上固件。",
+    "仅比较已有源码、测试和记录；本次评分没有重跑149项、没有烧录、没有做任何样机/用户尝试。",
+    "所有非零分仅为源码、软件或构建成熟度，均未达到目标交付环境3/4级。",
+    "Web排练台仍是模拟数据源；149通过不证明真实ASR/LLM/TTS串联，更不证明角色语气或停止时延。",
+    "工作区外native完整补丁与干净上游复现未验证；所列固件hash只指已保存的上轮构建镜像。"
+  ],
+  "historical_comparison": {
+    "previous_summary_score": 37.75,
+    "previous_path": ".grok-loop/scores/20260906T0925-2c12b7f.json",
+    "comparable": false,
+    "delta": null,
+    "reason": "历史文件缺完整40项、7门禁和逐项证据，不能据数值差认定进步或退步；本次是首个完整可审计基线。"
+  },
+  "weakest_three": [
+    {
+      "id": "SEC-2",
+      "score": 0,
+      "problem": "入口缺真正身份认证",
+      "next_action": "在WSS及IM入口验证真实凭据；默认拒绝缺失/错误凭据，避免把非空token头当认证。",
+      "exit_criteria": "缺失、错误、任意非空token都被拒绝且不改状态；有效身份流程通过确定性测试。"
+    },
+    {
+      "id": "QA-3",
+      "score": 0,
+      "problem": "未完成同版本目标样机验收",
+      "next_action": "完成接线与悬空条件后按7个门禁记录真实实验；先确认取消、未知和动作权限。",
+      "exit_criteria": "每个门禁有实际版本、尝试/失败数、原始时序与同版本录像；未执行保留NOT_RUN。"
+    },
+    {
+      "id": "EX-5",
+      "score": 0,
+      "problem": "没有陌生观众理解与语气听感证据",
+      "next_action": "录同一版本三分钟反差行为，进行10名陌生观众盲测。",
+      "exit_criteria": "保留逐人回答、真实分母、角色一致性与反差理解结果；未测不计体验验证分。"
+    }
+  ],
+  "evidence_catalog": [
+    {
+      "path": ".github/workflows/pytest.yml",
+      "sha256": "ad350aa225e46e0b47ae77b7ff67e485550393bc1cda03c4cad8aeacde81c87f",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "c8da589a24d5bd93b5bb9d8ffde6705cfe5c948ed974080f53fbec641cace57b",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": ".grok-loop/PRODUCT_BACKLOG.md",
+      "sha256": "5941d09f45575350a94f42b9590ebb7069539c03b57743d2f6367d00637e479f",
+      "type": "user-study",
+      "role": "contract_or_documentation",
+      "note": "仅验收计划，不是已执行用户研究；EX-5按无执行证据计0"
+    },
+    {
+      "path": ".grok-loop/SCORECARD.md",
+      "sha256": "eea009750179d3e4a0cb802d972f988a420f47c6e8fcb46f10b2139069fdefcb",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": ".grok-loop/evidence/runs/20260906-codex-takeover.json",
+      "sha256": "ad48c0994f6efa8168b3a4d244a47572575eabb923f5547b1e46eaa52a04e38e",
+      "type": "software",
+      "role": "recorded_verification",
+      "note": "上一轮验证记录；不是本次重新执行"
+    },
+    {
+      "path": ".scratch/codex-takeover/idf-build-utf8.log",
+      "sha256": "7f4228c9ed47c038f58e2f285f8bbfad3a9e1b59de5f92a16530d3ce1c761c8d",
+      "type": "build",
+      "role": "build_log",
+      "note": null
+    },
+    {
+      "path": "GOAL.md",
+      "sha256": "e9a533f87a785b4dcc99259e49304f9ea5fc64c14cf5ac4bcfb27841a9518137",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": "brain/app/api.py",
+      "sha256": "157427a4f2199cbeaf3698ca63c4e23e42f9ed8d04f61018e86b5c0d489c9dc2",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/brain.py",
+      "sha256": "608666d3b91c57b91c189bc83306316eedddd7bc8604ce0daa3272a30fdc4ccd",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/clawbot.py",
+      "sha256": "c297ca2db14b7b43c30a1d362d5174a9ca77e0faeca477cf2b8e70b8c1cdd4d4",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/im.py",
+      "sha256": "7ef6e9e7db6aac2f7b72cd3d23876fc01b8271fe9642e0cb34d4fb550c26dfef",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/lifecycle.py",
+      "sha256": "a4951484878f1be53a62e613447fbcd77f0ca1601241e022449fa0965ce9f62c",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/llm.py",
+      "sha256": "c4061801202fd1555cedf799d6f4f7db09b4f00199a97b9157a21d762e13f756",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/main.py",
+      "sha256": "406666f4c291e64580c3467ded11929fcf5d8317db5553391ad8fa8737969e09",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/media.py",
+      "sha256": "558aa1bb285b5e9bb7624d7a0c43418edb75c2b16339f0da434d5010894570a7",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/memory.py",
+      "sha256": "8399f7297d017517ccaa79a7b5a18793bfca9b665ca20c390235bedf12c179b5",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/origin.py",
+      "sha256": "645adf84936ab2529ebbdfb41b4b53d28da191857b30888b23eed462ae7c79f8",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/schemas.py",
+      "sha256": "06b32fc16d2917e540f5409b27cdef6b707c72fa6e57727183e10831fdefa195",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/scripting.py",
+      "sha256": "c961f37d09d67dda3331a1288107d06cbd1c8525ed80e3a0e44c0ccbddace184",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/secret_life.py",
+      "sha256": "c4669dc472861456b71b44969bc602897db67d9a52e45f1965ee182dcba49fc3",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/web/index.html",
+      "sha256": "48a8bd6b28eb137afd6ac8796647c08ca8c1440a225f41882ac69914adaf8390",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/web/life.js",
+      "sha256": "01a052895d8d72ee8899b1e4b1d28ed50f820187350ed2961c5d1101352a7a32",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/web/rehearsal.css",
+      "sha256": "2fff00782ce54abd22c99d3964a581286665207db148e7aaab23fb66f1759f0b",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/app/web/rehearsal.js",
+      "sha256": "6d5a16b3c2e18f92844e5b0de3c09154a948a6f18144c1a967e0b4e46142502b",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "brain/requirements.txt",
+      "sha256": "08fc9c05881448101e5e4d10e55cf4ba9ecad1f4ae292ac6d063c8556a86dd25",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": "brain/tests/conftest.py",
+      "sha256": "1317ac8c59c40abfadb03d5576a82c8fee108541fd39036e6653d656e054d23d",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_face_contract.py",
+      "sha256": "b9f9c7d76d03d68ef668bc42adc1792e0a557301ff16f29dd6c645b3c6dbf209",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_firmware_source_guards.py",
+      "sha256": "d60aa60e86a4a6e34bc1bbd4a700b4d4b6974bdb97f6f184c12ca440feb8361c",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_freeze_mcp.py",
+      "sha256": "fed379d7c5397a8aa28afa0283cff3e9692b34d17450a66d5299354ff61b7289",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_im.py",
+      "sha256": "1dd1cf09f4750f918aab109bf5a222648763e1838671148a4ba6cc48d09674f9",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_isolation.py",
+      "sha256": "cf2bd6a679e588d7f22fe08c7e6fd4e1635350903d99c4becd45cbe1f31f2327",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_lua.py",
+      "sha256": "5ad762ebbe703c7f9d19e6f68448cd863ad380ea7d4b837f6b04f9c4835c5c7a",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_media.py",
+      "sha256": "face0886d88c1607e86635d7fecdbbeb539e153b1968c3e488753ea607213239",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_memory.py",
+      "sha256": "756220e8fc78449abdc80448d6a9c4443d74e2045d657100f29bfb5f9782ebf9",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_protocol.py",
+      "sha256": "cef1649dbea88e82f9ef2fc7530f77460f4aa889d50d47741bd908e88af9397d",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_scripting.py",
+      "sha256": "11aa1dfaebfdd47e30de867e4f37c239f60b232533dee51f9de7e5d6f7992a4a",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_secret_life.py",
+      "sha256": "41f1f6dac0789e7092d40730949f4c896e5d24eae19e8c74d1830cc5c3633237",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_site.py",
+      "sha256": "f27ecbf8fe5b04178ca9f0e622556321d58a556c9480169c51fd30c097bfe751",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "brain/tests/test_web.py",
+      "sha256": "6fbdecc25b6ece79999793ae001c38cfe7b0a5d3957c073e67def48bb0204c19",
+      "type": "software",
+      "role": "test_source",
+      "note": null
+    },
+    {
+      "path": "docs/codex-takeover-2026-09-06.md",
+      "sha256": "5dc549e55ede2faad8ee4fe0d293da15370da5bdb4df9c568bb46abb803b30e4",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": "firmware/xiaozhi-niulai/README.md",
+      "sha256": "1c42b5a04dfc97f2efbdb79a78fb5fc09acd4f13b37c78253bf5159abd2d23ca",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    },
+    {
+      "path": "firmware/xiaozhi-niulai/build-evidence.md",
+      "sha256": "a209aa24121cffe121d4d9507549f8e5b3c5326c89989494ba35332d86620050",
+      "type": "build",
+      "role": "contract_or_documentation",
+      "note": "对应e825固件的历史构建，未烧录"
+    },
+    {
+      "path": "firmware/xiaozhi-niulai/niulai_face_display.cc",
+      "sha256": "899168753600b2969ffc6e81fb7ee9be64d5525138379c46d95a8ffd9f925b94",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "firmware/xiaozhi-niulai/niulai_life.cc",
+      "sha256": "f3289fd38799cfef71844f36fe71466ef5c194f8e26145dbc73302dd605d10c0",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "firmware/xiaozhi-niulai/niulai_life.h",
+      "sha256": "95e4eeef3084553aabdfd59a7963e1efa43b185752ba914a9480bbbd4ec51e91",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "firmware/xiaozhi-niulai/niulai_presence.h",
+      "sha256": "07ff815a578fabaa098f8c664aef86a73015f225a6e3006329c791d35e0be9d3",
+      "type": "software",
+      "role": "implementation",
+      "note": null
+    },
+    {
+      "path": "outputs/niulai-codex-2026-09-06/xiaozhi.bin",
+      "sha256": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+      "type": "build",
+      "role": "compiled_artifact",
+      "note": null
+    },
+    {
+      "path": "pytest.ini",
+      "sha256": "52641db36b086d92a8ef8a200759ea7d3f12171573f90db609a5a1029cb9ebb9",
+      "type": "software",
+      "role": "contract_or_documentation",
+      "note": null
+    }
+  ],
+  "verification": {
+    "method": "independent JSON structure/arithmetic/path validation after write",
+    "status": "PASS",
+    "exit_code": 0,
+    "items_checked": 40,
+    "critical_gates_checked": 7,
+    "evidence_paths_checked": 48,
+    "markdown_links_checked": 166,
+    "calculated_total": 30.75,
+    "source_manifest_hash_valid": true,
+    "firmware_hash_valid": true,
+    "changed_after_snapshot_at_validation": []
+  }
+}

@@ -1,37 +1,37 @@
 {
   "schema_version": 1,
-  "status": "RUNNING",
-  "controller": "grok-4.6-session-plus-native-scheduler",
-  "runtime_started_by_codex": false,
-  "readiness": "sole_writer_claimed_os_exclusive_lock_not_verified",
+  "status": "BASIC_DIALOGUE_WORKING",
+  "controller": "codex-session-with-three-subagents",
+  "runtime_started_by_codex": true,
+  "readiness": "physical_asr_reply_user_confirmed_and_keyword_wake_observed",
   "phase": "pre_submission_p0",
   "release_freeze_at": "2026-09-06T12:00:00+08:00",
   "after_freeze": "preserve_live_demo_develop_only_in_isolated_worktree",
-  "owner": "grok-4.6-session",
-  "scheduler_id": "01a073f8a1627741b5506ed398a38cbb",
+  "owner": "codex-session",
+  "scheduler_id": null,
   "exclusive_lock_verified": false,
   "exclusive_lock_kind": "advisory_lock_file_plus_single_native_scheduler",
   "baseline_commit": "d31b0468358b11393e4f5cb9d3f276ee2b70ae66",
   "baseline_evidence": ".grok-loop/evidence/baseline.json",
+  "head_at_stop": "91245675a2682d30e299144721cbf667761e2830",
   "active_task": null,
   "active_episode": null,
-  "next_task": "NIU-L04",
+  "next_task": "repeat_keyword_wake_and_dialogue_latency_acceptance_preserve_working_firmware",
   "fast_track": {
     "A": "01a0741f-b6e9-7563-b19f-299bc9691da8",
     "B": "01a0741f-b6eb-7362-ae91-386066d088cb",
     "C": "01a0741f-b6ee-7673-9b9c-8de498cba08d",
     "scorecard": "01a07417-3e1c-7a62-a95e-7c80918d2a35"
   },
-  "last_episode": "20260906T090600-P0-6",
+  "last_episode": "20260906-codex-round4",
+  "last_completed_product_episode": "20260906T090600-P0-6",
   "successful_episodes": 5,
-  "score_review_status": "RESCRED_36_75_AT_f4379f3",
-  "last_scorecard": ".grok-loop/scores/20260906T0900-f4379f3.json",
+  "score_review_status": "PARTIAL_SEC2_DELTA_31_75_OTHER39_INHERITED_NOT_FULL_REVIEW",
+  "last_scorecard": ".grok-loop/scores/20260906-auth-delta.json",
   "recent_failure_signatures": [],
-  "waiting_for": [
-    "live_uvicorn_reload_NEEDS_HUMAN",
-    "COM6_flash_NEEDS_HUMAN"
-  ],
+  "waiting_for": [],
   "stop_file": ".grok-loop/STOP",
+  "stop_reason": "2026-09-06: User explicitly delegated project development to Codex. Pause Grok new writes and new subtasks. Preserve demo checkout and hardware. Do not remove STOP.",
   "policy": {
     "episode_target_minutes": 20,
     "episode_max_minutes": 30,
@@ -55,5 +55,9 @@
     "each_dimension_min": 60,
     "life_embedded_safety_min": 80,
     "critical_gates_required": true
-  }
+  },
+  "previous_controller": "grok-4.6-session-plus-native-scheduler",
+  "previous_scheduler_id": "01a073f8a1627741b5506ed398a38cbb",
+  "last_runtime_record": ".scratch/codex-round3/runtime.json",
+  "next_software_task": "address_only_reproduced_latency_or_reliability_failures"
 }

@@ -1,0 +1,25 @@
+{
+  "episode_id": "20260906T081500-NIU-L01",
+  "task_id": "NIU-L01",
+  "started_at": "2026-09-06T08:15:00+08:00",
+  "ended_at": "2026-09-06T08:28:00+08:00",
+  "source_before": "a6e47f8",
+  "source_after": "381d86a",
+  "changed_paths": [
+    "brain/app/secret_life.py",
+    "brain/tests/test_secret_life.py",
+    "brain/app/lifecycle.py",
+    "brain/app/main.py",
+    "brain/app/memory.py",
+    "brain/app/origin.py"
+  ],
+  "checker": {
+    "identity": "01a07412-149f-7be0-9350-b67ca9fca287",
+    "verdict": "PASS_SOFTWARE",
+    "evidence": "35 related tests exit 0; disconnect mutter is finally-cancel only"
+  },
+  "verdict": "PASS_SOFTWARE",
+  "hardware_status": "NOT_RUN",
+  "cost": "unknown",
+  "next_action": "Independent 40-item scorecard then NIU-L03"
+}

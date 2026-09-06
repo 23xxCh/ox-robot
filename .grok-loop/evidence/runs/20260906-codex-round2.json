@@ -1,0 +1,122 @@
+{
+  "episode": "20260906-codex-round2",
+  "recorded_at": "2026-09-06T10:36:24.995059+08:00",
+  "verdict": "PASS_SOFTWARE_BUILD",
+  "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+  "working_tree_modified": true,
+  "source_hashes": {
+    "brain/app/main.py": "c73d1a0ca59e89662876e4a4fcc2caa225827054a88d85a03348e9f8fb4ab133",
+    "brain/app/media.py": "558aa1bb285b5e9bb7624d7a0c43418edb75c2b16339f0da434d5010894570a7",
+    "brain/tests/test_protocol.py": "cef1649dbea88e82f9ef2fc7530f77460f4aa889d50d47741bd908e88af9397d",
+    "brain/tests/test_autonomy.py": "c93825fb58f81ace0b1d25bf6ba3a10c7b72c3d2af0ad0e86f81a268c7b51a04",
+    "brain/tests/test_media.py": "face0886d88c1607e86635d7fecdbbeb539e153b1968c3e488753ea607213239",
+    "firmware/xiaozhi-niulai/check_application_intro.py": "089d727c85f29ec69ee8633de4d070b11c184c5e57f42f285e42efbf74bff7c4",
+    "firmware/xiaozhi-niulai/application-intro-2026-09-06.patch": "ec0e1aacaa80ec05a77c8c3e1fd129b430c50a1e51460d728fb37205eec02b22"
+  },
+  "native_patch_manifest": {
+    "application.cc": {
+      "before_sha256": "946194df3b17d0dd0fb06aaaefb89a6cbe101eb05a271e06ff37e1f89b79c7aa",
+      "after_sha256": "458ae720797a69152b115fb09d0dbfc7ca3932911faf7c070c74763197cc37a2"
+    },
+    "application.h": {
+      "before_sha256": "de7a6d0ce9e730681560265027441e68091249ce4470ac8c191e5a9b019bcef7",
+      "after_sha256": "302d03c06eed68a3b4be5bb0b7236caad53ad5e359830b6686b2b6e04ae2849b"
+    }
+  },
+  "patch_verification": "git apply on saved baseline reconstructs both final byte hashes",
+  "pytest": {
+    "command": "python -m pytest brain/tests -o addopts='' -q --basetemp=.scratch/codex-round2/pytest-after-handshake",
+    "exit_code": 0,
+    "passed": 156,
+    "warnings": 1,
+    "seconds": 10.37,
+    "log": ".scratch/codex-round2/pytest-final.log",
+    "log_sha256": "c0529004d5ea3305a02e367db5304477098a9dd1deaa4809c24eb696d47e857f"
+  },
+  "idf_build": {
+    "command": "python scripts/build.py niulai-s3-expand-v17 --name niulai-s3-expand-v17",
+    "exit_code": 0,
+    "requested_idf_path": "E:/AI_TOY_TOOLS/esp-idf-v6.0.2",
+    "resolved_idf_path": "E:/AI_TOY_NATIVE/esp-idf-v6.0.2",
+    "log": ".scratch/codex-round2/idf-build.log",
+    "log_sha256": "59775b421e0963c0fae6c37db62bc4cbf8afb291e1b8770db4494f285d5778c4",
+    "artifacts": {
+      "xiaozhi.bin": {
+        "path": "E:\\XIAOZHI_NATIVE\\xiaozhi-esp32\\build\\xiaozhi.bin",
+        "size": 2804672,
+        "sha256": "f1275bf9ea427dde4c7f28ac77bf304102949fe070cb22a83c52c8ab3f5a900d",
+        "mtime": "2026-09-06T10:33:30.025365+08:00"
+      },
+      "merged-binary.bin": {
+        "path": "E:\\XIAOZHI_NATIVE\\xiaozhi-esp32\\build\\merged-binary.bin",
+        "size": 11516293,
+        "sha256": "117443b1ec9b94455c56d0cc0e07c55ecb29010c2cd52d0f31b20907b39ca0d9",
+        "mtime": "2026-09-06T10:33:33.307124+08:00"
+      }
+    },
+    "saved_app": "outputs/niulai-codex-round2-2026-09-06/xiaozhi.bin"
+  },
+  "runtime": {
+    "url": "http://127.0.0.1:8000",
+    "memory_backup": ".scratch/codex-takeover/memory-before-start.sqlite",
+    "started_at": "2026-09-06T10:33:55.8927150+08:00",
+    "binding": "loopback_only_pending_hardware_setup",
+    "version": "codex-c73d1a0ca59e",
+    "pid": 1852,
+    "owner": "codex"
+  },
+  "runtime_verification": {
+    "http_statuses": {
+      "/": 200,
+      "/life": 200,
+      "/web/life.js": 200,
+      "/api/v1/state": 200
+    },
+    "health": {
+      "status": "ok",
+      "version": "codex-c73d1a0ca59e",
+      "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+      "source_dirty": true,
+      "source_metadata_scope": "startup",
+      "firmware_hash": "f3289fd38799",
+      "firmware_source_hash": "f3289fd38799",
+      "firmware_source_path": "firmware/xiaozhi-niulai/niulai_life.cc",
+      "firmware_runtime_verified": false
+    },
+    "websocket_hello": {
+      "type": "hello",
+      "transport": "websocket",
+      "version": 1,
+      "audio_params": {
+        "format": "opus",
+        "sample_rate": 24000,
+        "channels": 1,
+        "frame_duration": 60
+      },
+      "features": {
+        "mcp": true
+      },
+      "session": "sim",
+      "session_id": "sim"
+    },
+    "unknown_silent_window_ms": 300,
+    "hardware_tested": false
+  },
+  "voice_evidence": "outputs/niulai-voice-check-2026-09-06/verification.json",
+  "llm_evidence": "outputs/niulai-voice-check-2026-09-06/llm-check.json",
+  "independent_checker": "/root/backend_audit",
+  "checker_verdict": "PASS final native source and backend handshake correction",
+  "scorecard": ".grok-loop/scores/20260906-codex-review.json",
+  "score_scope": "10:14 snapshot; does not include all later changes or verifications",
+  "hardware_flashed": false,
+  "hardware_microphone_tested": false,
+  "hardware_speaker_tested": false,
+  "physical_movement_commanded": false,
+  "limitations": [
+    "PlaySound queue backpressure and synchronous WebSocket open remain",
+    "No protocol-level origin identity for all late old network payloads",
+    "Incremental native patch only; clean upstream reproduction still unverified",
+    "7 hardware critical gates NOT_RUN"
+  ],
+  "runtime_observation": "One Windows asyncio Proactor connection-close callback logged WinError 10054; subsequent HTTP health and WebSocket verification passed; no long-duration stability claim."
+}

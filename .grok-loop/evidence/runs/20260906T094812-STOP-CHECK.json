@@ -1,0 +1,35 @@
+{
+  "episode_id": "20260906T094812-STOP-CHECK",
+  "task_id": "STOP-CHECK",
+  "started_at": "2026-09-06T09:48:12+08:00",
+  "ended_at": "2026-09-06T09:49:30+08:00",
+  "source_before": "91245675a2682d30e299144721cbf667761e2830",
+  "source_after": "91245675a2682d30e299144721cbf667761e2830",
+  "changed_paths": [
+    ".grok-loop/STATE.json",
+    ".grok-loop/LOCK",
+    ".grok-loop/RUN_LOG.md",
+    ".grok-loop/evidence/runs/20260906T094812-STOP-CHECK.json"
+  ],
+  "acceptance_hash": null,
+  "commands": [
+    {
+      "command": "Get-Date; Test-Path .grok-loop/STOP; git rev-parse HEAD; git status --short; git log -8 --oneline; Invoke-WebRequest http://127.0.0.1:8000/health",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/STOP",
+      "source_hash": "91245675a2682d30e299144721cbf667761e2830",
+      "notes": "STOP exists. Codex scratch last write 09:44. /health timeout 2s. No product files written. STOP not deleted."
+    }
+  ],
+  "checker": {
+    "identity": null,
+    "verdict": "NOT_RUN",
+    "evidence": "no implementation slice; stop protocol only"
+  },
+  "verdict": "STOPPED",
+  "hardware_status": "NOT_RUN",
+  "cost": "unknown",
+  "failure_signature": null,
+  "next_action": "Remain STOPPED until user removes .grok-loop/STOP. Do not resume automatically. Preserve demo checkout. Next queued software task remains NIU-L04 after STOP lifts."
+}

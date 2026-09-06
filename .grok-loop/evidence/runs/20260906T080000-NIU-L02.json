@@ -1,0 +1,42 @@
+{
+  "episode_id": "20260906T080000-NIU-L02",
+  "task_id": "NIU-L02",
+  "started_at": "2026-09-06T08:00:00+08:00",
+  "ended_at": "2026-09-06T08:20:00+08:00",
+  "source_before": "769bd459a7fbf8eaf181d6fc9ab7e3a1b90ef23d",
+  "source_after": "a6e47f8",
+  "changed_paths": [
+    "brain/app/mcp_broker.py",
+    "brain/app/brain.py",
+    "brain/app/main.py",
+    "brain/tests/test_freeze_mcp.py",
+    "firmware/xiaozhi-niulai/niulai_life.cc",
+    "firmware/xiaozhi-niulai/niulai_life.h"
+  ],
+  "commands": [
+    {
+      "command": "python -m pytest -vv --tb=short brain/tests/test_freeze_mcp.py::test_late_perform_after_freeze_is_rejected brain/tests/test_freeze_mcp.py::test_walk_after_proximity_freeze_is_not_sent",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 1,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T080000-NIU-L02.red.txt",
+      "source_hash": "pre-fix"
+    },
+    {
+      "command": "python -m pytest -q brain/tests --tb=line",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T080000-NIU-L02.pytest.txt",
+      "source_hash": "0a8330d plus working tree"
+    }
+  ],
+  "checker": {
+    "identity": "01a0740c-374e-75e2-8eee-274665be3c95",
+    "verdict": "PASS_SOFTWARE",
+    "evidence": "first check FAIL on kPresent walk ban; firmware corrected in a6e47f8; hardware NOT_RUN"
+  },
+  "verdict": "PASS_SOFTWARE",
+  "hardware_status": "NOT_RUN",
+  "cost": "unknown",
+  "failure_signature": "firmware-kPresent-banned-asked-walk",
+  "next_action": "NIU-L01 verify secret cooldown/quiet/dedupe"
+}

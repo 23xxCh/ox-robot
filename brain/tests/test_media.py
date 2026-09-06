@@ -1,8 +1,26 @@
 from __future__ import annotations
 
 import asyncio
+import struct
 
-from brain.app.media import qwen_asr_text, qwen_audio_url, tts_pcm
+import pytest
+
+from brain.app.media import qwen_asr_text, qwen_audio_url, raw_opus_packets_to_ogg, tts_pcm
+
+
+@pytest.mark.parametrize("sample_rate", [16000, 24000, 48000])
+def test_ogg_opus_uses_48khz_timestamps_and_closes_last_audio_page(sample_rate):
+    # RFC 7845 section 4: 60 ms is 2880 granules at every input sample rate.
+    data = raw_opus_packets_to_ogg([b"first", b"", b"last", b""], sample_rate)
+    pages = []
+    offset = 0
+    while offset < len(data):
+        assert data[offset:offset + 4] == b"OggS"
+        segments = data[offset + 26]
+        length = 27 + segments + sum(data[offset + 27:offset + 27 + segments])
+        pages.append((data[offset + 5], struct.unpack_from("<Q", data, offset + 6)[0]))
+        offset += length
+    assert pages == [(2, 0), (0, 0), (0, 2880), (4, 5760)]
 
 
 def test_qwen_asr_text_reads_output() -> None:

@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "episode_id": "20260906-codex-takeover",
+  "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+  "working_tree_modified": true,
+  "recorded_at": "2026-09-06T10:04:19.7685564+08:00",
+  "verdict": "PASS_SOFTWARE_BUILD",
+  "hardware_status": "NOT_RUN",
+  "source_files": [
+    {
+      "sha256": "bfb3eb8ef3b46885f289b7a9c2e6a755a3da5b95a6534fe43e943b2873da462e",
+      "path": "brain/app/main.py"
+    },
+    {
+      "sha256": "8399f7297d017517ccaa79a7b5a18793bfca9b665ca20c390235bedf12c179b5",
+      "path": "brain/app/memory.py"
+    },
+    {
+      "sha256": "157427a4f2199cbeaf3698ca63c4e23e42f9ed8d04f61018e86b5c0d489c9dc2",
+      "path": "brain/app/api.py"
+    },
+    {
+      "sha256": "c961f37d09d67dda3331a1288107d06cbd1c8525ed80e3a0e44c0ccbddace184",
+      "path": "brain/app/scripting.py"
+    },
+    {
+      "sha256": "01a052895d8d72ee8899b1e4b1d28ed50f820187350ed2961c5d1101352a7a32",
+      "path": "brain/app/web/life.js"
+    },
+    {
+      "sha256": "5311a8d4ade5865aad44688585c79c0587967b8aec1f174fc1227483c116c664",
+      "path": "brain/tests/test_protocol.py"
+    },
+    {
+      "sha256": "756220e8fc78449abdc80448d6a9c4443d74e2045d657100f29bfb5f9782ebf9",
+      "path": "brain/tests/test_memory.py"
+    },
+    {
+      "sha256": "f27ecbf8fe5b04178ca9f0e622556321d58a556c9480169c51fd30c097bfe751",
+      "path": "brain/tests/test_site.py"
+    },
+    {
+      "sha256": "11aa1dfaebfdd47e30de867e4f37c239f60b232533dee51f9de7e5d6f7992a4a",
+      "path": "brain/tests/test_scripting.py"
+    },
+    {
+      "sha256": "d60aa60e86a4a6e34bc1bbd4a700b4d4b6974bdb97f6f184c12ca440feb8361c",
+      "path": "brain/tests/test_firmware_source_guards.py"
+    },
+    {
+      "sha256": "f3289fd38799cfef71844f36fe71466ef5c194f8e26145dbc73302dd605d10c0",
+      "path": "firmware/xiaozhi-niulai/niulai_life.cc"
+    },
+    {
+      "sha256": "95e4eeef3084553aabdfd59a7963e1efa43b185752ba914a9480bbbd4ec51e91",
+      "path": "firmware/xiaozhi-niulai/niulai_life.h"
+    },
+    {
+      "sha256": "07ff815a578fabaa098f8c664aef86a73015f225a6e3006329c791d35e0be9d3",
+      "path": "firmware/xiaozhi-niulai/niulai_presence.h"
+    }
+  ],
+  "commands": [
+    {
+      "duration_s": 7.91,
+      "cwd": ".scratch/codex-takeover",
+      "exit_code": 0,
+      "passed": 149,
+      "command": "python -B -m pytest -p no:cacheprovider brain/tests --basetemp=.pytest-root-integration-approved --tb=short -ra",
+      "integrated_source_hashes_match": 13,
+      "warnings": 1
+    },
+    {
+      "command": "node --check brain/app/web/life.js; git diff --check -- brain firmware",
+      "exit_code": 0
+    },
+    {
+      "command": "ESP32-S3 g++ @.firmware-check/compile.rsp",
+      "cwd": ".scratch/codex-takeover",
+      "exit_code": 0
+    },
+    {
+      "evidence_path": ".scratch/codex-takeover/idf-build-utf8.log",
+      "env": {
+        "PYTHONIOENCODING": "utf-8",
+        "PYTHONUTF8": "1"
+      },
+      "command": "python scripts/build.py niulai-s3-expand-v17 --name niulai-s3-expand-v17",
+      "cwd": "E:\\XIAOZHI_NATIVE\\xiaozhi-esp32",
+      "exit_code": 0
+    }
+  ],
+  "review": {
+    "independent_regression_passed": 14,
+    "checker": "/root/product_acceptance",
+    "scope": "WebSocket and HTTP cancellation",
+    "verdict": "PASS_SOFTWARE",
+    "root_review": "memory, scripting, firmware and integrated verification"
+  },
+  "runtime": {
+    "owner": "codex",
+    "pid": 33208,
+    "url": "http://127.0.0.1:8000",
+    "version": "codex-bfb3eb8ef3b4",
+    "started_at": "2026-09-06T09:52:58.9230963+08:00",
+    "binding": "loopback_only_pending_hardware_setup",
+    "memory_backup": ".scratch/codex-takeover/memory-before-start.sqlite"
+  },
+  "health": {
+    "status": "ok",
+    "version": "codex-bfb3eb8ef3b4",
+    "source_commit": "codex-bfb3eb8ef3b4",
+    "firmware_hash": "f3289fd38799"
+  },
+  "http_routes_200": [
+    "/",
+    "/life",
+    "/web/life.js",
+    "/api/v1/state"
+  ],
+  "live_websocket": "hello and UNKNOWN passed on localhost; no board",
+  "real_opus": {
+    "bytes": 456,
+    "packets": 3,
+    "hardware_playback": false
+  },
+  "firmware": {
+    "application_bytes": 2803312,
+    "flashed": false,
+    "upstream_clean_checkout_reproducibility": "NOT_VERIFIED",
+    "application_sha256": "e8259c5cc48cdbdf40f6cdd600d3c70b46c6cdd8d8cfbc68b57453240d7b3c22",
+    "application_path": "outputs/niulai-codex-2026-09-06/xiaozhi.bin",
+    "merged_sha256": "15df8dba2c49e749dfc9082803bbca13b87b711fa38276d74d5d9d059630c002"
+  },
+  "critical_gates": [
+    {
+      "id": "CG-01",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "id": "CG-02",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "id": "CG-03",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "id": "CG-04",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "id": "CG-05",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "id": "CG-06",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "id": "CG-07",
+      "verdict": "NOT_RUN",
+      "attempts": 0
+    }
+  ],
+  "critical_gates_passed": false,
+  "total_score": null,
+  "score_reason": "Latest historical 37.75 summary is not a complete 40-item audit; no fabricated score increment.",
+  "next_action": "Confirm hardware wiring and suspended legs, then bench acceptance."
+}

@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 import json
-import os
 from typing import Any
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 
 from brain.app.brain import NiulaiBrain
+from brain.app.auth import require_im_token
 from brain.app.clawbot import clawbot_configured, clawbot_event_id, parse_clawbot_text, send_clawbot_text
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_im_token)])
 
 
 def _brain(request: Request) -> NiulaiBrain:
@@ -23,14 +23,6 @@ def _seen_event_ids(request: Request) -> set[str]:
         seen = set()
         request.app.state.im_seen_event_ids = seen
     return seen
-
-
-def _missing_token_response(request: Request) -> JSONResponse | None:
-    if not os.environ.get("NIULAI_IM_REQUIRE_TOKEN"):
-        return None
-    if request.headers.get("token"):
-        return None
-    return JSONResponse({"ok": False, "error": "missing-token"}, status_code=401)
 
 
 def _already_seen(request: Request, channel: str, event_id: str | None) -> bool:
@@ -98,9 +90,6 @@ async def feishu_event(request: Request) -> JSONResponse:
     payload = await request.json()
     if payload.get("type") == "url_verification":
         return JSONResponse({"challenge": payload.get("challenge")})
-    denied = _missing_token_response(request)
-    if denied is not None:
-        return denied
     if _already_seen(request, "feishu", feishu_event_id(payload)):
         return JSONResponse({"ok": True})
     parsed = parse_feishu_text(payload)
@@ -112,9 +101,6 @@ async def feishu_event(request: Request) -> JSONResponse:
 
 @router.post("/im/wechat/callback")
 async def wechat_callback(request: Request) -> JSONResponse:
-    denied = _missing_token_response(request)
-    if denied is not None:
-        return denied
     payload = await request.json()
     if _already_seen(request, "wechat", wechat_event_id(payload)):
         return JSONResponse({"ok": True})
@@ -127,9 +113,6 @@ async def wechat_callback(request: Request) -> JSONResponse:
 
 @router.post("/im/clawbot/event")
 async def clawbot_event(request: Request) -> JSONResponse:
-    denied = _missing_token_response(request)
-    if denied is not None:
-        return denied
     payload = await request.json()
     if not isinstance(payload, dict):
         return JSONResponse({"ok": False, "error": "invalid-json"}, status_code=400)

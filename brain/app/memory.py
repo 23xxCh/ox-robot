@@ -278,7 +278,7 @@ class MemoryStore:
         now = time.time()
         self._conn.execute(
             """
-            INSERT INTO character_state(
+            INSERT OR IGNORE INTO character_state(
                 device_id, memory_generation, mama_count, pending_complaint,
                 recent_line_ids_json, interrupted_goal_json, mood, last_event_id, updated_at
             ) VALUES (?,?,0,NULL,'[]',NULL,NULL,NULL,?)
@@ -394,7 +394,7 @@ class MemoryStore:
             parts.append(f"被喊「妈妈」{view.mama_count}次")
         if presence == "ABSENT" and view and view.pending_complaint:
             parts.append(f"上次被打断时在说：{view.pending_complaint}")
-        if lines:
+        if presence == "ABSENT" and lines:
             parts.append("最近说过（不要重复）：" + "｜".join(lines[-RECENT_LIMIT:]))
         if presence == "ABSENT":
             parts.append("独处，翻旧账，不要客套")

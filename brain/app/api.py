@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import time
 import uuid
 from pathlib import Path
@@ -308,7 +309,10 @@ async def post_chat(request: Request) -> JSONResponse:
         return JSONResponse({"error": "invalid_presence"}, status_code=400)
     text = _clip_text(payload.get("text"))
     origin = normalize_origin(state.get("origin"))
-    reply, source = speak(origin, presence, text)
+    state_version = state["next_event_id"]
+    reply, source = await asyncio.to_thread(speak, origin, presence, text)
+    if state["next_event_id"] != state_version:
+        return JSONResponse({"error": "stale_chat", "simulated": True}, status_code=409)
     if presence in {"PRESENT", "ABSENT"}:
         _apply_presence(state, presence)
     turn = {"user": text, "reply": reply, "presence": presence, "source": source}

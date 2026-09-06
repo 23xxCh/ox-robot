@@ -1,0 +1,9 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.12, pytest-9.0.3
+collected 1 item
+brain/tests/test_isolation.py::test_importing_main_does_not_open_live_sqlite FAILED
+AssertionError: LIVE_SQLITE_OPENED
+assert 'LIVE_SQLITE_OPENED' not in 'LIVE_SQLITE_OPENED\n'
+command: python -m pytest --noconftest brain/tests/test_isolation.py::test_importing_main_does_not_open_live_sqlite -vv
+exit_code: 1
+note: spy intercepted sqlite3.connect and did not open the live file.

@@ -1,0 +1,79 @@
+{
+  "started_utc": "2026-09-06T03:22:34.232734+00:00",
+  "input_kind": "synthetic_cloud_tts_not_physical_microphone",
+  "question": "你好牛来，你是谁？",
+  "endpoint": "ws://127.0.0.1:8000/xiaozhi/v1/",
+  "device_io": false,
+  "authorization": "Bearer from local environment; value never recorded",
+  "errors": [],
+  "provenance": {
+    "input_tts": "try_qwen_tts_pcm explicit cloud call; no fallback",
+    "server_asr": "non-UTF8 Opus branch uses try_qwen_asr; transcript captured from WS",
+    "server_llm": "WS omits provider/source; cannot distinguish cloud provider from fallback solely from frame",
+    "server_tts": "Actual returned Opus; WS omits cloud/SAPI/beep source"
+  },
+  "service_health_before": {
+    "status": "ok",
+    "version": "codex-285c2285f0bf",
+    "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+    "source_dirty": true,
+    "source_metadata_scope": "startup",
+    "firmware_hash": "f3289fd38799",
+    "firmware_source_hash": "f3289fd38799",
+    "firmware_source_path": "firmware/xiaozhi-niulai/niulai_life.cc",
+    "firmware_runtime_verified": false
+  },
+  "input_tts_seconds": 1.849,
+  "input_audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "sample_width": 2,
+    "duration_s": 2.24,
+    "opus_frame_ms": 60,
+    "opus_packets": 38
+  },
+  "hello": {
+    "type": "hello",
+    "transport": "websocket",
+    "version": 1,
+    "audio_params": {
+      "format": "opus",
+      "sample_rate": 24000,
+      "channels": 1,
+      "frame_duration": 60
+    },
+    "features": {
+      "mcp": true
+    },
+    "session": "sim",
+    "session_id": "sim"
+  },
+  "input_send_seconds": 2.289,
+  "asr_text": "你好牛，来，你是谁？",
+  "asr_after_listen_stop_s": 1.287,
+  "reply_text": "你好呀，我是桌上的小牛摆件，乖乖的，会一直陪着你的～",
+  "llm_after_listen_stop_s": 2.112,
+  "first_audio_after_listen_stop_s": 4.074,
+  "tts_stop_after_listen_stop_s": 9.001,
+  "ws_connected_seconds": 11.324,
+  "ws_released": true,
+  "output_audio": {
+    "sample_rate": 24000,
+    "channels": 1,
+    "sample_width": 2,
+    "duration_s": 4.9735,
+    "opus_packets": 83
+  },
+  "reply_audio_cloud_asr_check": "你好呀，我是桌上的小牛摆件，乖乖的会一直陪着你的。",
+  "passed": true,
+  "total_seconds": 14.423,
+  "file_sha256": {
+    "input-cloud-24k.wav": "8fd1ae92db0ad1a8b27c5bd0af1584b60aaf6f86a4be5dc830fda2215c591e34",
+    "input-mic-16k.opus": "f9f9ee724255a18e2e144e1ee1eb20ad1a3f38a7ea9bf8521a1172cf20e587dc",
+    "input-mic-16k.wav": "bb2283c9892407449022de687bd886ff0a7df0d42ae227007d28916ff73e69ab",
+    "reply.opus": "e1d319a6b15ac07e0b85a86ee9bd1ad1e853e05d87a6595ebcf6c40323141a52",
+    "reply.wav": "af7d521a2093ba3ca8db6e475a735d5c10d3fea154fbf402d59093fe89921022",
+    "run_pipeline.py": "7e43553b383c7c53157768151a46d6b8b6b2543fb8236b2d99b9f14729d831f7",
+    "ws-events.json": "4771e237927679848be6fee54f6e1179663b72fcb0c20cc2cb95fc2c271e4188"
+  }
+}

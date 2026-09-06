@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "record_kind": "single_item_delta",
+  "contract_version": "2026-09-06-v1",
+  "scored_at": "2026-09-06T11:23:04.0304738+08:00",
+  "checker": "/root/product_acceptance",
+  "scope": "仅独立复评 SEC-2；不是当前项目的完整40项重审。其余39项及7个门禁继承固定旧快照，本记录不证明后续源码或板上行为。",
+  "baseline": {
+    "path": ".grok-loop/scores/20260906-codex-review.json",
+    "sha256": "28c3774613458f0dbac62b690e0f9e0013f4850fe8c82df1c8fde7caf3216271",
+    "snapshot_at": "2026-09-06T10:14:23.866362+08:00",
+    "total_score": 30.75,
+    "inherited_item_count": 39,
+    "inherited_items_rule": "全部条目，排除 SEC-2；分值及证据时间均沿用 baseline，不代表重新核验。"
+  },
+  "source_commit": "91245675a2682d30e299144721cbf667761e2830",
+  "working_tree_modified": true,
+  "source_snapshot_at": "2026-09-06T11:23:04.0304738+08:00",
+  "source_manifest_algorithm": "SHA256 of raw file bytes",
+  "source_manifest": {
+    "brain/app/auth.py": "1421d185e8327dedfae0ce7ee207cb83ed3dac9ee8eaf64362a309f9a55e87ee",
+    "brain/app/main.py": "285c2285f0bf3cf5c8b9dcf5a77be1c9f8682e91b9723e1e54ed9b74a70bd71c",
+    "brain/app/im.py": "de4592693cde74ae51c347b64fbb9edb338ed7f000e0025502d4a2b1cc479c6c",
+    "brain/app/__main__.py": "f6af662757c78d3d25d73130c9c2561ae09d07d9258aa4be3474e8c3451df393",
+    "brain/tests/test_auth.py": "e2a7cbf3315a1f77fec13c5eb248756f60598d4975a245111d6667845fc0f116"
+  },
+  "item_delta": {
+    "id": "SEC-2",
+    "title": "来源与授权",
+    "before": 0,
+    "after": 2,
+    "reason": "已独立读源码和25个边界用例：WS 在 accept 前校验配置的设备 Bearer，IM 路由统一校验独立 IM Bearer，缺配置时拒绝；UI 校验真实传输 peer、Host、同源 Origin，正式启动禁用 proxy_headers。真实 TCP 记录支持缺失/错误设备密钥拒绝、正确密钥升级、IM 密钥隔离和 UI 来源拒绝，满足软件集成验证级别。",
+    "evidence_type": "software",
+    "evidence_paths": [
+      "brain/app/auth.py",
+      "brain/app/main.py",
+      "brain/app/im.py",
+      "brain/app/__main__.py",
+      "brain/tests/test_auth.py",
+      ".scratch/codex-round3/network-verification.json"
+    ],
+    "next_verification": "在目标板与指定交付网络上验证有效设备身份连接及错误身份拒绝；烧录、电脑本机 TCP 和 HTTP 文字对话不替代目标板鉴权连通验收。",
+    "why_not_3": "SCORECARD.md 第15行要求指定交付环境与设备连通证据；当前 TCP 记录明确 physical_board_tested=false、device firewall path pending。"
+  },
+  "network_evidence": {
+    "path": ".scratch/codex-round3/network-verification.json",
+    "sha256": "046eddcaafe3c59521489fd3a61f5800ac9258204a5fa376b9e8ba7e8622f376",
+    "type": "software",
+    "producer": "/root",
+    "review_method": "独立读取落盘 JSON 并与入口源码、测试矩阵核对；Checker 未另发 HTTP/WS 事件。",
+    "runtime_version": "codex-285c2285f0bf",
+    "observed_statuses": {
+      "ws_missing": 403,
+      "ws_wrong": 403,
+      "ws_correct": 101,
+      "im_missing_denied": 401,
+      "im_device_key_denied": 401,
+      "im_correct_key": 200,
+      "lan_ui_denied": 403,
+      "foreign_origin_denied": 403,
+      "local_page": 200
+    },
+    "physical_board_tested": false,
+    "target_board_auth_status": "NOT_RUN"
+  },
+  "reported_regression": {
+    "passed": 181,
+    "warning_count": 1,
+    "elapsed_seconds": 15.84,
+    "provenance": "团队终端运行结果转述，docs/codex-dialogue-2026-09-06.md 已记录。",
+    "raw_log_path": null,
+    "immutable_source_snapshot_available": false,
+    "checker_independently_verified_run": false,
+    "limitation": "可变工作区的测试结果，缺完整原始日志和该次运行源码快照；不作为181项在当前版本已独立验证的声明。"
+  },
+  "derived_scores": {
+    "formula": "SEC = sum(5 item scores)/20*100; total = baseline total + (SEC after - SEC before)*SEC weight/100",
+    "sec_weight_percent": 10,
+    "sec_before": 25,
+    "sec_after": 35,
+    "total_before": 30.75,
+    "total_delta": 1,
+    "total_after": 31.75
+  },
+  "critical_gates": {
+    "rule": "CG-01..CG-07 的状态、尝试数、失败数及证据原样继承 baseline，不提升；本次未执行门禁验收。",
+    "inherited_ids": [
+      "CG-01",
+      "CG-02",
+      "CG-03",
+      "CG-04",
+      "CG-05",
+      "CG-06",
+      "CG-07"
+    ],
+    "all_inherited_statuses": "NOT_RUN",
+    "critical_gates_passed": false
+  }
+}
