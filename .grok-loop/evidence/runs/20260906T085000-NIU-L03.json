@@ -1,0 +1,49 @@
+{
+  "episode_id": "20260906T085000-NIU-L03",
+  "task_id": "NIU-L03",
+  "started_at": "2026-09-06T08:50:00+08:00",
+  "ended_at": "2026-09-06T09:05:00+08:00",
+  "source_before": "f4379f32b1b190fd9dd187daf1f365dca8830771",
+  "source_after": "227f99de507b5021fdb88b8445a40f51be0ad494",
+  "changed_paths": [
+    "brain/app/main.py",
+    "brain/tests/test_protocol.py",
+    "GOAL.md"
+  ],
+  "acceptance_hash": "34c8badc3fbabb51bef1f91fa4ef49031f6f07c19b411319687522d7dddeffa6",
+  "commands": [
+    {
+      "command": "python -m pytest -q brain/tests/test_protocol.py::test_health_version_is_not_placeholder_0_1_0 brain/tests/test_protocol.py::test_health_version_env_override_is_used brain/tests/test_protocol.py::test_health_version_falls_back_to_source_digest --tb=short",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 1,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T085000-NIU-L03.red.txt",
+      "source_hash": "f4379f32b1b190fd9dd187daf1f365dca8830771"
+    },
+    {
+      "command": "python -m pytest -q brain/tests --tb=line",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T085000-NIU-L03.pytest.txt",
+      "source_hash": "working-tree-with-resolve_brain_version-before-227f99d",
+      "tests": "97 passed"
+    },
+    {
+      "command": "Invoke-RestMethod http://127.0.0.1:8000/health",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T085000-NIU-L03.pytest-footer.txt",
+      "source_hash": "live-process-not-this-commit",
+      "result": "{\"status\":\"ok\"}"
+    }
+  ],
+  "checker": {
+    "identity": null,
+    "verdict": "unavailable",
+    "evidence": "spawn_subagent ids not_found; not impersonating independent review"
+  },
+  "verdict": "PASS_SOFTWARE",
+  "hardware_status": "NOT_RUN",
+  "cost": "unknown",
+  "failure_signature": null,
+  "next_action": "Verify P0-6 PRESENT Lua walk tests+docs (already in test_protocol/test_lua/test_freeze_mcp); do not flash. Then NIU-L04 overlay vs native desync record."
+}

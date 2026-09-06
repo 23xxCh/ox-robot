@@ -13,21 +13,24 @@
   "exclusive_lock_kind": "advisory_lock_file_plus_single_native_scheduler",
   "baseline_commit": "d31b0468358b11393e4f5cb9d3f276ee2b70ae66",
   "baseline_evidence": ".grok-loop/evidence/baseline.json",
-  "active_task": "FAST_TRACK_ABC",
-  "active_episode": "20260906T082900-FAST-TRACK",
-  "next_task": "integrate-ABC",
+  "active_task": null,
+  "active_episode": null,
+  "next_task": "P0-6-VERIFY",
   "fast_track": {
     "A": "01a0741f-b6e9-7563-b19f-299bc9691da8",
     "B": "01a0741f-b6eb-7362-ae91-386066d088cb",
     "C": "01a0741f-b6ee-7673-9b9c-8de498cba08d",
     "scorecard": "01a07417-3e1c-7a62-a95e-7c80918d2a35"
   },
-  "last_episode": "20260906T081500-NIU-L01",
-  "successful_episodes": 3,
+  "last_episode": "20260906T085000-NIU-L03",
+  "successful_episodes": 4,
   "score_review_status": "BASELINE_36_AT_381d86a",
   "last_scorecard": ".grok-loop/scores/20260906T0830-381d86a.json",
   "recent_failure_signatures": [],
-  "waiting_for": [],
+  "waiting_for": [
+    "independent_checker_unavailable_this_episode",
+    "live_uvicorn_reload_NEEDS_HUMAN"
+  ],
   "stop_file": ".grok-loop/STOP",
   "policy": {
     "episode_target_minutes": 20,

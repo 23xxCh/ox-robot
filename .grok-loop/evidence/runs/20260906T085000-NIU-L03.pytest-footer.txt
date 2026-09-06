@@ -1,0 +1,10 @@
+command: python -m pytest -q brain/tests --tb=line
+cwd: E:\AI WORK\硬件黑客松
+exit_code: 0
+tests: 97 passed
+warning: existing StarletteDeprecationWarning from fastapi.testclient
+isolation: NiulaiBrain() uses :memory:; isolation tests included in targeted run (10 passed)
+live_8000: GET http://127.0.0.1:8000/health -> {"status":"ok"} (no version; process not restarted)
+resolved_version_in_this_tree: f4379f32b1b1 (git --short=12 HEAD before this commit)
+main_py_sha256: f1186fc8eaa9b49e74cb5afac2d4f8ed6a9bbdd8a9f2fa621f5f8421a820d1b7
+source_before: f4379f32b1b190fd9dd187daf1f365dca8830771

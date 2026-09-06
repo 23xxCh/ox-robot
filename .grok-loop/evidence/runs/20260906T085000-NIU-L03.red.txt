@@ -1,0 +1,20 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+________________ test_health_version_is_not_placeholder_0_1_0 _________________
+brain\tests\test_protocol.py:316: in test_health_version_is_not_placeholder_0_1_0
+    assert version != "0.1.0"
+E   AssertionError: assert '0.1.0' != '0.1.0'
+__________________ test_health_version_env_override_is_used ___________________
+brain\tests\test_protocol.py:324: in test_health_version_env_override_is_used
+    assert body["version"] == "cafef00d1234"
+E   AssertionError: assert '0.1.0' == 'cafef00d1234'
+_______________ test_health_version_falls_back_to_source_digest _______________
+AttributeError: 'module' object at brain.app.main has no attribute '_git_executable'
+=========================== short test summary info ===========================
+FAILED brain/tests/test_protocol.py::test_health_version_is_not_placeholder_0_1_0
+FAILED brain/tests/test_protocol.py::test_health_version_env_override_is_used
+FAILED brain/tests/test_protocol.py::test_health_version_falls_back_to_source_digest
+exit=1
+command: python -m pytest -q brain/tests/test_protocol.py::test_health_version_is_not_placeholder_0_1_0 brain/tests/test_protocol.py::test_health_version_env_override_is_used brain/tests/test_protocol.py::test_health_version_falls_back_to_source_digest --tb=short
+cwd: E:\AI WORK\硬件黑客松
+note: captured before resolve_brain_version implementation

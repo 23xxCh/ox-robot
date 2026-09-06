@@ -81,7 +81,7 @@
       "id": "NIU-L03",
       "priority": 1,
       "title": "礼貌语音失败恢复与版本可观测",
-      "status": "READY",
+      "status": "DONE",
       "depends_on": [
         "NIU-L00"
       ],
@@ -98,7 +98,10 @@
         "默认不重启不属于自己的现役进程，服务集成结果独立记录"
       ],
       "verification": "mock provider failure tests and API tests; real audio not inferred",
-      "completion_scope": "software_only"
+      "completion_scope": "software_only",
+      "completed_episode": "20260906T085000-NIU-L03",
+      "completed_commit": "227f99d",
+      "notes": "abort/ASR/TTS fail already in 90dfba7; this episode makes /health version identify git short hash or src-digest. Live uvicorn not restarted. checker=unavailable."
     },
     {
       "id": "NIU-L04",
