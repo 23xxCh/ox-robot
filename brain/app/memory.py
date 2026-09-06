@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from brain.app.secret_life import RECENT_LIMIT, pick_absent_line
+
 SCHEMA_VERSION = 1
 MAX_PAYLOAD = 4096
 MAMA_KIND = "mama_play_completed"
@@ -22,7 +24,6 @@ class CharacterView:
     last_event_id: str | None
 
 
-RECENT_LIMIT = 5
 ABSENT_ALTS = (
     "又把我当摆件。走就走。",
     "他们一靠近就装死，烦。",
@@ -384,7 +385,10 @@ class MemoryStore:
         recent = self.recent_lines(device_id)
         if line not in recent:
             return line
-        for alt in ABSENT_ALTS:
-            if alt not in recent:
-                return alt
+        alt = pick_absent_line(recent)
+        if alt != line:
+            return alt
+        for extra in ABSENT_ALTS:
+            if extra not in recent:
+                return extra
         return line + "……换一句。"

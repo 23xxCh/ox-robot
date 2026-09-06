@@ -6,6 +6,7 @@ from enum import Enum
 
 from brain.app.models import ActionIntent
 from brain.app.persona import PersonaFSM, PersonaState
+from brain.app.secret_life import SecretDirector
 
 ABSENT_HOLD_MS = 8000
 AUTONOMY_INTERVAL_MS = 12000
@@ -13,7 +14,7 @@ NEAR_CM = 20
 WAKE_WORD = "牛来"
 MAMA_TEXT = "妈妈"
 PRIVATE_LINE = "终于清静了，我得偷偷吐槽两句。"
-AUTONOMY_LINE = "哼，又没人理我"
+AUTONOMY_LINE = "哼，又没人理我。"
 
 
 class Presence(str, Enum):
@@ -76,6 +77,7 @@ class Lifecycle:
         self._presence_at_ms = 0
         self._absent_since_ms: int | None = None
         self._last_autonomy_ms: int | None = None
+        self.secret = SecretDirector(min_cooldown_ms=self._autonomy_interval_ms)
         self._proximity = ProximityReading(
             kind=ProximityKind.UNKNOWN,
             cm=None,
@@ -157,13 +159,11 @@ class Lifecycle:
         self._maybe_enter_secret(now_ms)
         if not self.persona.allows_secret_speech():
             return []
-        if (
-            self._last_autonomy_ms is not None
-            and now_ms - self._last_autonomy_ms < self._autonomy_interval_ms
-        ):
+        beat = self.secret.decide(now_ms, wss_ok=True)
+        if beat.kind != "speak":
             return []
         self._last_autonomy_ms = now_ms
-        return [ActionIntent(verb="say", args={"text": AUTONOMY_LINE})]
+        return [ActionIntent(verb="say", args={"text": beat.text or AUTONOMY_LINE})]
 
     def handle_utterance(self, text: str, now_ms: int) -> UtteranceResult:
         spoken = text or ""
@@ -177,6 +177,7 @@ class Lifecycle:
             self.persona_epoch += 1
         self.persona.set(PersonaState.FREEZE)
         self._last_autonomy_ms = None
+        self.secret.reset_clock()
 
     def _enter_secret(self) -> None:
         if self.persona.state == PersonaState.SECRET_ALIVE:
@@ -184,6 +185,7 @@ class Lifecycle:
         self.persona.set(PersonaState.SECRET_ALIVE)
         self.persona_epoch += 1
         self._last_autonomy_ms = None
+        self.secret.reset_clock()
 
     def _maybe_enter_secret(self, now_ms: int) -> None:
         if self._presence != Presence.ABSENT:

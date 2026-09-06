@@ -26,9 +26,10 @@ from brain.app.schemas import MAX_PERFORM_TTL_MS
 from brain.app.scripting import motion_intents
 from brain.app.persona import PersonaState
 from brain.app.providers import looks_like_utf8
+from brain.app.secret_life import SecretDirector
 
 MAX_AUDIO_BYTES = 512 * 1024
-MUTTER_INTERVAL_S = 11.0
+MUTTER_INTERVAL_S = 12.0
 DEFAULT_MEMORY = Path(__file__).resolve().parents[1] / "data" / "niulai-memory.sqlite"
 logger = logging.getLogger(__name__)
 
@@ -159,14 +160,19 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
         mutter_task: asyncio.Task[None] | None = None
         device_id = _device_id(ws)
         last_spoken = ""
+        director = SecretDirector(min_cooldown_ms=int(MUTTER_INTERVAL_S * 1000))
 
         async def mutter_loop() -> None:
             nonlocal last_spoken
             while True:
-                await asyncio.sleep(MUTTER_INTERVAL_S)
+                await asyncio.sleep(director.next_delay_s())
+                beat = director.decide(int(time.time() * 1000), wss_ok=True)
+                if beat.kind != "speak":
+                    continue
                 origin = normalize_origin(getattr(ws.app.state, "origin", None))
                 line, _intents = _compose_line(current, device_id, "ABSENT", origin, "")
                 last_spoken = line
+                director.remember(line)
                 await ws.send_json(
                     {
                         "type": "llm",
@@ -199,6 +205,8 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
             origin = normalize_origin(getattr(ws.app.state, "origin", None))
             line, _intents = _compose_line(current, device_id, "ABSENT", origin, "")
             last_spoken = line
+            director.note_spoken(int(time.time() * 1000))
+            director.remember(line)
             await ws.send_json(
                 {
                     "type": "llm",

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from brain.app.secret_life import pick_absent_line, recent_from_memory
+
 MAX_FIELD = 2000
 PRESENCE_VALUES = {"PRESENT", "ABSENT", "UNKNOWN"}
 
@@ -54,13 +56,11 @@ def mock_speak(origin: dict[str, str], presence: str, user_text: str, memory: st
     name = origin["name"]
     text = (user_text or "").strip()
     if presence == "ABSENT":
-        notes = (memory or "").strip()
-        if notes:
-            bit = notes.split("。")[0][:40]
-            return f"{name}嘀咕：{bit}。他们听不见。"
-        if not text:
-            return f"{name}自己嘀咕：{origin['secret']}"
-        return f"{name}对着空气说：{text}……算了，他们听不见。"
+        recent = recent_from_memory(memory)
+        line = pick_absent_line(recent)
+        if "妈妈" in line:
+            line = pick_absent_line(recent + [line])
+        return line
     if "牛来" in text:
         return f"我在，你说。我是{name}。"
     if not text:
