@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "contract_version": "2026-09-06-v1",
+  "source_commit": "f4379f32b1b190fd9dd187daf1f365dca8830771",
+  "checker": "01a0742c-fb5a-7fd1-85a8-ef6fe00945d0",
+  "hardware_tested": false,
+  "previous_source_commit": "381d86ac5973e88271a22989404c832368deb3da",
+  "previous_total_score": 36.0,
+  "total_score": 36.75,
+  "delta": 0.75,
+  "critical_gates_passed": false,
+  "dimension_scores": {
+    "EX": 35.0,
+    "FE": 35.0,
+    "BE": 50.0,
+    "DB": 45.0,
+    "FW": 25.0,
+    "SEC": 40.0,
+    "QA": 30.0,
+    "AR": 40.0
+  },
+  "weakest": ["EX-5", "QA-3", "FW-1"],
+  "notes": "Independent rescore. Only BE-3 1→2. No item scored 3 or 4. CI on f4379f3 failed pip pins; overlay=native hash MATCH, heard NOT_RUN. Software ceiling ~50."
+}

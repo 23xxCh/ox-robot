@@ -24,8 +24,8 @@
   },
   "last_episode": "20260906T090600-P0-6",
   "successful_episodes": 5,
-  "score_review_status": "BASELINE_36_AT_381d86a",
-  "last_scorecard": ".grok-loop/scores/20260906T0830-381d86a.json",
+  "score_review_status": "RESCRED_36_75_AT_f4379f3",
+  "last_scorecard": ".grok-loop/scores/20260906T0900-f4379f3.json",
   "recent_failure_signatures": [],
   "waiting_for": [
     "live_uvicorn_reload_NEEDS_HUMAN",

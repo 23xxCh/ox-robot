@@ -8,6 +8,8 @@
 | 2026-09-06 | NIU-L00 PASS_SOFTWARE | 769bd45 | 导入不再打开现役SQLite；3 isolation + pytest exit 0；Checker PASS_SOFTWARE；未测真机 | [run](evidence/runs/20260906T074530-NIU-L00.json)；scheduler 01a073f8a1627741b5506ed398a38cbb；next NIU-L02 |
 | 2026-09-06 | NIU-L02 PASS_SOFTWARE | a6e47f8 | 冻结后迟到 walk 拒绝；近距才冻腿；礼貌短走保留。BUILD/硬件 NOT_RUN | [run](evidence/runs/20260906T080000-NIU-L02.json)；next NIU-L01 |
 | 2026-09-06 | NIU-L01 PASS_SOFTWARE | 381d86a | 独处冷却/安静/5句去重；PRESENT 后不再 tick 私密。硬件 NOT_RUN | [run](evidence/runs/20260906T081500-NIU-L01.json)；第3轮成功，启动独立评分 |
+| 2026-09-06 | FAST_TRACK A/B/C + CI | f4379f3 | abort 丢旧秘密音频；ClawBot；脸契约；Actions。本地 94 passed | 独立复评 36.0→36.75；CG 全 NOT_RUN |
+
 | 2026-09-06 | NIU-L03 PASS_SOFTWARE | 227f99d | /health version=git short or src-digest; abort leftover already in 90dfba7; 97 pytest; checker=unavailable; live 8000 not restarted | [run](evidence/runs/20260906T085000-NIU-L03.json); next P0-6-VERIFY |
 | 2026-09-06 | P0-6-VERIFY PASS_SOFTWARE | f08ad6a | 16 walk/ttl/freeze tests; docs already ttl<=2000; no flash | [run](evidence/runs/20260906T090600-P0-6.json); next NIU-L04 |
 
