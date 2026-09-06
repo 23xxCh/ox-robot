@@ -76,7 +76,7 @@
 - [x] 妈妈先播再礼貌（`PlaySound(OGG_MAMA)+2.2s` 仍在 `application.cc`）
 - [x] P0-4 记忆接到 WSS 说话路径（wake 计妈妈次数；PRESENT/abort 记下打断；ABSENT 翻旧账且最近 5 句去重。测例 `test_wake_counts_mama_and_absent_uses_interrupt`）
 - [x] P0-5 独处冷却 / 不重复 / 断链本地 secret ogg（SecretDirector：≥11s 冷却、每 3 拍可安静、最近 5 句去重；WSS 失败轮播 secret1/2/3.ogg。测例 `test_director_cools_down_allows_quiet_and_rotates_local_clips`）
-- [ ] P0-6 PRESENT Lua 走路源码已有，测例+文档对齐；默认不烧板
+- [x] P0-6 PRESENT Lua 走路源码已有，测例+文档对齐；默认不烧板（`test_present_walk_sends_motion_with_ttl_cap` + freeze 负例 + `niu.walk` ttl≤2000；firmware README 已写礼貌短走。硬件未烧）
 - [x] P0-3/P0-7 礼貌对话回归测例 + `/health` 可识别版本（`test_hello_listen_roundtrip` / `test_present_wake_is_polite_not_roast` / abort+ASR/TTS 失败恢复 / `test_health_version_is_not_placeholder_0_1_0`；`pytest brain/tests` 97 passed。现役 8000 未重启，现场 GET 仍仅 `status=ok`）
 - [x] P0-8 pytest 全绿并 push（63 passed，`d79fe06`）
 - [ ] P0-9 交卷稿与锁定行为一致

@@ -1,0 +1,32 @@
+{
+  "episode_id": "20260906T090600-P0-6",
+  "task_id": "P0-6-VERIFY",
+  "started_at": "2026-09-06T09:06:00+08:00",
+  "ended_at": "2026-09-06T09:10:00+08:00",
+  "source_before": "f08ad6a",
+  "source_after": "f08ad6a",
+  "changed_paths": [
+    "GOAL.md"
+  ],
+  "acceptance_hash": "32ed90b11d8ff6fd7555e8ba7256e032b60f6386a180df416578554624c91f22",
+  "commands": [
+    {
+      "command": "python -m pytest -q brain/tests/test_protocol.py::test_present_walk_sends_motion_with_ttl_cap brain/tests/test_protocol.py::test_absent_walk_utterance_sends_niulai_motion brain/tests/test_lua.py brain/tests/test_scripting.py brain/tests/test_freeze_mcp.py --tb=line",
+      "cwd": "E:\\AI WORK\\硬件黑客松",
+      "exit_code": 0,
+      "evidence_path": ".grok-loop/evidence/runs/20260906T090600-P0-6.pytest.txt",
+      "source_hash": "f08ad6afollows-227f99d",
+      "tests": "16 passed"
+    }
+  ],
+  "checker": {
+    "identity": null,
+    "verdict": "unavailable",
+    "evidence": "no second writer; verify-only of existing tests/docs"
+  },
+  "verdict": "PASS_SOFTWARE",
+  "hardware_status": "NOT_RUN",
+  "cost": "unknown",
+  "failure_signature": null,
+  "next_action": "NIU-L04 overlay vs native niulai_life desync (ParkLegs vs HoldCenter); overlay-only unless exclusive native ownership. No flash."
+}
