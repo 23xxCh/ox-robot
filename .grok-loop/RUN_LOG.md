@@ -10,6 +10,7 @@
 | 2026-09-06 | NIU-L01 PASS_SOFTWARE | 381d86a | 独处冷却/安静/5句去重；PRESENT 后不再 tick 私密。硬件 NOT_RUN | [run](evidence/runs/20260906T081500-NIU-L01.json)；第3轮成功，启动独立评分 |
 | 2026-09-06 | FAST_TRACK A/B/C + CI | f4379f3 | abort 丢旧秘密音频；ClawBot；脸契约；Actions。本地 94 passed | 独立复评 36.0→36.75；CG 全 NOT_RUN |
 | 2026-09-06 | consume+health hash+CI | 2c12b7f | ABSENT 打断消费一次；/health 带 firmware_hash；Actions 绿；100 pytest | 独立复评 36.75→37.75 |
+| 2026-09-06 | IDF BUILD_PASS | 8477f5f | `python scripts/build.py niulai-s3-expand-v17` exit 0；xiaozhi.bin 09:25 sha256 60387221…；overlay=native AE5245A671E7；未烧录 | [build-evidence](../firmware/xiaozhi-niulai/build-evidence.md) |
 
 
 | 2026-09-06 | NIU-L03 PASS_SOFTWARE | 227f99d | /health version=git short or src-digest; abort leftover already in 90dfba7; 97 pytest; checker=unavailable; live 8000 not restarted | [run](evidence/runs/20260906T085000-NIU-L03.json); next P0-6-VERIFY |
