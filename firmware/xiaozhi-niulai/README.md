@@ -42,7 +42,7 @@ KY-016 三针模块只有一路 PWM，所以现在只会红。要红绿蓝混色
 KY-016：`-`=GND，中间=5V，`S`=GPIO14。
 KY-004：`-`=GND，中间 VCC 可空，`S`=GPIO18。
 
-屏上是黄牛来脸。人靠近：腿停，打断吐槽，切断私有 WSS，等人喊；脸只用听/笑。人离开约 8 秒：随机小晃 + 吐槽脸；吐槽走私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（LLM + 千问 Dylan，约 11 秒一句）。拒绝 xiaozhi.me。音量 90。
+屏上是黄牛来脸。人靠近：腿停，打断吐槽，切断私有 WSS，等人喊；脸只用听/笑。人离开约 8 秒：随机小晃 + 吐槽脸；吐槽走私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（冷却、可安静、最近 5 句不重复）。断链播本地 `secret1/2/3.ogg`，不假装云端在聊。拒绝 xiaozhi.me。音量 90。
 
 生命循环在 `niulai_life.cc`：200 ms 一轮，靠近立刻 1500 µs 冻腿。礼貌对话里若让它动，可短促 `niu.walk`/`niu.turn`（ttl≤2000）；靠近仍冻。SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 随机步态短促再停，避免 360° 舵机空转。靠近不播 `mama.ogg`。唤醒 / BOOT / 键：先播电影「妈妈」约 2.2 秒，再 `ParkActuators()` 并礼貌听、想、说。
 
@@ -79,3 +79,17 @@ COM 口按设备管理器改。不要闪 COM6，除非 brain 挂了或 WLAN 不�
 - `main/assets/lang_config.h`：`OGG_MAMA` / `OGG_HI` / `OGG_SECRET1..3` 指向本地 Opus 剪辑。
 
 不要打开 xiaozhi.me 点升级。
+
+## Overlay vs native：本地 secret 剪辑
+
+Overlay `AskBrainSecret()` **只** `Schedule(NiulaiEnterSecret)`，本目录没有 `PlaySound`、没有 clip 轮播。断链本地闷声在 native `main/application.cc` `NiulaiEnterSecret()`：WSS 打开失败才 `PlaySound(OGG_SECRET1/2/3)` 轮转；每 3 拍可安静。靠近路径走 `NiulaiEnterPresent()`，**不**播 `OGG_MAMA`。
+
+| Overlay 资源 | Native 符号 / 路径 |
+|---|---|
+| `firmware/xiaozhi-niulai/secret1.ogg` | `Lang::Sounds::OGG_SECRET1` ← `main/assets/common/secret1.ogg` |
+| `firmware/xiaozhi-niulai/secret2.ogg` | `Lang::Sounds::OGG_SECRET2` ← `main/assets/common/secret2.ogg` |
+| `firmware/xiaozhi-niulai/secret3.ogg` | `Lang::Sounds::OGG_SECRET3` ← `main/assets/common/secret3.ogg` |
+| `firmware/xiaozhi-niulai/mama.ogg` | `Lang::Sounds::OGG_MAMA` ← `main/assets/common/mama.ogg`（仅唤醒 / BOOT / KY-004） |
+| `firmware/xiaozhi-niulai/hi.ogg` | `Lang::Sounds::OGG_HI` ← `main/assets/common/hi.ogg` |
+
+资源存在 ≠ 已进当前 native 板型编译 ≠ 喇叭听过。三列证据见 [fallback-evidence.md](fallback-evidence.md)。本切片不复制 native 文件、不烧板、不声称 heard-on-device。

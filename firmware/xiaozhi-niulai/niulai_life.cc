@@ -20,7 +20,7 @@ namespace {
 constexpr float kPresentCm = 55.0f;
 constexpr int kPresentStreak = 1;
 constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
-constexpr int64_t kBrainRetryUs = 11LL * 1000 * 1000;
+constexpr int64_t kBrainRetryUs = 18LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
 constexpr uint32_t kMaxDuty = (1u << 14) - 1;
@@ -86,7 +86,14 @@ void NiulaiLife::Loop() {
                 SecretWalk();
                 if (now - last_brain_us_ >= kBrainRetryUs) {
                     last_brain_us_ = now;
-                    AskBrainSecret();
+                    secret_retry_++;
+                    // ABSENT-only quiet window: wiggle, no WSS / local ogg.
+                    // Asked PRESENT walks are not banned here (PulseMotion when not close).
+                    if (secret_retry_ % 3 == 0) {
+                        ESP_LOGI(TAG, "secret quiet window");
+                    } else {
+                        AskBrainSecret();
+                    }
                 }
             }
         }
@@ -229,6 +236,7 @@ void NiulaiLife::OnPresence(Presence next) {
         face->AllowSecretFaces(next == kAbsent);
     }
     if (next == kPresent) {
+        secret_retry_ = 0;
         ParkLegs();
         PostFace("listening", "");
         Application::GetInstance().Schedule([]() {
@@ -238,6 +246,7 @@ void NiulaiLife::OnPresence(Presence next) {
     }
     if (next == kAbsent) {
         wiggle_phase_ = 0;
+        secret_retry_ = 0;
         last_brain_us_ = esp_timer_get_time();
         PostFace("winking", "");
         AskBrainSecret();
@@ -245,6 +254,11 @@ void NiulaiLife::OnPresence(Presence next) {
 }
 
 void NiulaiLife::AskBrainSecret() {
+    // Overlay schedules WSS only. No local clip rotate here.
+    // PlaySound(OGG_SECRET1/2/3) lives in native application.cc
+    // NiulaiEnterSecret() after OpenAudioChannelWithConfigRefresh() fails.
+    // Mapping: firmware/xiaozhi-niulai/secretN.ogg ==
+    //   xiaozhi-esp32/main/assets/common/secretN.ogg == Lang::Sounds::OGG_SECRETN.
     Application::GetInstance().Schedule([]() {
         Application::GetInstance().NiulaiEnterSecret();
     });
