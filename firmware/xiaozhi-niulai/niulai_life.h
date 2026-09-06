@@ -22,6 +22,7 @@ private:
     int64_t last_present_us_ = 0;
     int64_t last_brain_us_ = 0;
     int present_streak_ = 0;
+    int secret_retry_ = 0;
     int wiggle_phase_ = 0;
     int gait_ = 0;
     int log_tick_ = 0;
