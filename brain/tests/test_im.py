@@ -202,3 +202,98 @@ def test_im_require_token_rejects_missing_header(monkeypatch) -> None:
     allowed = client.post("/im/feishu/event", json=payload, headers={"token": "1"})
     assert allowed.status_code == 200
     assert len(brain.im_outbox) == 1
+
+
+def test_clawbot_ilink_text_in_secret_alive_replies_and_may_walk() -> None:
+    brain = NiulaiBrain()
+    brain.persona.set(PersonaState.SECRET_ALIVE)
+    client = TestClient(create_app(brain))
+    response = client.post(
+        "/im/clawbot/event",
+        json={
+            "session_id": "sess_niu",
+            "from_user_id": "wxid_owner",
+            "msg_id": "ilink-1",
+            "item_list": [{"type": "text", "text": "起来走走"}],
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["ok"] is True
+    assert body["configured"] is False
+    assert body["delivered"] is False
+    assert brain.im_outbox
+    last = brain.im_outbox[-1]
+    assert last.channel == "clawbot"
+    assert last.chat_id == "sess_niu"
+    assert last.text
+    assert any(item.verb == "walk" for item in last.intents)
+
+
+def test_clawbot_openclaw_hook_shape() -> None:
+    brain = NiulaiBrain()
+    brain.persona.set(PersonaState.SECRET_ALIVE)
+    client = TestClient(create_app(brain))
+    response = client.post(
+        "/im/clawbot/event",
+        json={"message": "起来走走", "to": "wxid_owner", "sessionKey": "hook:1"},
+    )
+    assert response.status_code == 200
+    last = brain.im_outbox[-1]
+    assert last.channel == "clawbot"
+    assert last.chat_id == "wxid_owner"
+
+
+def test_clawbot_during_freeze_does_not_walk_or_leak() -> None:
+    brain = NiulaiBrain()
+    brain.persona.set(PersonaState.FREEZE)
+    client = TestClient(create_app(brain))
+    client.post(
+        "/im/clawbot/event",
+        json={"from": "wxid_owner", "text": "起来走走", "msg_id": "c1"},
+    )
+    last = brain.im_outbox[-1]
+    assert last.intents == []
+    assert last.text == "……"
+    assert "走走" not in last.text
+    assert "吐槽" not in last.text
+
+
+def test_clawbot_duplicate_msgid_does_not_repeat(monkeypatch) -> None:
+    brain = NiulaiBrain()
+    brain.persona.set(PersonaState.SECRET_ALIVE)
+    client = TestClient(create_app(brain))
+    payload = {
+        "session_id": "sess_niu",
+        "msg_id": "dup-claw-9",
+        "item_list": [{"type": "text", "text": "起来走走"}],
+    }
+    assert client.post("/im/clawbot/event", json=payload).status_code == 200
+    second = client.post("/im/clawbot/event", json=payload)
+    assert second.status_code == 200
+    assert second.json().get("deduped") is True
+    assert len(brain.im_outbox) == 1
+
+
+def test_clawbot_sends_when_token_set(monkeypatch) -> None:
+    sent: list[tuple[str, str]] = []
+
+    def fake_send(chat_id: str, text: str) -> bool:
+        sent.append((chat_id, text))
+        return True
+
+    monkeypatch.setenv("NIULAI_CLAWBOT_TOKEN", "test-token")
+    monkeypatch.setattr("brain.app.im.send_clawbot_text", fake_send)
+    monkeypatch.setattr("brain.app.im.clawbot_configured", lambda: True)
+    brain = NiulaiBrain()
+    brain.persona.set(PersonaState.SECRET_ALIVE)
+    client = TestClient(create_app(brain))
+    response = client.post(
+        "/im/clawbot/event",
+        json={"from": "wxid_owner", "text": "你在吗", "msg_id": "send-1"},
+    )
+    assert response.status_code == 200
+    assert response.json()["delivered"] is True
+    assert sent
+    assert sent[0][0] == "wxid_owner"
+    assert sent[0][1]

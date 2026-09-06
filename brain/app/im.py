@@ -8,6 +8,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
 from brain.app.brain import NiulaiBrain
+from brain.app.clawbot import clawbot_configured, clawbot_event_id, parse_clawbot_text, send_clawbot_text
 
 router = APIRouter()
 
@@ -122,3 +123,31 @@ async def wechat_callback(request: Request) -> JSONResponse:
         chat_id, text = parsed
         _brain(request).handle_user_text(text, channel="wechat", chat_id=chat_id)
     return JSONResponse({"ok": True})
+
+
+@router.post("/im/clawbot/event")
+async def clawbot_event(request: Request) -> JSONResponse:
+    denied = _missing_token_response(request)
+    if denied is not None:
+        return denied
+    payload = await request.json()
+    if not isinstance(payload, dict):
+        return JSONResponse({"ok": False, "error": "invalid-json"}, status_code=400)
+    if _already_seen(request, "clawbot", clawbot_event_id(payload)):
+        return JSONResponse({"ok": True, "deduped": True})
+    parsed = parse_clawbot_text(payload)
+    if not parsed:
+        return JSONResponse({"ok": True, "ignored": True})
+    chat_id, text = parsed
+    outbound = _brain(request).handle_user_text(text, channel="clawbot", chat_id=chat_id)
+    delivered = False
+    if clawbot_configured() and outbound.text:
+        delivered = send_clawbot_text(chat_id, outbound.text)
+    return JSONResponse(
+        {
+            "ok": True,
+            "channel": "clawbot",
+            "delivered": delivered,
+            "configured": clawbot_configured(),
+        }
+    )
