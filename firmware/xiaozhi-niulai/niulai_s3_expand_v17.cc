@@ -137,20 +137,10 @@ private:
             }
             app.ToggleChatState();
         });
-        // KY-004 active-low poke: local "妈妈" only, no cloud chat.
+        // KY-004: start polite chat on the private laptop brain.
         key_button_.OnClick([this]() {
             life_.ParkLegs();
-            auto& app = Application::GetInstance();
-            auto* codec = GetAudioCodec();
-            if (codec != nullptr) {
-                codec->SetOutputVolume(90);
-            }
-            app.GetAudioService().ResetDecoder();
-            app.PlaySound(Lang::Sounds::OGG_MAMA);
-            if (display_ != nullptr) {
-                display_->SetEmotion("happy");
-                display_->SetChatMessage("assistant", "妈妈");
-            }
+            Application::GetInstance().NiulaiStartPoliteChat();
         });
     }
 
@@ -225,6 +215,10 @@ public:
 
     void ParkActuators() override {
         life_.ParkLegs();
+    }
+
+    void NiulaiMotion(const char* dir, int ms) override {
+        life_.PulseMotion(dir, ms);
     }
 
     virtual Backlight* GetBacklight() override {

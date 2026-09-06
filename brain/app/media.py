@@ -3,9 +3,9 @@
 StreamingPcmToOpus / OpusPacketPacer follow
 E:\\AI TOY\\xiaozhi-claw\\backend\\realtime\\media.py (ffmpeg libopus 24 kHz 60 ms).
 
-ASR of raw Opus is not implemented here: listen.stop with non-UTF-8 binary
-falls back in the websocket handler. TTS prefers DashScope qwen3-tts-flash
-(Dylan), then Windows SAPI, then a short beep.
+Device mic is raw Opus frames (16 kHz 60 ms). ASR muxes them to Ogg Opus,
+decodes to WAV, then calls DashScope qwen3-asr-flash. TTS prefers
+qwen3-tts-flash (Dylan), then Windows SAPI, then a short beep.
 """
 
 from __future__ import annotations
@@ -26,10 +26,12 @@ from typing import Any
 import httpx
 
 OPUS_SAMPLE_RATE = 24000
+MIC_SAMPLE_RATE = 16000
 OPUS_FRAME_MS = 60
 QWEN_TTS_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
 QWEN_TTS_MODEL = "qwen3-tts-flash"
 QWEN_TTS_VOICE = "Dylan"
+QWEN_ASR_MODEL = "qwen3-asr-flash"
 logger = logging.getLogger(__name__)
 
 
@@ -205,6 +207,188 @@ def beep_pcm(*, duration_s: float = 0.36, freq: float = 440.0) -> bytes:
         sample = int(9000 * env * math.sin(2 * math.pi * freq * index / OPUS_SAMPLE_RATE))
         out.extend(struct.pack("<h", max(-32767, min(32767, sample))))
     return bytes(out)
+
+
+def pcm_s16le_to_wav(pcm: bytes, sample_rate: int = MIC_SAMPLE_RATE) -> bytes:
+    return (
+        struct.pack(
+            "<4sI4s4sIHHIIHH4sI",
+            b"RIFF",
+            36 + len(pcm),
+            b"WAVE",
+            b"fmt ",
+            16,
+            1,
+            1,
+            sample_rate,
+            sample_rate * 2,
+            2,
+            16,
+            b"data",
+            len(pcm),
+        )
+        + pcm
+    )
+
+
+def _ogg_crc(data: bytes) -> int:
+    crc = 0
+    for byte in data:
+        crc ^= byte << 24
+        for _ in range(8):
+            if crc & 0x80000000:
+                crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF
+            else:
+                crc = (crc << 1) & 0xFFFFFFFF
+    return crc
+
+
+def _ogg_page(header_type: int, granule: int, seq: int, body: bytes, *, serial: int = 1) -> bytes:
+    lacing = bytearray()
+    remaining = len(body)
+    offset = 0
+    chunks: list[bytes] = []
+    while remaining >= 255:
+        lacing.append(255)
+        chunks.append(body[offset : offset + 255])
+        offset += 255
+        remaining -= 255
+    lacing.append(remaining)
+    chunks.append(body[offset:])
+    header = bytearray()
+    header.extend(b"OggS")
+    header.append(0)
+    header.append(header_type)
+    header.extend(struct.pack("<Q", granule))
+    header.extend(struct.pack("<I", serial))
+    header.extend(struct.pack("<I", seq))
+    header.extend(b"\x00\x00\x00\x00")
+    header.append(len(lacing))
+    header.extend(lacing)
+    page = bytes(header) + b"".join(chunks)
+    crc = _ogg_crc(page)
+    return page[:22] + struct.pack("<I", crc) + page[26:]
+
+
+def raw_opus_packets_to_ogg(packets: list[bytes], sample_rate: int = MIC_SAMPLE_RATE) -> bytes:
+    head = struct.pack("<8sBBHIhB", b"OpusHead", 1, 1, 312, sample_rate, 0, 0)
+    tags = b"OpusTags" + struct.pack("<I", 6) + b"niulai" + struct.pack("<I", 0)
+    pages = [
+        _ogg_page(0x02, 0, 0, head),
+        _ogg_page(0x00, 0, 1, tags),
+    ]
+    granule = 0
+    seq = 2
+    samples_per_packet = sample_rate * OPUS_FRAME_MS // 1000
+    for index, packet in enumerate(packets):
+        if not packet:
+            continue
+        granule += samples_per_packet
+        header_type = 0x04 if index == len(packets) - 1 else 0x00
+        pages.append(_ogg_page(header_type, granule, seq, packet))
+        seq += 1
+    return b"".join(pages)
+
+
+async def ogg_opus_to_wav(ogg: bytes, ffmpeg_path: str, sample_rate: int = MIC_SAMPLE_RATE) -> bytes:
+    process = await asyncio.create_subprocess_exec(
+        ffmpeg_path,
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-i",
+        "pipe:0",
+        "-f",
+        "wav",
+        "-ac",
+        "1",
+        "-ar",
+        str(sample_rate),
+        "pipe:1",
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    wav, error = await process.communicate(ogg)
+    if process.returncode != 0 or not wav:
+        detail = error.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"FFmpeg could not decode mic opus: {detail}")
+    return wav
+
+
+def qwen_asr_text(data: dict[str, Any]) -> str:
+    output = data.get("output") if isinstance(data, dict) else None
+    if isinstance(output, dict):
+        text = str(output.get("text") or "").strip()
+        if text:
+            return text
+        choices = output.get("choices") or []
+        if choices:
+            message = choices[0].get("message") or {}
+            content = message.get("content")
+            if isinstance(content, str) and content.strip():
+                return content.strip()
+            if isinstance(content, list):
+                parts: list[str] = []
+                for item in content:
+                    if isinstance(item, dict):
+                        parts.append(str(item.get("text") or ""))
+                    else:
+                        parts.append(str(item))
+                joined = "".join(parts).strip()
+                if joined:
+                    return joined
+    return ""
+
+
+async def try_qwen_asr(packets: list[bytes], ffmpeg_path: str) -> str | None:
+    if not packets:
+        return None
+    from brain.app.llm import _load_env_files
+
+    _load_env_files()
+    key = (os.environ.get("DASHSCOPE_API_KEY") or os.environ.get("QWEN_API_KEY") or "").strip()
+    if not key:
+        return None
+    try:
+        ogg = raw_opus_packets_to_ogg(packets)
+        wav = await ogg_opus_to_wav(ogg, ffmpeg_path)
+    except Exception:
+        logger.exception("mic opus decode failed")
+        return None
+    import base64
+
+    encoded = base64.b64encode(wav).decode("ascii")
+    payload = {
+        "model": os.environ.get("DASHSCOPE_ASR_MODEL") or QWEN_ASR_MODEL,
+        "input": {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [{"audio": f"data:audio/wav;base64,{encoded}"}],
+                }
+            ]
+        },
+    }
+    url = os.environ.get("DASHSCOPE_TTS_URL") or QWEN_TTS_URL
+    try:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.post(
+                url,
+                json=payload,
+                headers={
+                    "Authorization": f"Bearer {key}",
+                    "Content-Type": "application/json",
+                },
+            )
+            if response.status_code != 200:
+                logger.warning("qwen asr http %s", response.status_code)
+                return None
+            text = qwen_asr_text(response.json())
+            return text or None
+    except Exception:
+        logger.exception("qwen asr failed")
+        return None
 
 
 async def wav_to_pcm(wav: bytes, ffmpeg_path: str) -> bytes:

@@ -12,6 +12,7 @@ public:
     void Start(Display* display);
     void SnapFreeze();
     void ParkLegs();
+    void PulseMotion(const char* dir, int ms);
 
 private:
     enum Presence { kUnknown, kPresent, kAbsent };
@@ -24,6 +25,9 @@ private:
     int wiggle_phase_ = 0;
     int gait_ = 0;
     int log_tick_ = 0;
+    int64_t motion_until_us_ = 0;
+    bool directed_ = false;
+    bool last_close_ = false;
     ledc_channel_t channels_[4] = {
         LEDC_CHANNEL_2, LEDC_CHANNEL_3, LEDC_CHANNEL_4, LEDC_CHANNEL_5
     };

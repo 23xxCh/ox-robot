@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "d31b0468358b11393e4f5cb9d3f276ee2b70ae66",
+  "rule": "Acceptance changes require a documented current user requirement and independent review; existence of code is not hardware completion.",
+  "tasks": [
+    {
+      "id": "NIU-L00",
+      "priority": 0,
+      "title": "隔离测试导入与现役SQLite",
+      "status": "DONE",
+      "completed_episode": "20260906T074530-NIU-L00",
+      "completed_commit": "769bd459a7fbf8eaf181d6fc9ab7e3a1b90ef23d",
+      "depends_on": [],
+      "paths": [
+        "brain/app/main.py",
+        "brain/tests/conftest.py",
+        "brain/tests/test_memory.py"
+      ],
+      "problem": "main模块全局create_app默认打开brain/data/niulai-memory.sqlite，测试导入可能触碰现役库。",
+      "acceptance": [
+        "用临时目录或连接spy证明导入及测试均不访问现役SQLite，不用真实库做探针",
+        "正式服务仍可按原配置打开持久库",
+        "相关隔离回归和完整pytest通过，记录受测代码hash"
+      ],
+      "verification": "isolated targeted tests plus python -m pytest -q brain/tests",
+      "completion_scope": "software_only"
+    },
+    {
+      "id": "NIU-L01",
+      "priority": 1,
+      "title": "独处有冷却、有留白、不反复同一句",
+      "status": "DONE",
+      "completed_episode": "20260906T081500-NIU-L01",
+      "completed_commit": "381d86a",
+      "depends_on": [
+        "NIU-L00"
+      ],
+      "paths": [
+        "brain/app/main.py",
+        "brain/app/memory.py",
+        "brain/tests/test_autonomy.py",
+        "brain/tests/test_protocol.py"
+      ],
+      "problem": "当前mutter_loop仍固定11秒发言；先打磨节奏，不重写完整场景JSON系统。",
+      "acceptance": [
+        "可控时钟下验证冷却和安静分支，保持最近5句去重",
+        "无人条件失效后不再生成或发送新的私密内容",
+        "断开连接后不残留mutter任务，保持妈妈后礼貌对话的锁定行为"
+      ],
+      "verification": "autonomy/protocol/memory tests with fake clock and deterministic inputs",
+      "completion_scope": "software_only; actual performance needs separate hardware evidence",
+      "product_feature": "P-01"
+    },
+    {
+      "id": "NIU-L02",
+      "priority": 0,
+      "title": "冻结与迟到动作竞争条件",
+      "status": "DONE",
+      "completed_episode": "20260906T080000-NIU-L02",
+      "completed_commit": "a6e47f8",
+      "depends_on": [
+        "NIU-L00"
+      ],
+      "paths": [
+        "brain/app/main.py",
+        "brain/app/mcp_broker.py",
+        "brain/tests/test_protocol.py",
+        "firmware/xiaozhi-niulai/niulai_life.cc",
+        "firmware/xiaozhi-niulai/niulai_life.h"
+      ],
+      "problem": "已有PRESENT按请求动作和TTL截断，需验证新冻结之后旧动作不能恢复执行。",
+      "acceptance": [
+        "先红后绿复现取消后迟到动作，白名单与TTL上限2000ms保持",
+        "新安全事件优先于PRESENT动作请求，未确认安全条件时拒绝执行",
+        "软件模拟、构建与真机时延分别记录；本任务不自动驱动实体或烧录"
+      ],
+      "verification": "protocol/freezing negative tests; native build only if environment verified",
+      "completion_scope": "software/build; physical cancellation remains NEEDS_HUMAN"
+    },
+    {
+      "id": "NIU-L03",
+      "priority": 1,
+      "title": "礼貌语音失败恢复与版本可观测",
+      "status": "READY",
+      "depends_on": [
+        "NIU-L00"
+      ],
+      "paths": [
+        "brain/app/main.py",
+        "brain/app/media.py",
+        "brain/tests/test_protocol.py",
+        "brain/tests/test_media.py"
+      ],
+      "problem": "health=ok不能证明新代码已加载或音频链完整；检查abort/ASR/TTS异常后能继续互动。",
+      "acceptance": [
+        "模拟ASR/TTS超时和失败，abort后不发送旧私密音频，下一轮可继续",
+        "health或单独版本端点可识别服务版本但不泄露环境密钥",
+        "默认不重启不属于自己的现役进程，服务集成结果独立记录"
+      ],
+      "verification": "mock provider failure tests and API tests; real audio not inferred",
+      "completion_scope": "software_only"
+    },
+    {
+      "id": "NIU-L04",
+      "priority": 1,
+      "title": "固件双树可复现与本地fallback验证",
+      "status": "READY",
+      "depends_on": [],
+      "paths": [
+        "firmware/xiaozhi-niulai/",
+        "docs/"
+      ],
+      "problem": "板型cc/h已一致但config.json不同；关键行为另在native application.cc。已存在OGG_SECRET1回退，不能报告为从零补全。",
+      "acceptance": [
+        "逐项记录overlay与native映射和配置差异，不盲目覆盖",
+        "从固定上游commit加明确patch可以构建同一行为，记录工具链与固件hash",
+        "验证本地fallback状态切换与素材选择；资源存在/源码分支/实际听到三种证据分开"
+      ],
+      "verification": "manifest/hash comparison; reproducible build; hardware playback remains pending",
+      "completion_scope": "source/build_only; native writes require ownership and scoped patch review",
+      "product_feature": "P-05"
+    },
+    {
+      "id": "NIU-L05",
+      "priority": 2,
+      "title": "当前行为与交卷材料、评分正文一致",
+      "status": "READY",
+      "depends_on": [],
+      "paths": [
+        "README.md",
+        "docs/review-niulai-architecture-2026-09-05.md",
+        "牛来机器人-Submission-2026-09-06.md",
+        "牛来机器人-Checkpoint2-进展说明-2026-09-06.md"
+      ],
+      "problem": "旧评分及README部分描述已过时，需要按实际代码与证据刷新，保留人工录像和提交待办。",
+      "acceptance": [
+        "全篇对齐当前锁定的妈妈后礼貌行为，消除头部新评分与正文旧能力相矛盾",
+        "八维评分引用当前commit和证据，明确未实测与未发布",
+        "仅生成本地提交材料，不自动发微信/飞书或公开交卷"
+      ],
+      "verification": "independent read-only consistency review plus file/link checks",
+      "completion_scope": "documents_only",
+      "score_contract": ".grok-loop/SCORECARD.md"
+    },
+    {
+      "id": "NIU-P02",
+      "product_feature": "P-02",
+      "priority": 2,
+      "title": "被打断的小事延续",
+      "status": "PRODUCT_BRIEF_REQUIRED",
+      "depends_on": [
+        "NIU-L00"
+      ],
+      "paths": [
+        "brain/app/memory.py",
+        "brain/app/main.py",
+        "brain/tests/test_memory.py"
+      ],
+      "acceptance": [
+        "一次中断只在后续无人场景使用，消费后不反复翻同一旧账",
+        "重复事件不重复计数，唤醒次数和已播完次数语义明确",
+        "只恢复意图不重播旧动作，真机连贯体验待独立录像"
+      ],
+      "verification": "PM brief then targeted software tests and independent review; hardware evidence recorded separately",
+      "completion_scope": "within confirmed product boundary; split into one 15-20 minute slice"
+    },
+    {
+      "id": "NIU-P03",
+      "product_feature": "P-03",
+      "priority": 2,
+      "title": "妈妈与听说表情连成一段表演",
+      "status": "PRODUCT_BRIEF_REQUIRED",
+      "depends_on": [
+        "NIU-L00"
+      ],
+      "paths": [
+        "firmware/xiaozhi-niulai/",
+        "brain/tests/test_protocol.py"
+      ],
+      "acceptance": [
+        "保留妈妈先播再礼貌；人在只用listening/happy",
+        "音频结束或取消后嘴动停止，迟到状态不恢复旧口型",
+        "源码/构建/实机音画记录分别验收，不自动烧录"
+      ],
+      "verification": "PM brief then targeted software tests and independent review; hardware evidence recorded separately",
+      "completion_scope": "within confirmed product boundary; split into one 15-20 minute slice"
+    },
+    {
+      "id": "NIU-P04",
+      "product_feature": "P-04",
+      "priority": 2,
+      "title": "排练台显示真实执行状态",
+      "status": "PRODUCT_BRIEF_REQUIRED",
+      "depends_on": [
+        "NIU-L00"
+      ],
+      "paths": [
+        "brain/app/api.py",
+        "brain/app/web/",
+        "brain/tests/test_web.py"
+      ],
+      "acceptance": [
+        "先核对真实前端路径和数据源，只修当前一条状态闭环",
+        "断线/等待/已接受/已完成/结果未知明确区分，模拟输入常驻标识",
+        "重复点击不重复执行，没有板端回执不宣称实物已完成"
+      ],
+      "verification": "PM brief then targeted software tests and independent review; hardware evidence recorded separately",
+      "completion_scope": "within confirmed product boundary; split into one 15-20 minute slice"
+    }
+  ]
+}

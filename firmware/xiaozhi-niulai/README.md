@@ -31,7 +31,7 @@ KY-016 三针模块只有一路 PWM，所以现在只会红。要红绿蓝混色
 | 功能 | GPIO | 说明 |
 |---|---|---|
 | KY-016 S（红） | **14** | PWM，共阴极，高电平更亮 |
-| KY-004 S | **18** | 上拉，按下为低；点一下播本地「妈妈」 |
+| KY-004 S | **18** | 上拉，按下为低；点一下开始礼貌听、想、说 |
 | 喇叭 MAX98357 | BCLK 15 / LRC 16 / DIN 7 | |
 | 屏 ST7789 | SCL 21 MOSI 47 RST 45 DC 40 CS 41 BL 42 | invert on |
 | 麦 I2S | WS 4 / SCK 5 / DIN 6 | 板载 |
@@ -42,17 +42,17 @@ KY-016 三针模块只有一路 PWM，所以现在只会红。要红绿蓝混色
 KY-016：`-`=GND，中间=5V，`S`=GPIO14。
 KY-004：`-`=GND，中间 VCC 可空，`S`=GPIO18。
 
-屏上是黄牛来脸。人靠近：腿停，喇叭说本地「妈妈」，切断私有 WSS。人离开约 8 秒：随机小晃；吐槽优先笔记本 `ws://192.168.18.242:8000/xiaozhi/v1/`，失败则本地 secret1.ogg。拒绝 xiaozhi.me。音量 90。
+屏上是黄牛来脸。人靠近：腿停，打断吐槽，切断私有 WSS，等人喊；脸只用听/笑。人离开约 8 秒：随机小晃 + 吐槽脸；吐槽走私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（LLM + 千问 Dylan，约 11 秒一句）。拒绝 xiaozhi.me。音量 90。
 
-生命循环在 `niulai_life.cc`：200 ms 一轮，有人时每拍都写 1500 µs，SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 随机步态约 800 ms，然后在 1500 µs 停约 2 s，避免 360° 舵机空转。靠近播 `hi.ogg`，离开轮播 `secret1/2/3.ogg`（均为 Opus）。唤醒 / BOOT / 键都会 `ParkActuators()`。
+生命循环在 `niulai_life.cc`：200 ms 一轮，靠近立刻 1500 µs 冻腿。礼貌对话里若让它动，可短促 `niu.walk`/`niu.turn`（ttl≤2000）；靠近仍冻。SECRET 可被近距立刻打断。超时 ≠ 确认无人。SECRET 随机步态短促再停，避免 360° 舵机空转。靠近不播 `mama.ogg`。唤醒 / BOOT / 键：先播电影「妈妈」约 2.2 秒，再 `ParkActuators()` 并礼貌听、想、说。
 
-## 唤醒与妈妈
+## 唤醒与礼貌对话
 
-- 唤醒词：`niu lai niu lai`（牛来牛来）
-- 唤醒后只播本地 `mama.ogg`，**不打开云端对话，也不走小智官网**
-- BOOT / 开始聆听同样只播「妈妈」，禁止连官方 websocket
+- 唤醒词：`niu lai`（单次「牛来」）
+- 唤醒后先播 `mama.ogg`（电影「妈妈」），再走私有大脑礼貌听、想、说，**不打开小智官网**
+- BOOT / 开始聆听同样：妈妈片段 → 礼貌对话，禁止连官方 websocket
 - 启动时跳过官方 OTA，避免被官网固件覆盖
-- KY-004 短按同样只播本地「妈妈」
+- KY-004 短按同样开始礼貌对话
 
 ## 编译烧录
 
@@ -68,13 +68,13 @@ python scripts/build.py niulai-s3-expand-v17
 idf.py -p COM6 flash monitor
 ```
 
-COM 口按设备管理器改。2026-09-05 19:57 已烧进 COM6（GPIO 10/11/9/13，Wrote 2807072 bytes，hash verified，RTS 复位）。靠近或播妈妈会 `ResetDecoder()`，SECRET 吐槽立刻停。烧完先看黄牛脸，再按 KY-004 或喊「牛来牛来」。左后黄线必须在 GPIO 9，不要接 12。
+COM 口按设备管理器改。不要闪 COM6，除非 brain 挂了或 WLAN 不再是 `192.168.10.95`。靠近会 `ResetDecoder()`，SECRET 吐槽立刻停。烧完先看黄牛脸，再按 KY-004 或喊「牛来」。左后黄线必须在 GPIO 9，不要接 12。
 
 ## 小智主干挂钩（不在本 overlay 目录里）
 
 这些改动在构建树 `E:\XIAOZHI_NATIVE\xiaozhi-esp32`，板型为 `niulai-s3-expand-v17` 时才生效：
 
-- `main/application.cc`：`IsNiulaiBoard()`。启动跳过官方 OTA/激活；拒绝打开官方 websocket 音频通道；唤醒 / BOOT / 开始聆听只播 `OGG_MAMA` 并 `ParkActuators()`。
+- `main/application.cc`：`IsNiulaiBoard()`。启动跳过官方 OTA/激活；拒绝打开官方 websocket 音频通道；唤醒 / BOOT / KY-004 走 `NiulaiStartPoliteChat()`（`PlaySound(OGG_MAMA)` + 2.2s 再听）；近距走 `NiulaiEnterPresent()` 冻腿打断吐槽。
 - `main/boards/common/board.h`：`virtual void ParkActuators() {}`，牛来板 override 成四腿 1500 µs。
 - `main/assets/lang_config.h`：`OGG_MAMA` / `OGG_HI` / `OGG_SECRET1..3` 指向本地 Opus 剪辑。
 

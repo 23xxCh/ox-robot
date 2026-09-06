@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 from brain.app.lifecycle import Lifecycle, Presence
+from brain.app.memory import MemoryStore
 from brain.app.persona import PersonaState
 
 
@@ -26,7 +28,7 @@ def test_persona_aliases_keep_old_enum_values() -> None:
     assert PersonaState.SECRET is PersonaState.SECRET_ALIVE
 
 
-def test_t01_mechanical_blocks_secret_speech_and_walk_wake_is_mama() -> None:
+def test_t01_mechanical_blocks_secret_speech_and_walk_wake_is_polite() -> None:
     life = Lifecycle()
     assert life.persona.state == PersonaState.FREEZE
     assert life.persona.state == PersonaState.MECHANICAL
@@ -38,11 +40,10 @@ def test_t01_mechanical_blocks_secret_speech_and_walk_wake_is_mama() -> None:
     assert all(item.verb != "walk" for item in hello.intents)
     assert hello.intents == []
 
-    mama = life.handle_utterance("嘿，牛来", now_ms=10)
-    assert mama.text == "妈妈"
-    assert all(item.verb != "walk" for item in mama.intents)
-    assert all(marker not in mama.text for marker in SECRET_MARKERS)
-    assert life.persona.state == PersonaState.FREEZE
+    wake = life.handle_utterance("嘿，牛来", now_ms=10)
+    assert wake.text == ""
+    assert all(item.verb != "walk" for item in wake.intents)
+    assert life.presence.value == Presence.PRESENT
     assert not life.persona.allows_secret_speech()
 
 
@@ -101,8 +102,7 @@ def test_present_during_secret_immediately_freezes_and_autonomy_is_empty() -> No
     assert life.persona.state == PersonaState.SECRET_ALIVE
 
     secret = life.handle_utterance("你好", now_ms=ABSENT_HOLD_MS + 1)
-    assert any(marker in secret.text for marker in SECRET_MARKERS)
-    assert secret.text != "妈妈"
+    assert secret.text == ""
 
     life.set_presence(Presence.PRESENT, source="operator_demo", now_ms=ABSENT_HOLD_MS + 50)
     assert life.persona.state == PersonaState.FREEZE
@@ -114,3 +114,25 @@ def test_present_during_secret_immediately_freezes_and_autonomy_is_empty() -> No
     hello = life.handle_utterance("你好", now_ms=ABSENT_HOLD_MS + 100)
     assert all(marker not in (hello.text or "") for marker in SECRET_MARKERS)
     assert hello.intents == []
+
+
+def test_absent_tick_consumes_interrupt_once(tmp_path: Path) -> None:
+    store = MemoryStore(tmp_path / "niulai.db")
+    store.note_interrupt("niu-1", "正要吐槽")
+    assert "上次被打断" in store.prompt_memory("niu-1", "ABSENT")
+    life = Lifecycle(autonomy_interval_ms=100, memory=store, device_id="niu-1")
+    life.set_presence(Presence.ABSENT, source="operator_demo", now_ms=0)
+    spoken: list[str] = []
+    now = ABSENT_HOLD_MS
+    for _ in range(6):
+        spoken.extend(_say_texts(life.tick(now)))
+        now += 100
+        if spoken:
+            break
+    assert spoken
+    assert all("妈妈" not in text for text in spoken)
+    assert all(item.verb != "walk" for item in life.tick(now))
+    after = store.prompt_memory("niu-1", "ABSENT")
+    assert "正要吐槽" not in after
+    assert "上次被打断" not in after
+    assert store.consume_interrupt("niu-1") is None

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "contract_version": "2026-09-06-v1",
+  "source_commit": "381d86ac5973e88271a22989404c832368deb3da",
+  "working_diff_hash": null,
+  "firmware_hash": null,
+  "checker": "01a07417-3e1c-7a62-a95e-7c80918d2a35",
+  "hardware_tested": false,
+  "total_score": 36.0,
+  "critical_gates_passed": false,
+  "dimension_scores": {
+    "EX": 35.0,
+    "FE": 35.0,
+    "BE": 45.0,
+    "DB": 45.0,
+    "FW": 25.0,
+    "SEC": 40.0,
+    "QA": 30.0,
+    "AR": 40.0
+  },
+  "weakest": ["EX-5", "QA-3", "FW-3"],
+  "notes": "Independent baseline after L00/L02/L01. No item scored 3/4. All CG NOT_RUN. Native overlay desynced. Dirty clawbot/firmware not scored."
+}

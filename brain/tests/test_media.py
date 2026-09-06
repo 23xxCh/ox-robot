@@ -2,7 +2,13 @@ from __future__ import annotations
 
 import asyncio
 
-from brain.app.media import qwen_audio_url, tts_pcm
+from brain.app.media import qwen_asr_text, qwen_audio_url, tts_pcm
+
+
+def test_qwen_asr_text_reads_output() -> None:
+    assert qwen_asr_text({"output": {"text": "牛来"}}) == "牛来"
+    assert qwen_asr_text({"output": {"choices": [{"message": {"content": "你好"}}]}}) == "你好"
+    assert qwen_asr_text({}) == ""
 
 
 def test_qwen_audio_url_reads_output_audio() -> None:

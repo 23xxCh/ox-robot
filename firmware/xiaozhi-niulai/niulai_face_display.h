@@ -12,8 +12,11 @@ public:
                      bool swap_xy);
     ~NiulaiLcdDisplay() override;
 
+    void SetupUI() override;
     void SetEmotion(const char* emotion) override;
+    void SetChatMessage(const char* role, const char* content) override;
     void ClearChatMessages() override;
+    void AllowSecretFaces(bool allow);
 
 private:
     lv_obj_t* face_ = nullptr;
@@ -36,13 +39,15 @@ private:
     lv_obj_t* blush_r_ = nullptr;
 
     lv_timer_t* anim_timer_ = nullptr;
-    char emotion_[24] = "neutral";
+    char emotion_[24] = "listening";
     int mouth_rest_h_ = 10;
     int blink_ticks_ = 0;
     int mouth_phase_ = 0;
     bool talking_ = false;
     bool blinking_ = false;
+    bool secret_ok_ = false;
 
+    void HideChrome();
     void BuildFace();
     void ApplyFace(const char* emotion);
     void StartAnim();

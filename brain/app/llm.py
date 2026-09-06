@@ -72,18 +72,23 @@ def _providers() -> list[tuple[str, str, str]]:
     return [(key, base, model) for key, base, model in specs if key]
 
 
-def speak(origin: dict[str, str], presence: str, user_text: str) -> tuple[str, str]:
+def speak(
+    origin: dict[str, str],
+    presence: str,
+    user_text: str,
+    memory: str = "",
+) -> tuple[str, str]:
     origin = normalize_origin(origin)
     if not llm_enabled():
-        return mock_speak(origin, presence, user_text), "mock"
-    prompt = system_prompt(origin, presence)
+        return mock_speak(origin, presence, user_text, memory=memory), "mock"
+    prompt = system_prompt(origin, presence, memory=memory)
     user = user_text.strip() if user_text.strip() else "（没有人说话，你自己来一句。）"
     try:
         text = _complete(prompt, user)
     except Exception:
-        return mock_speak(origin, presence, user_text), "mock"
+        return mock_speak(origin, presence, user_text, memory=memory), "mock"
     if not text:
-        return mock_speak(origin, presence, user_text), "mock"
+        return mock_speak(origin, presence, user_text, memory=memory), "mock"
     return text, "llm"
 
 

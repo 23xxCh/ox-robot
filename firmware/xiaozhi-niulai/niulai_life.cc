@@ -3,6 +3,7 @@
 #include "application.h"
 #include "board.h"
 #include "config.h"
+#include "niulai_face_display.h"
 
 #include <driver/gpio.h>
 #include <esp_log.h>
@@ -10,6 +11,7 @@
 #include <esp_rom_sys.h>
 #include <esp_timer.h>
 
+#include <cstring>
 #include <string>
 
 #define TAG "NiulaiLife"
@@ -18,7 +20,7 @@ namespace {
 constexpr float kPresentCm = 55.0f;
 constexpr int kPresentStreak = 1;
 constexpr int64_t kAbsentUs = 8LL * 1000 * 1000;
-constexpr int64_t kBrainRetryUs = 8LL * 1000 * 1000;
+constexpr int64_t kBrainRetryUs = 11LL * 1000 * 1000;
 constexpr uint32_t kEchoTimeoutUs = 25000;
 constexpr uint32_t kCenterUs = 1500;
 constexpr uint32_t kMaxDuty = (1u << 14) - 1;
@@ -53,6 +55,7 @@ void NiulaiLife::Loop() {
         float cm = ReadCm();
         int64_t now = esp_timer_get_time();
         bool close = cm > 1.0f && cm < kPresentCm;
+        last_close_ = close;
         if (close) {
             present_streak_++;
             last_present_us_ = now;
@@ -71,13 +74,20 @@ void NiulaiLife::Loop() {
             OnPresence(next);
         }
 
-        if (presence_ == kPresent || close) {
-            HoldCenter();
-        } else if (presence_ == kAbsent) {
+        if (close) {
+            ParkLegs();
+        } else if (now < motion_until_us_) {
             SecretWalk();
-            if (now - last_brain_us_ >= kBrainRetryUs) {
-                last_brain_us_ = now;
-                AskBrainSecret();
+        } else {
+            directed_ = false;
+            if (presence_ == kPresent) {
+                HoldCenter();
+            } else if (presence_ == kAbsent) {
+                SecretWalk();
+                if (now - last_brain_us_ >= kBrainRetryUs) {
+                    last_brain_us_ = now;
+                    AskBrainSecret();
+                }
             }
         }
 
@@ -131,7 +141,38 @@ void NiulaiLife::HoldCenter() {
 }
 
 void NiulaiLife::ParkLegs() {
+    motion_until_us_ = 0;
+    directed_ = false;
     HoldCenter();
+}
+
+void NiulaiLife::PulseMotion(const char* dir, int ms) {
+    if (presence_ == kUnknown || last_close_) {
+        if (dir != nullptr && strcmp(dir, "stop") == 0) {
+            ParkLegs();
+        }
+        return;
+    }
+    if (ms < 0) {
+        ms = 0;
+    }
+    if (ms > 2000) {
+        ms = 2000;
+    }
+    if (dir != nullptr && strcmp(dir, "stop") == 0) {
+        ParkLegs();
+        return;
+    }
+    if (dir != nullptr && (strcmp(dir, "left") == 0 || strcmp(dir, "right") == 0)) {
+        gait_ = 3;
+    } else if (dir != nullptr && strcmp(dir, "back") == 0) {
+        gait_ = 1;
+    } else {
+        gait_ = 0;
+    }
+    directed_ = true;
+    wiggle_phase_ = 1;
+    motion_until_us_ = esp_timer_get_time() + static_cast<int64_t>(ms) * 1000;
 }
 
 void NiulaiLife::SnapFreeze() {
@@ -141,7 +182,8 @@ void NiulaiLife::SnapFreeze() {
 
 void NiulaiLife::SecretWalk() {
     // Random gait, short burst then park so 360° servos stop.
-    if (wiggle_phase_ == 0) {
+    // Lua niu.walk/turn keeps the gait PulseMotion already chose.
+    if (!directed_ && wiggle_phase_ == 0) {
         gait_ = static_cast<int>(esp_random() % 4);
     }
     wiggle_phase_ = (wiggle_phase_ + 1) % 14;
@@ -183,9 +225,12 @@ void NiulaiLife::OnPresence(Presence next) {
     Presence prev = presence_;
     presence_ = next;
     ESP_LOGI(TAG, "presence %d -> %d", (int)prev, (int)next);
+    if (auto* face = static_cast<NiulaiLcdDisplay*>(display_)) {
+        face->AllowSecretFaces(next == kAbsent);
+    }
     if (next == kPresent) {
         ParkLegs();
-        PostFace("happy", "妈妈");
+        PostFace("listening", "");
         Application::GetInstance().Schedule([]() {
             Application::GetInstance().NiulaiEnterPresent();
         });
@@ -214,6 +259,8 @@ void NiulaiLife::PostFace(const char* emotion, const char* chat) {
     Display* display = display_;
     Application::GetInstance().Schedule([display, emo, msg]() {
         display->SetEmotion(emo.c_str());
-        display->SetChatMessage(msg.empty() ? "system" : "assistant", msg.c_str());
+        if (!msg.empty()) {
+            display->SetChatMessage("assistant", msg.c_str());
+        }
     });
 }
