@@ -55,6 +55,7 @@ void NiulaiLife::Loop() {
         float cm = ReadCm();
         int64_t now = esp_timer_get_time();
         bool close = cm > 1.0f && cm < kPresentCm;
+        last_close_ = close;
         if (close) {
             present_streak_++;
             last_present_us_ = now;
@@ -73,13 +74,15 @@ void NiulaiLife::Loop() {
             OnPresence(next);
         }
 
-        if (close || presence_ == kPresent) {
+        if (close) {
             ParkLegs();
         } else if (now < motion_until_us_) {
             SecretWalk();
         } else {
             directed_ = false;
-            if (presence_ == kAbsent) {
+            if (presence_ == kPresent) {
+                HoldCenter();
+            } else if (presence_ == kAbsent) {
                 SecretWalk();
                 if (now - last_brain_us_ >= kBrainRetryUs) {
                     last_brain_us_ = now;
@@ -144,7 +147,7 @@ void NiulaiLife::ParkLegs() {
 }
 
 void NiulaiLife::PulseMotion(const char* dir, int ms) {
-    if (presence_ == kPresent || presence_ == kUnknown) {
+    if (presence_ == kUnknown || last_close_) {
         if (dir != nullptr && strcmp(dir, "stop") == 0) {
             ParkLegs();
         }
