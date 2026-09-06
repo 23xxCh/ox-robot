@@ -7,6 +7,7 @@ import logging
 import random
 import shutil
 import time
+from collections.abc import Callable
 from typing import Any
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -80,16 +81,27 @@ def _hello_audio_params(opus: bool) -> dict[str, Any]:
     }
 
 
-async def _send_opus_audio(ws: WebSocket, text: str, ffmpeg_path: str | None) -> None:
+async def _send_opus_audio(
+    ws: WebSocket,
+    text: str,
+    ffmpeg_path: str | None,
+    still_current: Callable[[], bool] | None = None,
+) -> None:
     if not ffmpeg_path:
         logger.warning("ffmpeg not found; Xiaozhi will see TTS text but no Opus frames")
         return
     try:
         pcm = await tts_pcm(text, ffmpeg_path)
+        if still_current is not None and not still_current():
+            return
         # Device only queues decode while in speaking; tts start is applied on
         # its main loop, so give it a tick before the first packet.
         await asyncio.sleep(0.05)
-        await send_opus_pcm(ws.send_bytes, pcm, ffmpeg_path)
+        if still_current is not None and not still_current():
+            return
+        await send_opus_pcm(ws.send_bytes, pcm, ffmpeg_path, alive=still_current)
+    except asyncio.CancelledError:
+        raise
     except Exception:
         logger.exception("Opus TTS encode failed")
 
@@ -100,12 +112,21 @@ async def _speak(
     *,
     audio_format: str,
     ffmpeg_path: str | None,
+    still_current: Callable[[], bool] | None = None,
 ) -> None:
     try:
+        if still_current is not None and not still_current():
+            return
         await ws.send_json({"type": "tts", "state": "start"})
+        if still_current is not None and not still_current():
+            return
         await ws.send_json({"type": "tts", "state": "sentence_start", "text": text})
         if audio_format == "opus":
-            await _send_opus_audio(ws, text, ffmpeg_path)
+            await _send_opus_audio(
+                ws, text, ffmpeg_path, still_current=still_current
+            )
+        if still_current is not None and not still_current():
+            return
         await ws.send_json({"type": "tts", "state": "stop"})
     except (WebSocketDisconnect, RuntimeError):
         return
@@ -145,7 +166,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
 
     @app.get("/health")
     async def health() -> dict[str, str]:
-        return {"status": "ok"}
+        return {"status": "ok", "version": app.version}
 
     @app.websocket("/xiaozhi/v1/")
     async def device_ws(ws: WebSocket) -> None:
@@ -160,12 +181,18 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
         mutter_task: asyncio.Task[None] | None = None
         device_id = _device_id(ws)
         last_spoken = ""
+        speech_generation = 0
         director = SecretDirector(min_cooldown_ms=int(MUTTER_INTERVAL_S * 1000))
+
+        def speak_guard() -> Callable[[], bool]:
+            token = speech_generation
+            return lambda: speech_generation == token
 
         async def mutter_loop() -> None:
             nonlocal last_spoken
             while True:
                 await asyncio.sleep(director.next_delay_s())
+                still_current = speak_guard()
                 beat = director.decide(int(time.time() * 1000), wss_ok=True)
                 if beat.kind != "speak":
                     continue
@@ -173,6 +200,8 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                 line, _intents = _compose_line(current, device_id, "ABSENT", origin, "")
                 last_spoken = line
                 director.remember(line)
+                if not still_current():
+                    continue
                 await ws.send_json(
                     {
                         "type": "llm",
@@ -187,6 +216,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                     line,
                     audio_format=audio_format,
                     ffmpeg_path=ffmpeg_path,
+                    still_current=still_current,
                 )
 
         def ensure_mutter() -> None:
@@ -195,18 +225,22 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                 mutter_task = asyncio.create_task(mutter_loop())
 
         def stop_mutter() -> None:
-            nonlocal mutter_task
+            nonlocal mutter_task, speech_generation
+            speech_generation += 1
             if mutter_task is not None:
                 mutter_task.cancel()
                 mutter_task = None
 
         async def speak_absent() -> None:
             nonlocal last_spoken
+            still_current = speak_guard()
             origin = normalize_origin(getattr(ws.app.state, "origin", None))
             line, _intents = _compose_line(current, device_id, "ABSENT", origin, "")
             last_spoken = line
             director.note_spoken(int(time.time() * 1000))
             director.remember(line)
+            if not still_current():
+                return
             await ws.send_json(
                 {
                     "type": "llm",
@@ -221,8 +255,10 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                 line,
                 audio_format=audio_format,
                 ffmpeg_path=ffmpeg_path,
+                still_current=still_current,
             )
-            ensure_mutter()
+            if still_current():
+                ensure_mutter()
 
         try:
             while True:
@@ -319,6 +355,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                             current, device_id, "PRESENT", origin, heard
                         )
                         last_spoken = line
+                        still_current = speak_guard()
                         await ws.send_json({"type": "stt", "text": heard})
                         await ws.send_json({"type": "llm", "text": line, "emotion": "happy"})
                         await _speak(
@@ -326,6 +363,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                             line,
                             audio_format=audio_format,
                             ffmpeg_path=ffmpeg_path,
+                            still_current=still_current,
                         )
                         continue
                     if state == "stop":
@@ -337,7 +375,14 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         transcript = current.providers.transcribe(payload)
                         if not transcript and payload and not looks_like_utf8(payload):
                             if ffmpeg_path:
-                                transcript = (await try_qwen_asr(frame_packets, ffmpeg_path)) or ""
+                                try:
+                                    transcript = (
+                                        await try_qwen_asr(frame_packets, ffmpeg_path)
+                                    ) or ""
+                                except Exception:
+                                    logger.exception("ASR failed")
+                                    transcript = ""
+                        still_current = speak_guard()
                         await ws.send_json({"type": "stt", "text": transcript})
                         current.handle_utterance(transcript, now_ms=int(time.time() * 1000))
                         presence = session_presence if session_presence in {"PRESENT", "ABSENT"} else "PRESENT"
@@ -369,6 +414,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                                 reply,
                                 audio_format=audio_format,
                                 ffmpeg_path=ffmpeg_path,
+                                still_current=still_current,
                             )
                         else:
                             await ws.send_json({"type": "tts", "state": "start"})

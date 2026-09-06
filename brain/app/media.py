@@ -522,10 +522,17 @@ async def try_qwen_tts_pcm(text: str, ffmpeg_path: str) -> bytes | None:
 
 
 async def tts_pcm(text: str, ffmpeg_path: str) -> bytes:
-    spoken = await try_qwen_tts_pcm(text, ffmpeg_path)
+    spoken: bytes | None = None
+    try:
+        spoken = await try_qwen_tts_pcm(text, ffmpeg_path)
+    except Exception:
+        logger.exception("qwen tts raised")
     if spoken:
         return spoken
-    spoken = await try_sapi_pcm(text, ffmpeg_path)
+    try:
+        spoken = await try_sapi_pcm(text, ffmpeg_path)
+    except Exception:
+        logger.exception("sapi tts raised")
     if spoken:
         return spoken
     return beep_pcm()
@@ -535,6 +542,8 @@ async def send_opus_pcm(
     send_bytes: Callable[[bytes], Awaitable[None]],
     pcm: bytes,
     ffmpeg_path: str,
+    *,
+    alive: Callable[[], bool] | None = None,
 ) -> int:
     """Encode s16le 24 kHz PCM and pace raw Opus packets to the device. Returns frames sent."""
     encoder = StreamingPcmToOpus(ffmpeg_path)
@@ -542,6 +551,8 @@ async def send_opus_pcm(
 
     async def _send(packet: bytes) -> bool:
         nonlocal sent
+        if alive is not None and not alive():
+            return False
         await send_bytes(packet)
         sent += 1
         return True
@@ -554,7 +565,7 @@ async def send_opus_pcm(
             await encoder.write(pcm)
         await encoder.finish()
         await pump
-    except Exception:
+    except (Exception, asyncio.CancelledError):
         await encoder.cancel()
         pump.cancel()
         with contextlib.suppress(asyncio.CancelledError):

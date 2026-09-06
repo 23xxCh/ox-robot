@@ -32,3 +32,17 @@ def test_tts_pcm_prefers_qwen(monkeypatch) -> None:
     monkeypatch.setattr("brain.app.media.try_qwen_tts_pcm", fake_qwen)
     monkeypatch.setattr("brain.app.media.try_sapi_pcm", fake_sapi)
     assert asyncio.run(tts_pcm("独处碎碎念", "ffmpeg")) == b"qwen-pcm"
+
+
+def test_tts_pcm_does_not_raise_when_providers_fail(monkeypatch) -> None:
+    async def boom_qwen(text: str, ffmpeg_path: str) -> bytes | None:
+        raise RuntimeError("qwen down")
+
+    async def boom_sapi(text: str, ffmpeg_path: str) -> bytes | None:
+        raise RuntimeError("sapi down")
+
+    monkeypatch.setattr("brain.app.media.try_qwen_tts_pcm", boom_qwen)
+    monkeypatch.setattr("brain.app.media.try_sapi_pcm", boom_sapi)
+    pcm = asyncio.run(tts_pcm("独处碎碎念", "ffmpeg"))
+    assert isinstance(pcm, bytes)
+    assert pcm

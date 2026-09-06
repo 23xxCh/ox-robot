@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import asyncio
+
 from fastapi.testclient import TestClient
 
 from brain.app.brain import NiulaiBrain
-from brain.app.main import create_app
+from brain.app.main import _send_opus_audio, create_app
 
 
 def test_hello_listen_roundtrip_emits_stt_llm_tts() -> None:
@@ -287,3 +289,197 @@ def test_opus_hello_binary_non_utf8_yields_tts_stop_without_ffmpeg() -> None:
                 break
         assert llm_text == "我在，你再说一次。"
         assert tts_stopped
+
+
+def test_health_returns_ok_version_without_secrets(monkeypatch) -> None:
+    monkeypatch.setenv("DASHSCOPE_API_KEY", "sk-leak-dashscope")
+    monkeypatch.setenv("API_KEY", "sk-leak-api-key")
+    monkeypatch.setenv("NIULAI_TOKEN", "leak-token-value")
+    app = create_app(NiulaiBrain())
+    client = TestClient(app)
+    response = client.get("/health")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ok"
+    assert isinstance(body.get("version"), str) and body["version"]
+    assert body["version"] == app.version
+    assert set(body) == {"status", "version"}
+    raw = response.text
+    for leak in ("API_KEY", "DASHSCOPE", "token", "sk-leak", "leak-token", ".env"):
+        assert leak.lower() not in raw.lower()
+
+
+def test_abort_after_absent_drops_late_secret_tts_and_listen_still_replies(
+    monkeypatch,
+) -> None:
+    sent: list[bytes] = []
+
+    async def late_tts(text: str, ffmpeg_path: str) -> bytes:
+        try:
+            await asyncio.sleep(0.12)
+        except asyncio.CancelledError:
+            await asyncio.sleep(0.05)
+        return f"pcm:{text}".encode("utf-8")
+
+    async def record_opus(send_bytes, pcm, ffmpeg_path, **kwargs) -> int:
+        sent.append(pcm)
+        return 1
+
+    monkeypatch.setattr("brain.app.main.tts_pcm", late_tts)
+    monkeypatch.setattr("brain.app.main.send_opus_pcm", record_opus)
+    monkeypatch.setattr(
+        "brain.app.secret_life.SecretDirector.next_delay_s", lambda self: 0.02
+    )
+
+    app = create_app(NiulaiBrain())
+    app.state.ffmpeg_path = "ffmpeg"
+    client = TestClient(app)
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json(
+            {
+                "type": "hello",
+                "version": 1,
+                "audio_params": {"format": "opus", "sample_rate": 16000},
+            }
+        )
+        assert ws.receive_json()["type"] == "hello"
+        ws.send_json({"type": "niulai", "presence": "ABSENT"})
+        secret = ""
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg.get("type") == "llm" and msg.get("text"):
+                secret = str(msg["text"])
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                break
+        assert secret
+        first_sends = len(sent)
+        ws.send_json({"type": "abort"})
+        ws.send_json({"type": "niulai", "presence": "PRESENT"})
+        ws.send_json({"type": "listen", "state": "detect", "text": "你好"})
+        polite = False
+        leftover_secret_tts = False
+        tts_stopped = False
+        saw_stt = False
+        for _ in range(24):
+            msg = ws.receive_json()
+            text = str(msg.get("text") or "")
+            if msg.get("type") == "stt":
+                saw_stt = True
+            if saw_stt and msg.get("type") in {"tts", "llm"} and text:
+                if secret in text:
+                    leftover_secret_tts = True
+                if "你好" in text or "我在" in text:
+                    polite = True
+            if msg.get("type") == "tts" and msg.get("state") == "stop" and polite:
+                tts_stopped = True
+                break
+        assert saw_stt
+        assert polite
+        assert tts_stopped
+        assert leftover_secret_tts is False
+        for item in sent[first_sends:]:
+            decoded = item.decode("utf-8", errors="replace")
+            assert secret not in decoded
+            assert "你好" in decoded or "我在" in decoded
+
+
+def test_failed_tts_does_not_raise_and_next_listen_replies(monkeypatch) -> None:
+    async def boom(text: str, ffmpeg_path: str) -> bytes:
+        raise RuntimeError("tts down")
+
+    monkeypatch.setattr("brain.app.main.tts_pcm", boom)
+    app = create_app(NiulaiBrain())
+    app.state.ffmpeg_path = "ffmpeg"
+    client = TestClient(app)
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json(
+            {
+                "type": "hello",
+                "version": 1,
+                "audio_params": {"format": "opus", "sample_rate": 16000},
+            }
+        )
+        assert ws.receive_json()["type"] == "hello"
+        ws.send_json({"type": "listen", "state": "detect", "text": "牛来"})
+        first_stop = False
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                first_stop = True
+                break
+        assert first_stop
+        ws.send_json({"type": "listen", "state": "detect", "text": "你好"})
+        texts: list[str] = []
+        second_stop = False
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg.get("text"):
+                texts.append(str(msg["text"]))
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                second_stop = True
+                break
+        assert second_stop
+        assert any("你好" in item or "我在" in item or "牛来" in item for item in texts)
+
+
+def test_failed_tts_pcm_does_not_raise_from_handler(monkeypatch) -> None:
+    async def boom(text: str, ffmpeg_path: str) -> bytes:
+        raise RuntimeError("tts down")
+
+    monkeypatch.setattr("brain.app.main.tts_pcm", boom)
+
+    class _DeadSocket:
+        async def send_bytes(self, data: bytes) -> None:
+            raise AssertionError("failed tts must not send leftover audio")
+
+    asyncio.run(_send_opus_audio(_DeadSocket(), "哼，又没人理我。", "ffmpeg"))
+
+
+def test_asr_failure_does_not_break_next_listen(monkeypatch) -> None:
+    async def boom(packets, ffmpeg_path) -> str | None:
+        raise RuntimeError("asr down")
+
+    async def silent_tts(text: str, ffmpeg_path: str) -> bytes:
+        return b""
+
+    async def no_opus(*args, **kwargs) -> int:
+        return 0
+
+    monkeypatch.setattr("brain.app.main.try_qwen_asr", boom)
+    monkeypatch.setattr("brain.app.main.tts_pcm", silent_tts)
+    monkeypatch.setattr("brain.app.main.send_opus_pcm", no_opus)
+    app = create_app(NiulaiBrain())
+    app.state.ffmpeg_path = "ffmpeg"
+    client = TestClient(app)
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json(
+            {
+                "type": "hello",
+                "version": 1,
+                "audio_params": {"format": "opus", "sample_rate": 16000},
+            }
+        )
+        assert ws.receive_json()["type"] == "hello"
+        ws.send_json({"type": "listen", "state": "start"})
+        ws.send_bytes(b"\xff\xfb\x90\x00opus")
+        ws.send_json({"type": "listen", "state": "stop"})
+        first_stop = False
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                first_stop = True
+                break
+        assert first_stop
+        ws.send_json({"type": "listen", "state": "detect", "text": "牛来"})
+        texts: list[str] = []
+        second_stop = False
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg.get("text"):
+                texts.append(str(msg["text"]))
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                second_stop = True
+                break
+        assert second_stop
+        assert any("我在" in item for item in texts)
+        assert all("妈妈" not in item for item in texts)
