@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
 import json
 import logging
+import os
 import random
 import shutil
+import subprocess
 import time
 from collections.abc import Callable
 from typing import Any
@@ -32,7 +35,58 @@ from brain.app.secret_life import SecretDirector
 MAX_AUDIO_BYTES = 512 * 1024
 MUTTER_INTERVAL_S = 12.0
 DEFAULT_MEMORY = Path(__file__).resolve().parents[1] / "data" / "niulai-memory.sqlite"
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 logger = logging.getLogger(__name__)
+
+
+def _git_executable() -> str | None:
+    found = shutil.which("git")
+    if found:
+        return found
+    for candidate in (
+        r"C:\Program Files\Git\cmd\git.exe",
+        r"C:\Program Files\Git\bin\git.exe",
+    ):
+        if Path(candidate).is_file():
+            return candidate
+    return None
+
+
+def _source_digest(path: Path | None = None) -> str:
+    return hashlib.sha256((path or Path(__file__)).read_bytes()).hexdigest()[:12]
+
+
+def resolve_brain_version() -> str:
+    pinned = (os.environ.get("NIULAI_BRAIN_VERSION") or "").strip()
+    if (
+        pinned
+        and len(pinned) <= 64
+        and all(ch.isalnum() or ch in ".-_" for ch in pinned)
+        and "sk-" not in pinned.lower()
+        and "token" not in pinned.lower()
+    ):
+        return pinned
+    git = _git_executable()
+    if git:
+        try:
+            proc = subprocess.run(
+                [git, "rev-parse", "--short=12", "HEAD"],
+                cwd=str(_REPO_ROOT),
+                check=False,
+                capture_output=True,
+                text=True,
+                timeout=2,
+            )
+            rev = (proc.stdout or "").strip()
+            if (
+                proc.returncode == 0
+                and 7 <= len(rev) <= 12
+                and all(ch in "0123456789abcdef" for ch in rev.lower())
+            ):
+                return rev
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+    return f"src-{_source_digest()}"
 
 
 def _device_id(ws: WebSocket) -> str:
@@ -156,7 +210,7 @@ async def _send_motion(
 
 
 def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
-    app = FastAPI(title="niulai-brain", version="0.1.0")
+    app = FastAPI(title="niulai-brain", version=resolve_brain_version())
     app.state.brain = brain or NiulaiBrain(memory_path=DEFAULT_MEMORY)
     app.state.ffmpeg_path = shutil.which("ffmpeg")
     app.state.origin = dict(DEFAULT_ORIGIN)

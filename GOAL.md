@@ -37,12 +37,13 @@
 | P0-7 | 大脑进程 | `0.0.0.0:8000` 健康。改 `brain/` 后优雅重启 uvicorn，不丢端口。WLAN 仍是 192.168.10.95。 |
 | P0-8 | 测试与仓库 | `python -m pytest` 全绿。overlay 与 native 板型目录同步。推 `23xxCh/ox-robot`。 |
 | P0-9 | 交卷材料 | Submission / Checkpoint2 / README / 飞书附录与真机行为一致。不写没做的能力。 |
+| P0-10 | 微信 ClawBot | 用 iLink/OpenClaw 接到用户已有的微信 ClawBot。微信消息走同一意图管道。人在场只礼貌回、不泄密、不远程走腿；人走开才可吐槽+短促走。无 token 时测例绿、只进发件箱，不假装已连上真微信。 |
 
 ## 不做（P1 / 禁止假装完成）
 
 - 外壳总装、真正四足步态闭环、第二块板、毫米波、六轴
 - 打开 xiaozhi.me / 官方 OTA / 合入完整 ESP-Claw
-- 飞书/微信遥控驱动腿
+- IM **绕过冻结** 远程走腿（人在场时微信不能驱动腿）
 - 完整 SPEC 场景 JSON 播放器、向量检索、微服务
 - **不要闪 COM6**，除非：(a) 大脑挂了且必须改固件 URL，或 (b) WLAN IP 变了，或 (c) 屏又全白。闪之前在回复里写原因。默认只改源码 + 本地编译。
 - 不要删 `NiulaiStartPoliteChat` 里的妈妈。不要把 PRESENT 无唤醒改回自动走路。
@@ -52,6 +53,7 @@
 - ≤3 分钟连续录像：妈妈 → 礼貌聊 → 靠近冻 → 离开 8 秒吐槽+表情
 - 把 `docs/feishu-checkpoint2-append.xml` 贴进飞书
 - 接线、外供 5V、机械装配
+- 微信里打开 ClawBot 插件并扫码；把 `NIULAI_CLAWBOT_TOKEN`（以及可选 `NIULAI_CLAWBOT_BASE_URL`）写进本机环境。没有 token 循环不得声称「微信已连通」
 
 循环每次只在进度里提醒这两项还没拍/没贴，不要把时间花在写新文档催人。
 
@@ -73,10 +75,24 @@
 - [x] P0-2 黄牛脸源码 + 已烧 COM6（2026-09-06 凌晨，SetupUI 后画脸）
 - [x] 妈妈先播再礼貌（`PlaySound(OGG_MAMA)+2.2s` 仍在 `application.cc`）
 - [x] P0-4 记忆接到 WSS 说话路径（wake 计妈妈次数；PRESENT/abort 记下打断；ABSENT 翻旧账且最近 5 句去重。测例 `test_wake_counts_mama_and_absent_uses_interrupt`）
-- [ ] P0-5 独处冷却 / 不重复 / 断链本地 secret ogg
+- [x] P0-5 独处冷却 / 不重复 / 断链本地 secret ogg（SecretDirector：≥11s 冷却、每 3 拍可安静、最近 5 句去重；WSS 失败轮播 secret1/2/3.ogg。测例 `test_director_cools_down_allows_quiet_and_rotates_local_clips`）
 - [ ] P0-6 PRESENT Lua 走路源码已有，测例+文档对齐；默认不烧板
-- [ ] P0-3/P0-7 礼貌对话回归测例；brain `/health` 保持 ok
+- [x] P0-3/P0-7 礼貌对话回归测例 + `/health` 可识别版本（`test_hello_listen_roundtrip` / `test_present_wake_is_polite_not_roast` / abort+ASR/TTS 失败恢复 / `test_health_version_is_not_placeholder_0_1_0`；`pytest brain/tests` 97 passed。现役 8000 未重启，现场 GET 仍仅 `status=ok`）
 - [x] P0-8 pytest 全绿并 push（63 passed，`d79fe06`）
 - [ ] P0-9 交卷稿与锁定行为一致
+- [x] P0-10 微信 ClawBot 适配器：`POST /im/clawbot/event`（iLink item_list + OpenClaw hook），无 token 只进发件箱；冻结不走腿。测例在 `test_im.py`。真微信仍差人扫码/`NIULAI_CLAWBOT_TOKEN`
 - [ ] 人：录像
 - [ ] 人：飞书粘贴
+- [ ] 人：ClawBot 扫码 / 填 token
+
+
+## 持续产品迭代入口（2026-09-06 新请求）
+
+用户新增要求：Grok持续迭代，并兼任产品经理设计功能、按固定标准提高整体评分。下一轮先读 [GROK_LOOP.md](GROK_LOOP.md)、[产品功能队列](.grok-loop/PRODUCT_BACKLOG.md) 与 [评分合同](.grok-loop/SCORECARD.md)，核对现有唯一循环后接管。
+
+本入口不改写以上锁定人格、接线和现役行为。12:00交卷版本仍冻结；截止后的持续改进进入隔离工作区，不自动更新样机。每3轮做一次产品优先级与独立评分复评，目标整体80分、各维至少60、生命体验/嵌入式/安全至少80，分数只随证据增长。文件写入不代表调度器已启动，首次接管需记录实际任务ID和单写者状态。
+
+
+## 快速完成调度覆盖（2026-09-06）
+
+用户要求提速。下一轮先执行 [.grok-loop/FAST_TRACK.md](.grok-loop/FAST_TRACK.md)：复用现有总控，最多3个开发子代理分管后端语音、固件、角色记忆；当前L02原写者保持文件所有权，同一文件只由一个人修改。完成即交，不等20分钟；分线针对性测试、总控统一集成回归。先完成核心演示内部联调，再推进整体80分目标，不降低安全和证据要求。状态文件由当前Grok总控维护，本次文档更新没有代为启动子代理。

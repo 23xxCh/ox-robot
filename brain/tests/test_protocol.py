@@ -309,6 +309,32 @@ def test_health_returns_ok_version_without_secrets(monkeypatch) -> None:
         assert leak.lower() not in raw.lower()
 
 
+def test_health_version_is_not_placeholder_0_1_0() -> None:
+    app = create_app(NiulaiBrain())
+    body = TestClient(app).get("/health").json()
+    version = str(body["version"])
+    assert version != "0.1.0"
+    assert not version.startswith("0.1")
+
+
+def test_health_version_env_override_is_used(monkeypatch) -> None:
+    monkeypatch.setenv("NIULAI_BRAIN_VERSION", "cafef00d1234")
+    app = create_app(NiulaiBrain())
+    body = TestClient(app).get("/health").json()
+    assert body["version"] == "cafef00d1234"
+    assert set(body) == {"status", "version"}
+
+
+def test_health_version_falls_back_to_source_digest(monkeypatch) -> None:
+    monkeypatch.delenv("NIULAI_BRAIN_VERSION", raising=False)
+    monkeypatch.setattr("brain.app.main.shutil.which", lambda _name: None)
+    monkeypatch.setattr("brain.app.main._git_executable", lambda: None)
+    app = create_app(NiulaiBrain())
+    version = TestClient(app).get("/health").json()["version"]
+    assert version.startswith("src-")
+    assert len(version) == len("src-") + 12
+
+
 def test_abort_after_absent_drops_late_secret_tts_and_listen_still_replies(
     monkeypatch,
 ) -> None:
