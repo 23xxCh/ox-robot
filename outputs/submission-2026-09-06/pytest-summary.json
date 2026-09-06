@@ -1,0 +1,18 @@
+{
+  "command": "C:\\Users\\22003\\miniconda3\\python.exe -B -m pytest -p no:cacheprovider brain/tests --basetemp=.scratch/submission-2026-09-06/pytest-full --tb=short -ra",
+  "started_at": "2026-09-06T11:30:41.3626172+08:00",
+  "finished_at": "2026-09-06T11:30:59.3871868+08:00",
+  "elapsed_wall_s": 18.018,
+  "exit_code": 0,
+  "scope": "offline software regression; no cloud or physical-device acceptance",
+  "env_note": "PYTEST_CURRENT_TEST prevents .env loading; conftest clears cloud and ClawBot credentials; bytecode/cache disabled",
+  "results": {
+    "passed": 181,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "pytest_elapsed_s": 14.41,
+    "run_count": 1
+  }
+}

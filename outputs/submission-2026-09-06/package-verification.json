@@ -1,0 +1,17 @@
+{
+  "archive": "niulai-code-2026-09-06.zip",
+  "files": 85,
+  "bytes": 387149,
+  "sha256": "13ac9aac0eece39bf995f734db7ecd18c5d37a0c754eda7fba1f3db6a6b04474",
+  "zip_crc_and_all_file_hashes_passed": true,
+  "tested_source_files_match": 51,
+  "excluded": [
+    ".env",
+    "brain/data",
+    "private device header",
+    "firmware binaries",
+    "flash backups",
+    "personal datasets",
+    "cache"
+  ]
+}

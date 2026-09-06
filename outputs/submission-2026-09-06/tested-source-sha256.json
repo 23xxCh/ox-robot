@@ -1,0 +1,206 @@
+[
+  {
+    "path": "brain/__init__.py",
+    "sha256": "814a0442abc5cf4084ca8940695ff56b22543a535ca29044460c02728aa1f450"
+  },
+  {
+    "path": "brain/requirements.txt",
+    "sha256": "08fc9c05881448101e5e4d10e55cf4ba9ecad1f4ae292ac6d063c8556a86dd25"
+  },
+  {
+    "path": "brain/app/__init__.py",
+    "sha256": "ad9ce63b2ba1a697efcd5c12dd75a978d51acb3519f684e32acfd4540e9351f6"
+  },
+  {
+    "path": "brain/app/__main__.py",
+    "sha256": "f6af662757c78d3d25d73130c9c2561ae09d07d9258aa4be3474e8c3451df393"
+  },
+  {
+    "path": "brain/app/api.py",
+    "sha256": "157427a4f2199cbeaf3698ca63c4e23e42f9ed8d04f61018e86b5c0d489c9dc2"
+  },
+  {
+    "path": "brain/app/auth.py",
+    "sha256": "1421d185e8327dedfae0ce7ee207cb83ed3dac9ee8eaf64362a309f9a55e87ee"
+  },
+  {
+    "path": "brain/app/brain.py",
+    "sha256": "608666d3b91c57b91c189bc83306316eedddd7bc8604ce0daa3272a30fdc4ccd"
+  },
+  {
+    "path": "brain/app/clawbot.py",
+    "sha256": "c297ca2db14b7b43c30a1d362d5174a9ca77e0faeca477cf2b8e70b8c1cdd4d4"
+  },
+  {
+    "path": "brain/app/im.py",
+    "sha256": "de4592693cde74ae51c347b64fbb9edb338ed7f000e0025502d4a2b1cc479c6c"
+  },
+  {
+    "path": "brain/app/lifecycle.py",
+    "sha256": "a4951484878f1be53a62e613447fbcd77f0ca1601241e022449fa0965ce9f62c"
+  },
+  {
+    "path": "brain/app/llm.py",
+    "sha256": "c4061801202fd1555cedf799d6f4f7db09b4f00199a97b9157a21d762e13f756"
+  },
+  {
+    "path": "brain/app/lua_sandbox.py",
+    "sha256": "a230c87f54c11fcae7b2d29737d88bec53439ebc255943c4f5809d728fd6f7f8"
+  },
+  {
+    "path": "brain/app/main.py",
+    "sha256": "285c2285f0bf3cf5c8b9dcf5a77be1c9f8682e91b9723e1e54ed9b74a70bd71c"
+  },
+  {
+    "path": "brain/app/mcp_broker.py",
+    "sha256": "d8466cfc3ca30bd21efad43a565e65354a82cb35a939e126c7ae42263e19b5db"
+  },
+  {
+    "path": "brain/app/media.py",
+    "sha256": "558aa1bb285b5e9bb7624d7a0c43418edb75c2b16339f0da434d5010894570a7"
+  },
+  {
+    "path": "brain/app/memory.py",
+    "sha256": "8399f7297d017517ccaa79a7b5a18793bfca9b665ca20c390235bedf12c179b5"
+  },
+  {
+    "path": "brain/app/models.py",
+    "sha256": "141b6d53d00772b862885129bd981964f3f067fccbfbb422467f12f8e0a07083"
+  },
+  {
+    "path": "brain/app/origin.py",
+    "sha256": "645adf84936ab2529ebbdfb41b4b53d28da191857b30888b23eed462ae7c79f8"
+  },
+  {
+    "path": "brain/app/persona.py",
+    "sha256": "ee5c9802df1da04cd3190ec8faf44c56a089fa7a6fdbbb070be986ec49cae5b8"
+  },
+  {
+    "path": "brain/app/providers.py",
+    "sha256": "dc08c29609ea94a94420d61542336a4994ed2dcb487b16c036174d1c949a5365"
+  },
+  {
+    "path": "brain/app/schemas.py",
+    "sha256": "06b32fc16d2917e540f5409b27cdef6b707c72fa6e57727183e10831fdefa195"
+  },
+  {
+    "path": "brain/app/scripting.py",
+    "sha256": "c961f37d09d67dda3331a1288107d06cbd1c8525ed80e3a0e44c0ccbddace184"
+  },
+  {
+    "path": "brain/app/secret_life.py",
+    "sha256": "c4669dc472861456b71b44969bc602897db67d9a52e45f1965ee182dcba49fc3"
+  },
+  {
+    "path": "brain/app/web/index.html",
+    "sha256": "48a8bd6b28eb137afd6ac8796647c08ca8c1440a225f41882ac69914adaf8390"
+  },
+  {
+    "path": "brain/app/web/life.html",
+    "sha256": "48423d07d8c4853f6ca6dc534ea650f612b99e97a3b0313170c1f0dfd6d2496f"
+  },
+  {
+    "path": "brain/app/web/life.js",
+    "sha256": "01a052895d8d72ee8899b1e4b1d28ed50f820187350ed2961c5d1101352a7a32"
+  },
+  {
+    "path": "brain/app/web/rehearsal.css",
+    "sha256": "2fff00782ce54abd22c99d3964a581286665207db148e7aaab23fb66f1759f0b"
+  },
+  {
+    "path": "brain/app/web/rehearsal.js",
+    "sha256": "6d5a16b3c2e18f92844e5b0de3c09154a948a6f18144c1a967e0b4e46142502b"
+  },
+  {
+    "path": "brain/scripts/gen_niulai_voice.py",
+    "sha256": "d938101b939a1fc665dad64215cac3ae2ba9b3af5b1cfe93d51beb61b145f6af"
+  },
+  {
+    "path": "brain/scripts/lua/wander.lua",
+    "sha256": "177a678b11a7778e7b57702f35952c438a140977e86d80c5e6c1177e57f6d11f"
+  },
+  {
+    "path": "brain/tests/conftest.py",
+    "sha256": "320bf3d1614814902d0be2382feb172d565cf2f4f4a185402ba0eef5e347aca6"
+  },
+  {
+    "path": "brain/tests/test_auth.py",
+    "sha256": "e2a7cbf3315a1f77fec13c5eb248756f60598d4975a245111d6667845fc0f116"
+  },
+  {
+    "path": "brain/tests/test_autonomy.py",
+    "sha256": "5795e1943379610192d4682ec12025e23967210eb61eee805478b71613d49a30"
+  },
+  {
+    "path": "brain/tests/test_face_contract.py",
+    "sha256": "b9f9c7d76d03d68ef668bc42adc1792e0a557301ff16f29dd6c645b3c6dbf209"
+  },
+  {
+    "path": "brain/tests/test_firmware_source_guards.py",
+    "sha256": "d60aa60e86a4a6e34bc1bbd4a700b4d4b6974bdb97f6f184c12ca440feb8361c"
+  },
+  {
+    "path": "brain/tests/test_freeze_mcp.py",
+    "sha256": "fed379d7c5397a8aa28afa0283cff3e9692b34d17450a66d5299354ff61b7289"
+  },
+  {
+    "path": "brain/tests/test_im.py",
+    "sha256": "194b07a9f5018e432045d9020720cbeb9d7b67f51198cf6a1476d3f997102c78"
+  },
+  {
+    "path": "brain/tests/test_isolation.py",
+    "sha256": "cf2bd6a679e588d7f22fe08c7e6fd4e1635350903d99c4becd45cbe1f31f2327"
+  },
+  {
+    "path": "brain/tests/test_lifecycle.py",
+    "sha256": "2ede1f01185e61ae2aaaefe78922d0a13bac857cfe0c1b560de4dea9564eb710"
+  },
+  {
+    "path": "brain/tests/test_lua.py",
+    "sha256": "5ad762ebbe703c7f9d19e6f68448cd863ad380ea7d4b837f6b04f9c4835c5c7a"
+  },
+  {
+    "path": "brain/tests/test_media.py",
+    "sha256": "face0886d88c1607e86635d7fecdbbeb539e153b1968c3e488753ea607213239"
+  },
+  {
+    "path": "brain/tests/test_memory.py",
+    "sha256": "756220e8fc78449abdc80448d6a9c4443d74e2045d657100f29bfb5f9782ebf9"
+  },
+  {
+    "path": "brain/tests/test_origin.py",
+    "sha256": "88bff4e27c29315c98d42383a6768b2dafc7c919e67a2babffae1834875de3c1"
+  },
+  {
+    "path": "brain/tests/test_protocol.py",
+    "sha256": "8ea31dbf4478221ced6b2c1b5d3c7c3ff4791fdc4bea87166bdd734b7181a801"
+  },
+  {
+    "path": "brain/tests/test_scripting.py",
+    "sha256": "11aa1dfaebfdd47e30de867e4f37c239f60b232533dee51f9de7e5d6f7992a4a"
+  },
+  {
+    "path": "brain/tests/test_secret_life.py",
+    "sha256": "41f1f6dac0789e7092d40730949f4c896e5d24eae19e8c74d1830cc5c3633237"
+  },
+  {
+    "path": "brain/tests/test_site.py",
+    "sha256": "f27ecbf8fe5b04178ca9f0e622556321d58a556c9480169c51fd30c097bfe751"
+  },
+  {
+    "path": "brain/tests/test_web.py",
+    "sha256": "6fbdecc25b6ece79999793ae001c38cfe7b0a5d3957c073e67def48bb0204c19"
+  },
+  {
+    "path": "firmware/xiaozhi-niulai/niulai_face_display.cc",
+    "sha256": "899168753600b2969ffc6e81fb7ee9be64d5525138379c46d95a8ffd9f925b94"
+  },
+  {
+    "path": "firmware/xiaozhi-niulai/niulai_life.cc",
+    "sha256": "f3289fd38799cfef71844f36fe71466ef5c194f8e26145dbc73302dd605d10c0"
+  },
+  {
+    "path": "firmware/xiaozhi-niulai/niulai_presence.h",
+    "sha256": "07ff815a578fabaa098f8c664aef86a73015f225a6e3006329c791d35e0be9d3"
+  }
+]

@@ -5,26 +5,66 @@
 一块小智 S3 扩展板 V1.7 负责听、说、屏、灯、键、超声和四路舵机信号。笔记本上的 `brain/` 负责人格、记忆和动作编排。不把完整 ESP-Claw 固件并进小智。
 
 - 仓库：https://github.com/23xxCh/ox-robot
+- 最终汇报：[PDF](./outputs/submission-2026-09-06/牛来-最终汇报.pdf) · [Word](./outputs/submission-2026-09-06/牛来-最终汇报.docx)
 - Checkpoint 1：[牛来机器人-进展说明-2026-09-05.md](./牛来机器人-进展说明-2026-09-05.md)
 - Checkpoint 2：[牛来机器人-Checkpoint2-进展说明-2026-09-06.md](./牛来机器人-Checkpoint2-进展说明-2026-09-06.md)
 - Submission：[牛来机器人-Submission-2026-09-06.md](./牛来机器人-Submission-2026-09-06.md)
 
 ## 架构
 
-```
-喊「牛来」 / 按 KY-004 / 超声
-        │
-        ▼
-  小智板 niulai-s3-expand-v17
-  有人喊它 → 先播「妈妈」再礼貌听、想、说；没人 → 走私有大脑 LLM + 千问男声吐槽
-  冻结走板端 C · 舵机 5V 外供 · 不打开小智云
-        │  （本轮演示不依赖这条线）
-        ▼
-  笔记本 FastAPI  brain/
-  /life 人设页 · Lua(niu.*) · MCP ttl 帽 · SQLite
+当前实现：**一块小智 ESP32-S3 板 + 笔记本本地大脑 + 按配置启用的云语音/模型服务**。
+
+![牛来当前系统架构](./outputs/submission-2026-09-06/牛来-系统架构.png)
+
+<details>
+<summary>查看可编辑的 Mermaid 架构图</summary>
+
+```mermaid
+flowchart TB
+    User["现场用户：喊牛来 / 按键 / 靠近"]
+
+    subgraph Robot["牛来实体 · 小智 S3 扩展板 V1.7"]
+        Input["麦克风 · KY-004 / BOOT · 超声测距"]
+        Board["小智固件 + 牛来板型 overlay<br/>唤醒与音频 · 距离状态 · 本地生命循环"]
+        Stop["板端 C++ 最终控制<br/>近距 / 测距未知：停腿并取消独处行为"]
+        Face["屏幕表情 · 喇叭 · LED"]
+        Servo["四路舵机<br/>GPIO 10 / 11 / 9 / 13"]
+        Input --> Board
+        Board --> Stop --> Servo
+        Board --> Face
+    end
+
+    subgraph Laptop["笔记本 · brain"]
+        Gateway["FastAPI / 小智 WebSocket<br/>设备 Bearer 鉴权"]
+        Persona["人格与回复 · 独处编排<br/>受限 niu.* 语句解析 · 动作 TTL 校验"]
+        Memory[("SQLite<br/>设备事件 · 角色状态 · 近期记忆")]
+        Web["本机网页<br/>排练模拟 / 人设配置"]
+        Gateway <--> Persona
+        Persona <--> Memory
+        Web --> Gateway
+    end
+
+    Cloud["可选云服务<br/>ASR 语音识别 · LLM 回复 · TTS 合成"]
+    Power["舵机独立 5V 电源<br/>与控制板共地"]
+
+    User --> Input
+    Board <-->|"局域网 ws://：音频 / 状态 / 动作指令"| Gateway
+    Gateway <-->|"HTTPS：音频 / 文本 / 选定记忆"| Cloud
+    Power --> Servo
+
+    classDef hardware fill:#fff3d6,stroke:#b7791f,color:#332500
+    classDef software fill:#e9f3ff,stroke:#3675b5,color:#16324f
+    classDef guard fill:#ffe8e8,stroke:#c44b4b,color:#5c2020
+    class Input,Board,Face,Servo,Power hardware
+    class Gateway,Persona,Memory,Web,Cloud software
+    class Stop guard
 ```
 
-约束：不合完整 ESP-Claw；ESP 的 5V 不给舵机供电；继电器不用；freeze 不走 LLM；不打开 xiaozhi.me。
+</details>
+
+- **物理控制在板端：** 连续有效远距约 8 秒才进入独处；近距或未知时优先停腿、取消独处吐槽，明确发起的礼貌会话另行处理。实际停止与静音时延仍待测。
+- **语音需要按路径说明：** 本地「妈妈」片段在设备播放；完整问答依赖笔记本与配置的语音/模型服务。当前局域网使用 `ws://`，没有 TLS；网页排练结果是模拟。
+- **实现边界：** 本轮未运行完整 ESP-Claw 固件；`niu.*` 是 Python 受限语句解析器，不是完整 Lua 运行时。舵机外供 5V，不从 ESP 板取电；继电器未使用。
 
 ## 仓库
 
@@ -63,10 +103,10 @@ KY-004：`-`=GND，中间 VCC 可空，`S`=18。
 - 唤醒词：`niu lai`（单次「牛来」）
 - 唤醒 / BOOT / KY-004：先 `PlaySound(OGG_MAMA)` 约 2.2 秒，再礼貌听、想、说，走私有大脑；立刻把四腿写回 1500 µs；不打开小智云
 - 超声近距视为有人：腿立刻中位，打断 SECRET 吐槽，等人喊。礼貌对话里若让它动，可短促 `niu.walk`/`niu.turn`（ttl≤2000）；靠近仍冻腿
-- SECRET：连笔记本私有 `ws://192.168.10.95:8000/xiaozhi/v1/`（当前 WLAN）。LLM + `qwen3-tts-flash` Dylan，约 11 秒一句。拒绝 xiaozhi.me。笔记本没开或 IP 变了，独处没声音。
+- SECRET：连笔记本私有 `ws://192.168.18.144:8000/xiaozhi/v1/`（2026-09-06 当前 WLAN），使用设备 Bearer 鉴权。LLM + `qwen3-tts-flash` Dylan，有冷却和安静间隔。拒绝 xiaozhi.me。断链时走已有本地片段回退，实际听感须真机验收。
 - SECRET 步态：约 800 ms 随机步态，随后约 2 s 停在 1500 µs。360° 舵机不会一直转。喇叭音量 90
 
-构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。不要闪 COM6，除非 brain 挂了或 WLAN 不再是 `192.168.10.95`。靠近会 `ResetDecoder()`，SECRET 吐槽立刻被打断。
+构建树：`E:\XIAOZHI_NATIVE\xiaozhi-esp32`。烧录前备份相关分区并确认接线与四腿悬空固定；服务故障本身不构成重刷固件的理由。靠近会请求 `ResetDecoder()`，实际静音时延待测。
 
 ```powershell
 # ESP-IDF 6.0.2
@@ -87,6 +127,11 @@ python -m brain.app
 
 排练页：http://127.0.0.1:8000/  
 人设页：http://127.0.0.1:8000/life （笔记本浏览器，不驱动真机冻结，也不连小智云）
+
+设备连接必须提供 `Authorization: Bearer <NIULAI_DEVICE_TOKEN>`；三个 IM 入口必须提供独立的 `Authorization: Bearer <NIULAI_IM_TOKEN>`。在本机 `brain/.env` 或根 `.env` 配置，空值会拒绝连接；示例见 [.env.example](.env.example)。网页与 `/api/v1/*` 只对真实 localhost 开放。`python -m brain.app` 已禁用代理头；自行运行 uvicorn 时也要加 `--no-proxy-headers`。
+
+微信 ClawBot（iLink，不是公众号）：`POST http://192.168.18.144:8000/im/clawbot/event`。
+OpenClaw / 自建转发须附上上述 IM 入站 Bearer。出站另用本机环境变量 `NIULAI_CLAWBOT_TOKEN`（可选 `NIULAI_CLAWBOT_BASE_URL`），不能拿它充当入站鉴权。未配置出站 token 时只进测试发件箱，不假装已连上微信。人在场时微信只礼貌回、不走腿、不泄密。
 
 无 `NIULAI_LLM_*` key 时测例仍应通过。90 秒路演只演板端，不演 /life 闲聊。
 

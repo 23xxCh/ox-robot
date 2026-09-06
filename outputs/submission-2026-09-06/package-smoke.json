@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-09-06T03:41:23.604977+00:00",
+  "scope": "isolated package localhost HTTP only; no cloud or device IO",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "passed": true,
+      "elapsed_s": 0.0091
+    },
+    {
+      "method": "GET",
+      "path": "/life",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "passed": true,
+      "elapsed_s": 0.002
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/state",
+      "status": 200,
+      "content_type": "application/json",
+      "passed": true,
+      "elapsed_s": 0.0012
+    }
+  ],
+  "passed": true,
+  "command": [
+    "C:\\Users\\22003\\miniconda3\\python.exe",
+    "-B",
+    "-m",
+    "uvicorn",
+    "brain.app.main:app",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "43424",
+    "--no-proxy-headers"
+  ],
+  "isolation": "cloud/device/IM variables removed; PYTEST_CURRENT_TEST skips .env; server binds loopback",
+  "process_stopped": true,
+  "request_count": 3,
+  "elapsed_total_s": 1.64,
+  "finished_at": "2026-09-06T03:41:25.245379+00:00",
+  "generated_sqlite": "brain/data/niulai-memory.sqlite in isolated package; exclude from final archive"
+}
