@@ -13,6 +13,25 @@ def _client() -> TestClient:
     return TestClient(app)
 
 
+def test_index_has_skip_link_viewport_and_stop_button() -> None:
+    html = _client().get("/").text
+    assert 'name="viewport"' in html
+    assert 'href="#main"' in html
+    assert "跳到主内容" in html
+    assert 'id="btn-stop"' in html
+    assert 'id="stale-label"' in html
+
+
+def test_state_reports_stale_when_marked() -> None:
+    app = FastAPI()
+    app.include_router(router)
+    attach_rehearsal_state(app)
+    app.state.rehearsal["stale"] = True
+    body = TestClient(app).get("/api/v1/state").json()
+    assert body["stale"] is True
+    assert body["connection"] in {"offline", "sim"}
+
+
 def test_index_returns_html_containing_sim() -> None:
     response = _client().get("/")
     assert response.status_code == 200
