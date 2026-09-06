@@ -36,6 +36,7 @@ class NiulaiBrain:
             self.mcp.drop_motion()
             snore = ActionIntent(verb="snore", args={"on": True}, ttl_ms=0)
             return [snore]
+        self.mcp.allow_motion()
         return []
 
     def autonomy_intents(self) -> list[ActionIntent]:

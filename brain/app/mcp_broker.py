@@ -10,6 +10,7 @@ class McpBroker:
     def __init__(self) -> None:
         self._queue: list[ActionIntent] = []
         self.device_calls: list[dict] = []
+        self.block_motion = False
 
     def enqueue(self, intent: ActionIntent) -> None:
         self._queue.append(intent)
@@ -19,12 +20,18 @@ class McpBroker:
 
     def drop_motion(self) -> None:
         self._queue = [item for item in self._queue if item.verb not in {"walk", "turn"}]
+        self.block_motion = True
+
+    def allow_motion(self) -> None:
+        self.block_motion = False
 
     def call_perform(self, arguments: dict) -> CallResult:
         error = validate_perform_arguments(arguments)
         if error:
             return CallResult(ok=False, error=error)
         verb = str(arguments["verb"])
+        if verb in MOTION_VERBS and self.block_motion:
+            return CallResult(ok=False, error="frozen")
         ttl = int(arguments["ttl_ms"])
         args: dict = {}
         if verb in MOTION_VERBS and "dir" in arguments:

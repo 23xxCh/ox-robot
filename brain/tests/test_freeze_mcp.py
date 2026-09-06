@@ -6,6 +6,51 @@ from brain.app.models import ActionIntent
 from brain.app.persona import PersonaState
 
 
+def test_late_perform_after_freeze_is_rejected() -> None:
+    brain = NiulaiBrain()
+    first = brain.mcp.call_perform(
+        {"verb": "walk", "dir": "forward", "ttl_ms": 800}
+    )
+    assert first.ok is True
+    assert len(brain.mcp.device_calls) == 1
+
+    brain.ingest_distance(8)
+
+    late = brain.mcp.call_perform(
+        {"verb": "walk", "dir": "forward", "ttl_ms": 800}
+    )
+    assert late.ok is False
+    assert late.error == "frozen"
+    assert brain.mcp.queued() == []
+    assert len(brain.mcp.device_calls) == 1
+
+
+def test_walk_after_proximity_freeze_is_not_sent() -> None:
+    from fastapi.testclient import TestClient
+
+    from brain.app.main import create_app
+
+    brain = NiulaiBrain()
+    brain.ingest_distance(8)
+    client = TestClient(create_app(brain))
+    with client.websocket_connect("/xiaozhi/v1/") as ws:
+        ws.send_json({"type": "hello", "version": 1})
+        ws.receive_json()
+        ws.send_json({"type": "listen", "state": "start"})
+        ws.send_bytes("往前走".encode("utf-8"))
+        ws.send_json({"type": "listen", "state": "stop"})
+        messages: list[dict] = []
+        for _ in range(20):
+            msg = ws.receive_json()
+            messages.append(msg)
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                break
+        assert all(
+            not (item.get("type") == "niulai" and item.get("motion"))
+            for item in messages
+        )
+
+
 def test_close_distance_drops_walk_and_forces_snore() -> None:
     brain = NiulaiBrain()
     brain.persona.set(PersonaState.SECRET_ALIVE)

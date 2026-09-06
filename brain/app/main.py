@@ -22,6 +22,7 @@ from pathlib import Path
 from brain.app.llm import speak
 from brain.app.models import ActionIntent
 from brain.app.origin import DEFAULT_ORIGIN, normalize_origin
+from brain.app.schemas import MAX_PERFORM_TTL_MS
 from brain.app.scripting import motion_intents
 from brain.app.persona import PersonaState
 from brain.app.providers import looks_like_utf8
@@ -109,13 +110,19 @@ async def _speak(
         return
 
 
-async def _send_motion(ws: WebSocket, intents: list[ActionIntent]) -> None:
+async def _send_motion(
+    ws: WebSocket, intents: list[ActionIntent], brain: NiulaiBrain
+) -> None:
+    if brain.mcp.block_motion:
+        return
     for intent in intents:
         if intent.verb not in {"walk", "turn"}:
             continue
         ttl = int(intent.ttl_ms or 800)
         if ttl <= 0 and intent.args.get("dir") != "stop":
             ttl = 800
+        if ttl > MAX_PERFORM_TTL_MS:
+            ttl = MAX_PERFORM_TTL_MS
         await ws.send_json(
             {
                 "type": "niulai",
@@ -358,7 +365,7 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
                         else:
                             await ws.send_json({"type": "tts", "state": "start"})
                             await ws.send_json({"type": "tts", "state": "stop"})
-                        await _send_motion(ws, intents)
+                        await _send_motion(ws, intents, current)
                         continue
         except WebSocketDisconnect:
             return
