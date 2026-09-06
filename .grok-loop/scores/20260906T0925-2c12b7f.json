@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "contract_version": "2026-09-06-v1",
+  "source_commit": "2c12b7f4c9de78fd806b02364ffd9ed822a83040",
+  "checker": "01a0744d-d9b2-7842-b8ff-6d13d58ba2e8",
+  "hardware_tested": false,
+  "previous_total_score": 36.75,
+  "total_score": 37.75,
+  "delta": 1.0,
+  "critical_gates_passed": false,
+  "items_changed": [
+    {"id": "DB-5", "from": 1, "to": 2},
+    {"id": "QA-4", "from": 1, "to": 2},
+    {"id": "QA-5", "from": 1, "to": 2}
+  ],
+  "dimension_scores": {
+    "EX": 35.0,
+    "FE": 35.0,
+    "BE": 50.0,
+    "DB": 50.0,
+    "FW": 25.0,
+    "SEC": 40.0,
+    "QA": 40.0,
+    "AR": 40.0
+  },
+  "weakest": ["EX-5", "QA-3", "FW-1"],
+  "notes": "CI green on HEAD. consume_interrupt on WSS. health hashes. No 3/4. CGs NOT_RUN. IDF rebuild of this SHA was still in progress at scoring time."
+}
