@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "RUNNING",
+  "controller": "grok-4.6-session-plus-native-scheduler",
+  "runtime_started_by_codex": false,
+  "readiness": "sole_writer_claimed_os_exclusive_lock_not_verified",
+  "phase": "pre_submission_p0",
+  "release_freeze_at": "2026-09-06T12:00:00+08:00",
+  "after_freeze": "preserve_live_demo_develop_only_in_isolated_worktree",
+  "owner": "grok-4.6-session",
+  "scheduler_id": "01a073f8a1627741b5506ed398a38cbb",
+  "exclusive_lock_verified": false,
+  "exclusive_lock_kind": "advisory_lock_file_plus_single_native_scheduler",
+  "baseline_commit": "d31b0468358b11393e4f5cb9d3f276ee2b70ae66",
+  "baseline_evidence": ".grok-loop/evidence/baseline.json",
+  "active_task": "FAST_TRACK_ABC",
+  "active_episode": "20260906T082900-FAST-TRACK",
+  "next_task": "integrate-ABC",
+  "fast_track": {
+    "A": "01a0741f-b6e9-7563-b19f-299bc9691da8",
+    "B": "01a0741f-b6eb-7362-ae91-386066d088cb",
+    "C": "01a0741f-b6ee-7673-9b9c-8de498cba08d",
+    "scorecard": "01a07417-3e1c-7a62-a95e-7c80918d2a35"
+  },
+  "last_episode": "20260906T081500-NIU-L01",
+  "successful_episodes": 3,
+  "score_review_status": "BASELINE_36_AT_381d86a",
+  "last_scorecard": ".grok-loop/scores/20260906T0830-381d86a.json",
+  "recent_failure_signatures": [],
+  "waiting_for": [],
+  "stop_file": ".grok-loop/STOP",
+  "policy": {
+    "episode_target_minutes": 20,
+    "episode_max_minutes": 30,
+    "same_failure_attempts_max": 3,
+    "context_checkpoint_every_episodes": 3,
+    "idle_poll_minutes": 60,
+    "no_progress_rounds_max": 2,
+    "budget_enforcement": "must_verify_in_native_runtime_not_enforced_by_this_json",
+    "paid_budget": "existing_user_authorization_only"
+  },
+  "roles": [
+    "product_manager",
+    "builder",
+    "independent_checker"
+  ],
+  "pm_review_every_successful_episodes": 3,
+  "score_contract": ".grok-loop/SCORECARD.md",
+  "product_backlog": ".grok-loop/PRODUCT_BACKLOG.md",
+  "score_targets": {
+    "overall": 80,
+    "each_dimension_min": 60,
+    "life_embedded_safety_min": 80,
+    "critical_gates_required": true
+  }
+}

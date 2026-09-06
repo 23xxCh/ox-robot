@@ -92,3 +92,47 @@ def test_prune_keeps_newest(tmp_path: Path) -> None:
     store.prune(max_rows=2, max_age_s=7 * 86400)
     n = store._conn.execute("SELECT COUNT(*) AS n FROM device_events").fetchone()["n"]
     assert n == 2
+
+
+def test_consume_interrupt_used_once(tmp_path: Path) -> None:
+    store = _store(tmp_path)
+    store.note_interrupt("niu-1", "正要吐槽")
+    pending = store.prompt_memory("niu-1", "ABSENT")
+    assert "上次被打断" in pending
+    assert "正要吐槽" in pending
+    polite = store.prompt_memory("niu-1", "PRESENT")
+    assert "正要吐槽" not in polite
+    assert "上次被打断" not in polite
+    first = store.consume_interrupt("niu-1")
+    assert first == "正要吐槽"
+    after = store.prompt_memory("niu-1", "ABSENT")
+    assert "正要吐槽" not in after
+    assert "上次被打断" not in after
+    assert store.consume_interrupt("niu-1") is None
+    view = store.character("niu-1")
+    assert view is not None
+    assert view.pending_complaint is None
+    row = store._conn.execute(
+        "SELECT interrupted_goal_json FROM character_state WHERE device_id='niu-1'"
+    ).fetchone()
+    assert row["interrupted_goal_json"] is None
+
+
+def test_consume_interrupt_empty_is_none(tmp_path: Path) -> None:
+    store = _store(tmp_path)
+    assert store.consume_interrupt("niu-1") is None
+
+
+def test_reset_memory_wipes_pending_interrupt(tmp_path: Path) -> None:
+    store = _store(tmp_path)
+    store.note_interrupt("niu-1", "正要吐槽")
+    store.bump_mama("niu-1")
+    new_gen = store.reset_memory("niu-1")
+    assert new_gen >= 2
+    assert store.consume_interrupt("niu-1") is None
+    notes = store.prompt_memory("niu-1", "ABSENT")
+    assert "正要吐槽" not in notes
+    assert "上次被打断" not in notes
+    assert store.character("niu-1").mama_count == 0
+    store.commit_event(_event("old-interrupt", "note", 9, generation=1))
+    assert store.character("niu-1").mama_count == 0

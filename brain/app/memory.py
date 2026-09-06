@@ -361,6 +361,30 @@ class MemoryStore:
         )
         self._conn.commit()
 
+    def consume_interrupt(self, device_id: str) -> str | None:
+        """Return pending_complaint if set, then clear pending_complaint and interrupted_goal_json. Else None."""
+        row = self._conn.execute(
+            "SELECT pending_complaint FROM character_state WHERE device_id = ?",
+            (device_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        raw = row["pending_complaint"]
+        complaint = raw.strip() if isinstance(raw, str) else None
+        if not complaint:
+            complaint = None
+        now = time.time()
+        self._conn.execute(
+            """
+            UPDATE character_state
+            SET pending_complaint=NULL, interrupted_goal_json=NULL, updated_at=?
+            WHERE device_id=?
+            """,
+            (now, device_id),
+        )
+        self._conn.commit()
+        return complaint
+
     def prompt_memory(self, device_id: str, presence: str) -> str:
         self._ensure(device_id)
         view = self.character(device_id)
@@ -368,7 +392,7 @@ class MemoryStore:
         parts: list[str] = []
         if view and view.mama_count:
             parts.append(f"被喊「妈妈」{view.mama_count}次")
-        if view and view.pending_complaint:
+        if presence == "ABSENT" and view and view.pending_complaint:
             parts.append(f"上次被打断时在说：{view.pending_complaint}")
         if lines:
             parts.append("最近说过（不要重复）：" + "｜".join(lines[-RECENT_LIMIT:]))

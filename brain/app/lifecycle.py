@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from brain.app.models import ActionIntent
 from brain.app.persona import PersonaFSM, PersonaState
@@ -67,6 +68,8 @@ class Lifecycle:
         absent_hold_ms: int = ABSENT_HOLD_MS,
         autonomy_interval_ms: int = AUTONOMY_INTERVAL_MS,
         safety: SafetyState = SafetyState.READY,
+        memory: Any | None = None,
+        device_id: str = "niu-1",
     ) -> None:
         self.persona = PersonaFSM(PersonaState.FREEZE)
         self._absent_hold_ms = absent_hold_ms
@@ -77,6 +80,8 @@ class Lifecycle:
         self._presence_at_ms = 0
         self._absent_since_ms: int | None = None
         self._last_autonomy_ms: int | None = None
+        self.memory = memory
+        self.device_id = device_id
         self.secret = SecretDirector(min_cooldown_ms=self._autonomy_interval_ms)
         self._proximity = ProximityReading(
             kind=ProximityKind.UNKNOWN,
@@ -163,7 +168,10 @@ class Lifecycle:
         if beat.kind != "speak":
             return []
         self._last_autonomy_ms = now_ms
-        return [ActionIntent(verb="say", args={"text": beat.text or AUTONOMY_LINE})]
+        if self.memory is not None:
+            self.memory.consume_interrupt(self.device_id)
+        text = beat.text or AUTONOMY_LINE
+        return [ActionIntent(verb="say", args={"text": text})]
 
     def handle_utterance(self, text: str, now_ms: int) -> UtteranceResult:
         spoken = text or ""
