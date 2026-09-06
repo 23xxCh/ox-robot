@@ -107,6 +107,8 @@ def _compose_line(
     if mem:
         line = mem.dedupe_line(device_id, line, presence=presence)
         mem.remember_line(device_id, line)
+        if presence == "ABSENT":
+            mem.consume_interrupt(device_id)
     return line, intents
 
 
@@ -220,7 +222,16 @@ def create_app(brain: NiulaiBrain | None = None) -> FastAPI:
 
     @app.get("/health")
     async def health() -> dict[str, str]:
-        return {"status": "ok", "version": app.version}
+        overlay = _REPO_ROOT / "firmware" / "xiaozhi-niulai" / "niulai_life.cc"
+        firmware_hash = "missing"
+        if overlay.is_file():
+            firmware_hash = hashlib.sha256(overlay.read_bytes()).hexdigest()[:12]
+        return {
+            "status": "ok",
+            "version": app.version,
+            "source_commit": app.version,
+            "firmware_hash": firmware_hash,
+        }
 
     @app.websocket("/xiaozhi/v1/")
     async def device_ws(ws: WebSocket) -> None:

@@ -50,3 +50,16 @@ def test_absent_llm_emotion_is_secret_face() -> None:
             if msg.get("type") == "tts" and msg.get("state") == "stop":
                 break
         assert emotion in SECRET_FACES
+        ws.send_json({"type": "abort"})
+        ws.send_json({"type": "niulai", "presence": "PRESENT"})
+        ws.send_json({"type": "listen", "state": "detect", "text": "牛来"})
+        public: list[str] = []
+        for _ in range(16):
+            msg = ws.receive_json()
+            if msg.get("type") == "llm" and msg.get("emotion"):
+                public.append(str(msg["emotion"]))
+            if msg.get("type") == "tts" and msg.get("state") == "stop":
+                break
+        assert public
+        assert all(item in SMILE_FAMILY or item in LISTEN_FAMILY for item in public)
+        assert all(item not in SECRET_FACES for item in public)

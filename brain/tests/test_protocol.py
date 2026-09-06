@@ -64,6 +64,10 @@ def test_wake_counts_mama_and_absent_uses_interrupt() -> None:
         assert first
         ws.send_json({"type": "abort"})
         ws.send_json({"type": "niulai", "presence": "PRESENT"})
+        complaint = brain.memory.character("niu-1").pending_complaint
+        assert complaint
+        notes = brain.memory.prompt_memory("niu-1", "ABSENT")
+        assert "打断" in notes or complaint[:8] in notes
         ws.send_json({"type": "niulai", "presence": "ABSENT"})
         second = ""
         for _ in range(12):
@@ -74,10 +78,9 @@ def test_wake_counts_mama_and_absent_uses_interrupt() -> None:
                 break
         assert second
         assert "妈妈" not in second
-        complaint = brain.memory.character("niu-1").pending_complaint
-        assert complaint
-        notes = brain.memory.prompt_memory("niu-1", "ABSENT")
-        assert "打断" in notes or complaint[:8] in notes
+        assert brain.memory.character("niu-1").pending_complaint is None
+        later = brain.memory.prompt_memory("niu-1", "ABSENT")
+        assert "打断" not in later
 
 
 def test_present_wake_is_polite_not_roast() -> None:
@@ -303,7 +306,9 @@ def test_health_returns_ok_version_without_secrets(monkeypatch) -> None:
     assert body["status"] == "ok"
     assert isinstance(body.get("version"), str) and body["version"]
     assert body["version"] == app.version
-    assert set(body) == {"status", "version"}
+    assert body.get("source_commit") == app.version
+    assert isinstance(body.get("firmware_hash"), str) and body["firmware_hash"]
+    assert set(body) <= {"status", "version", "source_commit", "firmware_hash"}
     raw = response.text
     for leak in ("API_KEY", "DASHSCOPE", "token", "sk-leak", "leak-token", ".env"):
         assert leak.lower() not in raw.lower()
@@ -322,7 +327,8 @@ def test_health_version_env_override_is_used(monkeypatch) -> None:
     app = create_app(NiulaiBrain())
     body = TestClient(app).get("/health").json()
     assert body["version"] == "cafef00d1234"
-    assert set(body) == {"status", "version"}
+    assert body["source_commit"] == "cafef00d1234"
+    assert set(body) <= {"status", "version", "source_commit", "firmware_hash"}
 
 
 def test_health_version_falls_back_to_source_digest(monkeypatch) -> None:

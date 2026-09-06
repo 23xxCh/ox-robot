@@ -85,6 +85,19 @@ def test_wss_helpers_track_mama_interrupt_and_dedupe(tmp_path: Path) -> None:
     assert polite == "我在，你说。我是牛来。"
 
 
+def test_sqlite_file_reopens_after_copy(tmp_path: Path) -> None:
+    src = tmp_path / "live.db"
+    store = MemoryStore(src)
+    store.commit_event(_event("m1", "mama_play_completed", 1))
+    store.note_interrupt("niu-1", "正要吐槽")
+    store.close()
+    backup = tmp_path / "backup.db"
+    backup.write_bytes(src.read_bytes())
+    restored = MemoryStore(backup)
+    assert restored.character("niu-1").mama_count == 1
+    assert restored.character("niu-1").pending_complaint == "正要吐槽"
+
+
 def test_prune_keeps_newest(tmp_path: Path) -> None:
     store = _store(tmp_path)
     for i in range(5):
